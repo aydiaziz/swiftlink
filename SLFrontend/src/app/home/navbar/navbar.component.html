@@ -1,0 +1,28 @@
+<nav class="navbar">
+  <div class="container">
+    <a routerLink="/" class="logo">Swift Helpers</a>
+    <ul class="nav-links">
+      <li><a routerLink="/">Home</a></li>
+      <li><a routerLink="/services">Services</a></li>
+      <li><a routerLink="/about">About</a></li>
+      <li><a routerLink="/contact">Contact</a></li>
+      <li *ngIf="isClientLoggedIn" class="notification-icon">
+        <a routerLink="/notifications">
+          <img src="/icons/notification.png" alt="Notifications">
+          <span class="badge"></span> 
+        </a>
+      </li>
+      <li *ngIf="!isClientLoggedIn">
+        <button class="signin-btn" routerLink="/signin">Sign In</button>
+      </li>
+
+      <li *ngIf="isClientLoggedIn">
+        <button class="logout-btn" (click)="onLogout()">Logout</button>
+      </li>
+    </ul>
+      
+  </div>
+</nav>
+
+<!-- Load the page content dynamically -->
+<router-outlet></router-outlet>

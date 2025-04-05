@@ -1,0 +1,12 @@
+<div class="dashboard">
+  <app-sidebar (sectionChanged)="onSectionChange($event)"></app-sidebar>
+  
+  <div class="content">
+    <app-profile *ngIf="currentSection === 'profile'"></app-profile>
+    <app-orders *ngIf="currentSection === 'orders'"></app-orders>
+    <app-agenda *ngIf="currentSection === 'agenda'"></app-agenda>
+    <app-monthy-income *ngIf="currentSection === 'revenu-mensuel'"></app-monthy-income>
+    <app-annual-income *ngIf="currentSection === 'revenu-annuel'"></app-annual-income>
+    <app-historic-orders *ngIf="currentSection === 'historic-orders'"></app-historic-orders>
+  </div>
+</div>

@@ -1,0 +1,11 @@
+<nav class="sidebar">
+    <ul>
+      <li (click)="navigate('profile')" [class.active]="currentSection === 'profile'">Profile</li>
+      <li (click)="navigate('orders')" [class.active]="currentSection === 'orders'">Orders</li>
+      <li (click)="navigate('agenda')" [class.active]="currentSection === 'agenda'">Agenda</li>
+      <li (click)="navigate('revenu-mensuel')" [class.active]="currentSection === 'revenu-mensuel'">Revenu Mensuel</li>
+      <li (click)="navigate('revenu-annuel')" [class.active]="currentSection === 'revenu-annuel'">Revenu Annuel</li>
+      <li (click)="navigate('historic-orders')" [class.active]="currentSection === 'historic-orders'">Historic Orders</li>
+    </ul>
+  </nav>
+  

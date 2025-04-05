@@ -1,0 +1,41 @@
+<!-- homeComponent -->
+<section class="hero">
+  <div class="container">
+    <h1>Find Trusted Helpers for Your Home Services</h1>
+    <p>Swift Helpers connects you with verified professionals for cleaning, repairs, and more.</p>
+    
+    <!-- Bouton Explorer les Services -->
+    <a routerLink="/services" class="btn">Explore Services</a>
+
+    <!-- Nouveau champ de texte + bouton Send -->
+    <div class="help-box">
+      <input type="text" placeholder="How can I help you?" [(ngModel)]="helpMessage" />
+      <button class="send-btn" (click)="sendMessage()">Send</button>
+    </div>
+
+  </div>
+</section>
+
+<section class="features">
+  <div class="container">
+    <h2>Why Choose Us?</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <h3>Reliable Professionals</h3>
+        <p>All helpers are verified and experienced in their fields.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Easy Booking</h3>
+        <p>Book a service in just a few clicks.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Secure Payments</h3>
+        <p>Pay safely through our platform.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<app-services></app-services>
+<app-about></app-about>
+<app-contact></app-contact>

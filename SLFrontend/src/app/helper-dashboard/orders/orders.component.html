@@ -1,0 +1,19 @@
+<div class="orders-container">
+    <h2>Orders</h2>
+    <ul>
+      <li *ngFor="let order of orders">
+        <div class="order-details">
+          <h3>{{ order.jobTitle }}</h3>
+          <p><strong>Address:</strong> {{ order.jobAddress }}</p>
+          <p><strong>Priority:</strong> 
+            <span [ngClass]="getPriorityClass(order.priorityLevel)">{{ order.priorityLevel }}</span>
+          </p>
+          <p><strong>Execution Date:</strong> {{ order.executionDate | date:'mediumDate' }}</p>
+          <p><strong>Expiration Time:</strong> {{ order.expirationTime | date:'shortTime' }}</p>
+          <p><strong>Resources:</strong> {{ order.jobResources }}</p>
+        </div>
+        <button (click)="likeOrder(order.orderID)">❤️ Like</button>
+      </li>
+    </ul>
+  </div>
+  

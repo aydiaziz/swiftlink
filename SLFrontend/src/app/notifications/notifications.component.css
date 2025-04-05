@@ -1,0 +1,49 @@
+.notifications {
+  position: relative;
+}
+
+.notif-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  position: relative;
+}
+
+.notif-badge {
+  background: red;
+  color: white;
+  font-size: 12px;
+  border-radius: 50%;
+  padding: 4px 7px;
+  position: absolute;
+  top: -5px;
+  right: -5px;
+}
+
+.notif-dropdown {
+  position: absolute;
+  top: 30px;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  width: 250px;
+  padding: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.notif-dropdown h3 {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.notif-dropdown ul {
+  list-style: none;
+  padding: 0;
+}
+
+.notif-dropdown li {
+  padding: 5px 0;
+  border-bottom: 1px solid #ddd;
+}

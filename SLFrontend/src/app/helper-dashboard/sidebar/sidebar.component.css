@@ -1,0 +1,61 @@
+/* Sidebar Styling */
+.sidebar {
+    width: 250px;
+    background: #e65c50;
+    color: white;
+    height: 100vh;
+    padding: 20px;
+    font-family: 'Arial', sans-serif;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    padding: 15px;
+    cursor: pointer;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+}
+
+.sidebar ul li:hover, .sidebar ul li.active {
+    background: #d98874;
+    border-radius: 5px;
+}
+
+/* Orders Section */
+.orders-container {
+    padding: 20px;
+}
+
+.order-card {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.order-details {
+    font-size: 16px;
+}
+
+.like-btn {
+    background: #ff4757;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.like-btn:hover {
+    background: #e84118;
+}

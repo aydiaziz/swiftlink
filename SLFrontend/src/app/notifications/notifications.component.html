@@ -1,0 +1,16 @@
+<div class="notifications">
+  <button class="notif-btn" (click)="toggleDropdown()">
+    🔔
+    <span *ngIf="notifications.length > 0" class="notif-badge">{{ notifications.length }}</span>
+  </button>
+
+  <div class="notif-dropdown" *ngIf="showDropdown">
+    <h3>🔔 Notifications</h3>
+    <ul>
+      <li *ngFor="let notification of notifications">
+        <p>{{ notification.message }}</p>
+        <span>{{ notification.created_at | date:'short' }}</span>
+      </li>
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,57 @@
+<div class="signup-container">
+  <h2>Signup</h2>
+
+  <!-- Bascule entre Client et Workforce -->
+  <div class="toggle-buttons">
+    <button (click)="userType = 'client'" [class.active]="userType === 'client'">Client</button>
+    <button (click)="userType = 'workforce'" [class.active]="userType === 'workforce'">Workforce</button>
+  </div>
+
+  <!-- Formulaire Client -->
+  <form *ngIf="userType === 'client'" (ngSubmit)="onSignup()">
+    <input type="text" name="firstName" [(ngModel)]="clientForm.firstName" placeholder="First Name" required>
+    <input type="text" name="lastName" [(ngModel)]="clientForm.lastName" placeholder="Last Name" required>
+    <input type="email" name="email" [(ngModel)]="clientForm.email" placeholder="Email" required>
+    <input type="password" name="password" [(ngModel)]="clientForm.password" placeholder="Password" required>
+    <select name="clientType" [(ngModel)]="clientForm.clientType" required>
+      <option *ngFor="let type of clientTypes" [value]="type">{{ type }}</option>
+    </select>
+    <input type="text" name="address" [(ngModel)]="clientForm.address" placeholder="Address">
+    <input type="text" name="city" [(ngModel)]="clientForm.city" placeholder="City">
+    <input type="text" name="province" [(ngModel)]="clientForm.province" placeholder="Province">
+    <input type="text" name="postalCode" [(ngModel)]="clientForm.postalCode" placeholder="Postal Code">
+    <input type="text" name="phone" [(ngModel)]="clientForm.phone" placeholder="Phone">
+    <button type="submit">Sign Up</button>
+  </form>
+
+  <!-- Formulaire Workforce -->
+  <form *ngIf="userType === 'workforce'" (ngSubmit)="onSignup()">
+    <input type="text" name="firstName" [(ngModel)]="workforceForm.firstName" placeholder="First Name" required>
+    <input type="text" name="lastName" [(ngModel)]="workforceForm.lastName" placeholder="Last Name" required>
+    <input type="email" name="email" [(ngModel)]="workforceForm.email" placeholder="Email" required>
+    <input type="password" name="password" [(ngModel)]="workforceForm.password" placeholder="Password" required>
+    <input type="text" name="phone" [(ngModel)]="workforceForm.phone" placeholder="Phone">
+    <input type="date" name="dateOfBirth" [(ngModel)]="workforceForm.dateOfBirth" placeholder="Date of Birth">
+
+    <!-- Sélecteur pour Gender -->
+    <select name="gender" [(ngModel)]="workforceForm.gender">
+      <option *ngFor="let g of genders" [value]="g">{{ g }}</option>
+    </select>
+
+    <input type="text" name="socialSecurityNumber" [(ngModel)]="workforceForm.socialSecurityNumber" placeholder="Social Security Number">
+    <input type="text" name="skills" [(ngModel)]="workforceForm.skills" placeholder="Skills">
+    <input type="text" name="address" [(ngModel)]="workforceForm.address" placeholder="Address">
+
+    <!-- Sélecteur pour WorkForceType -->
+    <select name="workForceType" [(ngModel)]="workforceForm.workForceType">
+      <option *ngFor="let w of workForceTypes" [value]="w">{{ w }}</option>
+    </select>
+
+    <button type="submit">Sign Up</button>
+    
+  </form>
+  <p class="signin-link">
+    You have an account?  
+    <a routerLink="/signin">Sign in</a>
+  </p>
+</div>
