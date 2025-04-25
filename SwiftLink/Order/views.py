@@ -48,22 +48,26 @@ User = get_user_model()
 
 class CreateOrderView(generics.CreateAPIView):
     serializer_class = OrderSerializer
-      # 🔒 Authentification requise
 
     def create(self, request, *args, **kwargs):
-        print("Données reçues:", request.data)  # 🔥 Debugging
+        print("📥 Données reçues:", request.data)  # 🔍 Debug input
 
         # Vérification des champs requis
         required_fields = ["serviceType", "clientID", "entityID"]
         for field in required_fields:
             if field not in request.data:
-                return Response({f"error": f"{field} is required"}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"error": f"{field} is required"}, status=status.HTTP_400_BAD_REQUEST)
 
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             order = serializer.save()
             return Response(OrderSerializer(order).data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            print("❌ Erreurs de validation du serializer:")
+            for field, errors in serializer.errors.items():
+                print(f"  - {field}: {errors}")
+
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 class AllOrdersView(APIView):
     permission_classes = [IsAuthenticated]  
 

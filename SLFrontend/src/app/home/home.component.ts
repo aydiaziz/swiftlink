@@ -3,11 +3,16 @@ import { ServicesComponent } from "./services/services.component";
 import { AboutComponent } from "./about/about.component";
 import { ContactComponent } from "./contact/contact.component";
 import { FormsModule } from '@angular/forms';
+import { HeroComponent } from "./hero/hero.component";
+import { FeaturesComponent } from "./features/features.component";
+import { TabsComponent } from "./tabs/tabs.component";
+import { ChatbotComponent } from '../chatbot/chatbot.component';
+
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [ServicesComponent, AboutComponent, ContactComponent,FormsModule],
+  imports: [FormsModule, ChatbotComponent, FeaturesComponent, TabsComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })

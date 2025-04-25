@@ -1,57 +1,67 @@
-<div class="signup-container">
-  <h2>Signup</h2>
-
-  <!-- Bascule entre Client et Workforce -->
-  <div class="toggle-buttons">
-    <button (click)="userType = 'client'" [class.active]="userType === 'client'">Client</button>
-    <button (click)="userType = 'workforce'" [class.active]="userType === 'workforce'">Workforce</button>
+<form *ngIf="userType === 'client'" (ngSubmit)="onSignup()" class="form">
+  <div class="form-grid">
+    <input type="text" name="firstName" [(ngModel)]="clientForm.firstName" placeholder="First Name *" required>
+    <input type="text" name="lastName" [(ngModel)]="clientForm.lastName" placeholder="Last Name *" required>
   </div>
 
-  <!-- Formulaire Client -->
-  <form *ngIf="userType === 'client'" (ngSubmit)="onSignup()">
-    <input type="text" name="firstName" [(ngModel)]="clientForm.firstName" placeholder="First Name" required>
-    <input type="text" name="lastName" [(ngModel)]="clientForm.lastName" placeholder="Last Name" required>
-    <input type="email" name="email" [(ngModel)]="clientForm.email" placeholder="Email" required>
-    <input type="password" name="password" [(ngModel)]="clientForm.password" placeholder="Password" required>
-    <select name="clientType" [(ngModel)]="clientForm.clientType" required>
-      <option *ngFor="let type of clientTypes" [value]="type">{{ type }}</option>
-    </select>
-    <input type="text" name="address" [(ngModel)]="clientForm.address" placeholder="Address">
+  <input type="text" name="username" [(ngModel)]="clientForm.username" placeholder="Company/Business Name">
+
+  <input type="text" name="phone" [(ngModel)]="clientForm.phone" placeholder="Phone *" required>
+
+  <div class="form-grid">
+    <input type="email" name="email" [(ngModel)]="clientForm.email" placeholder="Email *" required>
+    <input type="email" placeholder="Confirm Email *" required>
+  </div>
+
+  <input type="password" name="password" [(ngModel)]="clientForm.password" placeholder="Password *" required>
+
+  <input type="text" name="address" [(ngModel)]="clientForm.address" placeholder="Street Address">
+  <input type="text" placeholder="Street Address Line 2">
+
+  <div class="form-grid">
     <input type="text" name="city" [(ngModel)]="clientForm.city" placeholder="City">
     <input type="text" name="province" [(ngModel)]="clientForm.province" placeholder="Province">
+  </div>
+
+  <div class="form-grid">
     <input type="text" name="postalCode" [(ngModel)]="clientForm.postalCode" placeholder="Postal Code">
-    <input type="text" name="phone" [(ngModel)]="clientForm.phone" placeholder="Phone">
-    <button type="submit">Sign Up</button>
-  </form>
-
-  <!-- Formulaire Workforce -->
-  <form *ngIf="userType === 'workforce'" (ngSubmit)="onSignup()">
-    <input type="text" name="firstName" [(ngModel)]="workforceForm.firstName" placeholder="First Name" required>
-    <input type="text" name="lastName" [(ngModel)]="workforceForm.lastName" placeholder="Last Name" required>
-    <input type="email" name="email" [(ngModel)]="workforceForm.email" placeholder="Email" required>
-    <input type="password" name="password" [(ngModel)]="workforceForm.password" placeholder="Password" required>
-    <input type="text" name="phone" [(ngModel)]="workforceForm.phone" placeholder="Phone">
-    <input type="date" name="dateOfBirth" [(ngModel)]="workforceForm.dateOfBirth" placeholder="Date of Birth">
-
-    <!-- Sélecteur pour Gender -->
-    <select name="gender" [(ngModel)]="workforceForm.gender">
-      <option *ngFor="let g of genders" [value]="g">{{ g }}</option>
+    <select name="country">
+      <option>Country</option>
+      <option>Canada</option>
+      <option>USA</option>
     </select>
+  </div>
 
-    <input type="text" name="socialSecurityNumber" [(ngModel)]="workforceForm.socialSecurityNumber" placeholder="Social Security Number">
-    <input type="text" name="skills" [(ngModel)]="workforceForm.skills" placeholder="Skills">
-    <input type="text" name="address" [(ngModel)]="workforceForm.address" placeholder="Address">
+  <label class="label-title">Select what is relevant to you so we can better assist you *</label>
+  <div class="checkbox-list">
+    <label><input type="checkbox"> Homeowner</label>
+    <label><input type="checkbox"> Tenant or Renter</label>
+    <label><input type="checkbox"> Short/Long Term Rental Operator</label>
+    <label><input type="checkbox"> Real Estate Investor</label>
+    <label><input type="checkbox"> Property or Operations Manager</label>
+    <label><input type="checkbox"> Realtor</label>
+    <label><input type="checkbox"> Business Owner needing flexible help</label>
+    <label><input type="checkbox"> Self-Employed Contractor or Tradesperson</label>
+    <label><input type="checkbox"> Nonprofit or Community Organization</label>
+    <label><input type="checkbox"> Senior or Family Member Seeking Help for a Senior</label>
+  </div>
 
-    <!-- Sélecteur pour WorkForceType -->
-    <select name="workForceType" [(ngModel)]="workforceForm.workForceType">
-      <option *ngFor="let w of workForceTypes" [value]="w">{{ w }}</option>
-    </select>
+  <label>Tell us about your main priorities or expectations with Swift Helpers.</label>
+  <textarea rows="5"></textarea>
 
-    <button type="submit">Sign Up</button>
-    
-  </form>
-  <p class="signin-link">
-    You have an account?  
-    <a routerLink="/signin">Sign in</a>
-  </p>
-</div>
+  <label>How did you hear about Swift Helpers?</label>
+  <select>
+    <option>Other</option>
+    <option>Google</option>
+    <option>Facebook</option>
+    <option>Referral</option>
+  </select>
+
+  <label>Would you like to receive updates and reminders?</label>
+  <div class="radio-group">
+    <label><input type="radio" name="updates"> Yes</label>
+    <label><input type="radio" name="updates"> No</label>
+  </div>
+
+  <button type="submit">Submit</button>
+</form>

@@ -1,30 +1,42 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgIf } from '@angular/common';
-import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-signin',
   standalone: true,
-  imports: [FormsModule, NgIf, RouterModule],
+  imports: [FormsModule, NgIf, RouterModule, ReactiveFormsModule],
   templateUrl: './signin.component.html',
   styleUrls: ['./signin.component.css']
 })
 export class SigninComponent {
-  email = '';
-  password = '';
+  form: FormGroup;
   errorMessage = '';
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router
+  ) {
+    // Création du formulaire avec validation
+    this.form = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required],
+    });
+  }
 
-  onSignin() {
-    this.authService.signin({ email: this.email, password: this.password }).subscribe({
+  login() {
+    if (this.form.invalid) {
+      return;
+    }
+
+    const { email, password } = this.form.value;
+
+    this.authService.signin({ email, password }).subscribe({
       next: (response) => {
-        console.log('✅ User signed in:', response);
         const role = response.role;
-  
         if (role === 'Client') {
           this.router.navigate(['/']);
         } else if (role === '3rd Party') {
@@ -32,14 +44,8 @@ export class SigninComponent {
         }
       },
       error: (err) => {
-        console.error('❌ Signin error:', err);
-        if (err.error && err.error.error) {
-          this.errorMessage = err.error.error;
-        } else {
-          this.errorMessage = "An error occurred, please try again.";
-        }
+        this.errorMessage = err?.error?.error || 'An error occurred, please try again.';
       }
     });
   }
-  
 }

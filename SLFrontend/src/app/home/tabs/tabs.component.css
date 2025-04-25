@@ -1,0 +1,48 @@
+.tabs-section {
+    padding: 50px 20px;
+    background: #fdfdfd;
+    max-width: 1000px;
+    margin: auto;
+  }
+  
+  .tabs-controls {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    list-style: none;
+    padding: 0;
+    border-bottom: 2px solid #eee;
+    margin-bottom: 30px;
+  }
+  
+  .tabs-controls li {
+    cursor: pointer;
+    padding: 10px 20px;
+    background: #f0f0f0;
+    border-radius: 6px 6px 0 0;
+    transition: 0.3s;
+    font-weight: 500;
+  }
+  
+  .tabs-controls li.active {
+    background: #e65c50;
+    color: white;
+  }
+  
+  .tabs-content {
+    background: white;
+    padding: 30px;
+    border-radius: 0 0 10px 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    font-size: 1.1rem;
+    line-height: 1.6;
+  }
+  
+  .tabs-content ul {
+    padding-left: 20px;
+  }
+  
+  .tabs-content li {
+    margin-bottom: 10px;
+  }
+  

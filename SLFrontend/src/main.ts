@@ -2,6 +2,7 @@ import { bootstrapApplication } from '@angular/platform-browser';
 import { provideRouter, Routes } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';  // ✅ Ajout de HttpClientModule
 import { AppComponent } from './app/app.component';
+import { provideAnimations } from '@angular/platform-browser/animations';
 
 import { HomeComponent } from './app/home/home.component';
 import { ServicesComponent } from './app/home/services/services.component';
@@ -11,6 +12,12 @@ import { SignupComponent } from './app/auth/signup/signup.component';
 import { NotificationsComponent } from './app/notifications/notifications.component';
 import { SigninComponent } from './app/auth/signin/signin.component';
 import { HelperDashboardComponent } from './app/helper-dashboard/helper-dashboard.component';
+import { SigninhelperComponent } from './app/auth/signinhelper/signinhelper.component';
+import { SignuphelperComponent } from './app/auth/signuphelper/signuphelper.component';
+import { ProfileComponent } from './app/helper-dashboard/profile/profile.component';
+import { AgendaComponent } from './app/helper-dashboard/agenda/agenda.component';
+import { DashboardComponent } from './app/helper-dashboard/dashboard/dashboard.component';
+import { OrdersComponent } from './app/helper-dashboard/orders/orders.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },  
@@ -20,12 +27,24 @@ const routes: Routes = [
   { path: 'signup', component: SignupComponent },
   { path: 'notifications', component: NotificationsComponent },
   { path: 'signin', component: SigninComponent },
-  { path: 'helper-dashboard', component: HelperDashboardComponent }
+   { path: 'helper-dashboard', 
+      component: HelperDashboardComponent,
+      children: [
+        { path: 'profile', component: ProfileComponent },
+        { path: 'agenda', component: AgendaComponent },
+        { path: 'dashboard', component: DashboardComponent },
+        { path: 'orders', component: OrdersComponent },
+        
+      ]
+    },
+  { path: 'signinhelper', component: SigninhelperComponent },
+  { path: 'signuphelper', component: SignuphelperComponent },
 ];
 
 bootstrapApplication(AppComponent, {
   providers: [
     provideRouter(routes),
+    provideAnimations(),
     provideHttpClient()  
   ],
 }).catch(err => console.error(err));

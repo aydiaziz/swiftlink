@@ -1,0 +1,113 @@
+.profile-form-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  }
+  
+  .form-title {
+    color: #002f5f;
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
+    font-weight: 600;
+  }
+  
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .form-group {
+    margin-bottom: 1.2rem;
+  
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #002f5f;
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+  
+    input, textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+  
+      &:focus {
+        outline: none;
+        border-color: #002f5f;
+        box-shadow: 0 0 0 2px rgba(0, 47, 95, 0.1);
+      }
+  
+      &::placeholder {
+        color: #a0a0a0;
+      }
+    }
+  
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+  }
+  
+  .error-msg {
+    color: #e65c50;
+    font-size: 0.85rem;
+    margin-top: 0.3rem;
+    display: block;
+  }
+  
+  .form-actions {
+    grid-column: 1 / -1;
+    text-align: center;
+    margin-top: 1rem;
+  }
+  
+  .submit-btn {
+    background-color: #002f5f;
+    color: white;
+    border: none;
+    padding: 0.8rem 2rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  
+    &:hover {
+      background-color: darken(#002f5f, 5%);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 47, 95, 0.2);
+    }
+  
+    &:active {
+      transform: translateY(0);
+    }
+  
+    &:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+  }
+  
+  /* Responsive */
+  @media (max-width: 600px) {
+    .profile-form-container {
+      padding: 1.5rem;
+    }
+    
+    .form-grid {
+      grid-template-columns: 1fr;
+    }
+  }

@@ -1,0 +1,31 @@
+<div class="chat-container">
+  <div class="container">
+    <div class="chat-box">
+      <div class="messages-area">
+        <div *ngFor="let msg of messages" class="message" [ngClass]="msg.sender">
+          <div class="avatar" [ngClass]="msg.sender">{{ msg.sender === 'user' ? 'U' : 'A' }}</div>
+          <div class="message-bubble">
+            <div class="message-text">{{ msg.text }}</div>
+            <span class="message-time">{{ msg.time }}</span>
+          </div>
+        </div>
+      </div>
+
+      <form (ngSubmit)="sendMessage()" class="input-form">
+        <input
+          type="text"
+          [(ngModel)]="userMessage"
+          name="userMessage"
+          placeholder="how can i help you ?"
+          class="input-field"
+          required
+        />
+        <button type="submit" class="send-button" [disabled]="!userMessage.trim()">Send</button>
+      </form>
+    </div>
+
+    <div class="info-box">
+      <p class="info-text">save your time book now!</p>
+    </div>
+  </div>
+</div>

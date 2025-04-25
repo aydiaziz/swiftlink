@@ -1,0 +1,30 @@
+<section class="tabs-section">
+    <ul class="tabs-controls">
+      <li [class.active]="activeTab === 0" (click)="selectTab(0)">Meet The Helpers</li>
+      <li [class.active]="activeTab === 1" (click)="selectTab(1)">How It Works</li>
+      <li [class.active]="activeTab === 2" (click)="selectTab(2)">Our Customers</li>
+    </ul>
+  
+    <div class="tabs-content" *ngIf="activeTab === 0">
+      <p>Our helpers are ready, willing, and capable self-employed individuals offering a wide range of services from general labor to skilled trades.</p>
+      <p>With hands-on experience, strong work ethic, and the proper certification, they work under your supervision to deliver quality results and complete satisfaction.</p>
+    </div>
+  
+    <div class="tabs-content" *ngIf="activeTab === 1">
+      <p>Share your request, and we’ll gather any needed details. Once clear, we’ll post it to the right secure workboard for qualified helpers to respond.</p>
+      <p>View helper profiles and choose who to connect with. No pressure, just safe and transparent interaction.</p>
+      <p>Coordinate directly and pay after the job is done.</p>
+    </div>
+  
+    <div class="tabs-content" *ngIf="activeTab === 2">
+      <ul>
+        <li>Homeowners needing help with everyday tasks.</li>
+        <li>Rental property owners needing maintenance support.</li>
+        <li>Property managers seeking quick, flexible workforce access.</li>
+        <li>Business owners looking for cost-efficient temporary help.</li>
+        <li>Realtors looking for reliable and cost-effective range of skills.</li>
+        <li>Self-employed professionals needing flexible help.</li>
+      </ul>
+    </div>
+  </section>
+  

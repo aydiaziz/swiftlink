@@ -1,0 +1,36 @@
+<div class="signin-container">
+    <div class="info-section">
+      <h1>Welcome to Your WorkSpace</h1>
+      <p>Log in to access the work board and to manage your work orders.</p>
+  
+      <div class="info-details">
+        <h2>Don’t have an account?</h2>
+        <p>
+            You’ve got skills, and you’re ready to work, whether you want extra income or full-time opportunities. Swift Helpers gives you flexible work on your terms.
+        </p>
+        <p>
+           <strong>Sign up today and start earning.</strong> 
+        </p>
+        <p>
+            Set your rates, manage your schedule, and get paid directly by your clients. There are no platform markups, and you keep 100 percent of what you earn.
+
+            At Swift Helpers, we charge a small membership fee to keep the platform fair, transparent, and affordable for everyone.
+        </p>
+      </div>
+    </div>
+  
+    <form (ngSubmit)="login()" [formGroup]="form">
+      <input type="email" formControlName="email" placeholder="Email" />
+      <input type="password" formControlName="password" placeholder="Password" />
+      <button type="submit" class="signin-button">Sign In</button>
+  
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
+  
+      <div class="switch-auth">
+        Don't have an account? <a routerLink="/signup">Create an account</a>
+      </div>
+    </form>
+  </div>
+  

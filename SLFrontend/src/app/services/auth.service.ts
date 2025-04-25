@@ -1,6 +1,7 @@
+// auth.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, BehaviorSubject, throwError } from 'rxjs';
+import { Observable, BehaviorSubject, throwError, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { Client, Workforce } from '../models/user.model';
 
@@ -14,17 +15,15 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  // ✅ Vérifie si un token est déjà présent
   private hasClientToken(): boolean {
     return !!localStorage.getItem('access_token');
   }
 
-  // ✅ Inscription Client
   signupClient(clientData: Client): Observable<any> {
     const formattedData = {
       UserId: {
         email: clientData.email,
-        username: clientData.email,  
+        username: clientData.email,
         last_name: clientData.lastName,
         first_name: clientData.firstName,
         password: clientData.password,
@@ -41,19 +40,17 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/signup/client/`, formattedData).pipe(
       tap(() => this.isClientLoggedInSubject.next(true)),
       catchError(error => {
-        console.error("❌ Signup Client Error:", error);
+        console.error("Signup Client Error:", error);
         return throwError(() => new Error("Signup failed"));
       })
     );
   }
-  
 
-  // ✅ Inscription Workforce
   signupWorkforce(workforceData: Workforce): Observable<any> {
     const formattedData = {
       UserId: {
         email: workforceData.email,
-        username: workforceData.email,  // ✅ Username = Email
+        username: workforceData.email,
         first_name: workforceData.firstName,
         last_name: workforceData.lastName,
         password: workforceData.password,
@@ -76,17 +73,14 @@ export class AuthService {
       hourlyRatebyService: workforceData.hourlyRatebyService || 0
     };
 
-    console.log("🚀 Signup Workforce Data:", formattedData); // 🔥 Debugging
-
     return this.http.post(`${this.apiUrl}/signup/workforce/`, formattedData).pipe(
       catchError(error => {
-        console.error("❌ Signup Workforce Error:", error);
+        console.error("Signup Workforce Error:", error);
         return throwError(() => new Error("Signup failed"));
       })
     );
   }
 
-  // ✅ Connexion (Signin)
   signin(credentials: { email: string; password: string }): Observable<any> {
     return this.http.post(`${this.apiUrl}/signin/`, credentials).pipe(
       tap((response: any) => {
@@ -102,25 +96,23 @@ export class AuthService {
         }
       }),
       catchError(error => {
-        console.error("❌ Signin Error:", error);
+        console.error("Signin Error:", error);
         return throwError(() => new Error("Invalid credentials"));
       })
     );
   }
   
-  // ✅ Déconnexion
-  logout() {
+  logout(): void {
     localStorage.clear();
     this.isClientLoggedInSubject.next(false);
   }
 
-  // ✅ Récupérer le rôle de l'utilisateur
   getUserRole(): string | null {
     return localStorage.getItem('role');
   }
-  // ✅ Récupérer l'utilisateur connecté
+
   getCurrentUser(): Observable<any> {
-    const token = localStorage.getItem('access_token'); // 🔥 Récupère le token
+    const token = localStorage.getItem('access_token');
     if (!token) {
       return throwError(() => new Error('No access token found'));
     }
@@ -129,6 +121,4 @@ export class AuthService {
       headers: { Authorization: `Bearer ${token}` }
     });
   }
-  
-
 }

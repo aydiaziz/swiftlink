@@ -1,70 +1,165 @@
-/* Orders Container */
+/* Orders Container - Version améliorée */
 .orders-container {
-    padding: 20px;
-    font-family: 'Arial', sans-serif;
+    padding: 2rem;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-/* Orders List */
+.orders-container h2 {
+    color: #002f5f;
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid rgba(0, 47, 95, 0.1);
+    display: inline-block;
+}
+
+/* Orders List - Version améliorée */
 .orders-container ul {
     list-style: none;
     padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
 }
 
 .orders-container li {
     background: #ffffff;
-    margin-bottom: 15px;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.03);
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: 0.3s;
+    flex-direction: column;
 }
 
 .orders-container li:hover {
-    transform: scale(1.02);
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
 }
 
-/* Order Details */
+/* Order Details - Version améliorée */
+.order-details {
+    padding: 1.5rem;
+    flex-grow: 1;
+}
+
 .order-details h3 {
-    margin: 0;
-    color: #333;
+    margin: 0 0 1rem 0;
+    color: #002f5f;
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.4;
 }
 
 .order-details p {
-    margin: 5px 0;
-    font-size: 14px;
+    margin: 0.75rem 0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #555;
+    display: flex;
+    align-items: flex-start;
 }
 
-/* Priority Levels */
+.order-details strong {
+    color: #333;
+    min-width: 100px;
+    display: inline-block;
+    font-weight: 500;
+}
+
+/* Priority Levels - Version améliorée */
+.priority-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
 .low {
-    color: green;
-    font-weight: bold;
+    background-color: rgba(40, 167, 69, 0.15);
+    color: #28a745;
 }
 
 .medium {
-    color: orange;
-    font-weight: bold;
+    background-color: rgba(255, 193, 7, 0.15);
+    color: #ffc107;
 }
 
 .high {
-    color: red;
-    font-weight: bold;
+    background-color: rgba(220, 53, 69, 0.15);
+    color: #dc3545;
 }
 
-/* Like Button */
+/* Like Button - Version améliorée */
 .orders-container button {
-    background: #ff4757;
+    background: linear-gradient(135deg, #ff4757 0%, #e84118 100%);
     color: white;
     border: none;
-    padding: 8px 12px;
-    border-radius: 5px;
+    padding: 0.75rem 1.25rem;
+    border-radius: 0 0 12px 12px;
     cursor: pointer;
-    font-size: 14px;
-    transition: 0.3s;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: auto;
 }
 
 .orders-container button:hover {
-    background: #e84118;
+    background: linear-gradient(135deg, #e84118 0%, #c23616 100%);
+    letter-spacing: 0.5px;
+}
+
+.orders-container button:active {
+    transform: scale(0.98);
+}
+
+/* Animation pour le like */
+@keyframes heartBeat {
+    0% { transform: scale(1); }
+    25% { transform: scale(1.3); }
+    50% { transform: scale(1); }
+    75% { transform: scale(1.3); }
+    100% { transform: scale(1); }
+}
+
+.orders-container button.liked {
+    animation: heartBeat 0.5s ease;
+    background: linear-gradient(135deg, #20c997 0%, #099268 100%);
+}
+
+/* Badge pour les dates importantes */
+.date-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(0, 47, 95, 0.08);
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+}
+
+.date-badge mat-icon {
+    font-size: 1rem;
+    width: 1rem;
+    height: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .orders-container ul {
+        grid-template-columns: 1fr;
+    }
+    
+    .orders-container {
+        padding: 1rem;
+    }
 }

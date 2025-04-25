@@ -1,28 +1,36 @@
 <nav class="navbar">
-  <div class="container">
-    <a routerLink="/" class="logo">Swift Helpers</a>
-    <ul class="nav-links">
-      <li><a routerLink="/">Home</a></li>
-      <li><a routerLink="/services">Services</a></li>
-      <li><a routerLink="/about">About</a></li>
-      <li><a routerLink="/contact">Contact</a></li>
-      <li *ngIf="isClientLoggedIn" class="notification-icon">
-        <a routerLink="/notifications">
-          <img src="/icons/notification.png" alt="Notifications">
-          <span class="badge"></span> 
-        </a>
-      </li>
-      <li *ngIf="!isClientLoggedIn">
-        <button class="signin-btn" routerLink="/signin">Sign In</button>
-      </li>
-
-      <li *ngIf="isClientLoggedIn">
-        <button class="logout-btn" (click)="onLogout()">Logout</button>
-      </li>
-    </ul>
-      
+  <div class="logo">
+    <img  src="\SWIFT-HELEPERS.PNG-BLANC.png"
+    alt="Swift Helpers Logo"
+      fetchpriority="high"
+      decoding="async"
+      width="1276"
+      height="754"
+      sizes="(min-width: 0px) and (max-width: 480px) 480px, 
+             (min-width: 481px) and (max-width: 980px) 980px, 
+             (min-width: 981px) 1276px, 
+             100vw"
+      class="logo-img">
   </div>
+  <ul class="nav-links">
+    <li><a href="#">Home</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#contact">Contact</a></li>
+  
+    <!-- Avant connexion -->
+    <ng-container *ngIf="!isClientLoggedIn">
+      <li><a routerLink="/signin">Client Login</a></li>
+      <li><a routerLink="/signinhelper">Helpers Login</a></li>
+    </ng-container>
+  
+    <!-- Après connexion -->
+    <ng-container *ngIf="isClientLoggedIn">
+      <li>
+        <button (click)="onLogout()" class="logout-button">Logout</button>
+      </li>
+      <li>
+        <img src="/icons/notification.png" alt="Notifications" class="notification-icon">
+      </li>
+    </ng-container>
+  </ul>
 </nav>
-
-<!-- Load the page content dynamically -->
-<router-outlet></router-outlet>

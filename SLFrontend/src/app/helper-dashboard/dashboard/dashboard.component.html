@@ -1,0 +1,61 @@
+<!-- dashboard.component.html -->
+<div class="dashboard-container">
+    <!-- Sidebar -->
+    
+    
+    <!-- Main Content -->
+    <main class="main-content">
+      <ng-container *ngIf="!loading; else loader">
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+          <div class="stat-card" *ngFor="let stat of statsCards">
+            <h3>{{ stat.title }}</h3>
+            <p class="stat-value" [ngSwitch]="stat.type">
+              <span *ngSwitchCase="'currency'">{{ stat.value | currency:'CAD':'symbol':'1.2-2' }}</span>
+              <span *ngSwitchDefault>{{ stat.value }}</span>
+            </p>
+          </div>
+        </div>
+        
+        <!-- Graphique et Calendrier -->
+        <div class="content-grid">
+          <!-- Graphique -->
+          <div class="chart-container card">
+            <h3>Vos Revenus</h3>
+            <canvas #incomeChart height="250"></canvas>
+          </div>
+        
+          <!-- Prochains Jobs -->
+          <div class="card">
+            <h3>Prochains Jobs</h3>
+            <div *ngIf="upcomingJobs?.length; else noJobs">
+              <div *ngFor="let job of upcomingJobs" class="job-item">
+                <div class="job-header">
+                  <span class="job-date">{{ job.date | date:'shortDate' }}</span>
+                  <span class="job-priority" [class]="'priority-' + job.priority">
+                    {{ job.priority }}
+                  </span>
+                </div>
+                <h4 class="job-title">{{ job.title }}</h4>
+                <p class="job-address">
+                  <mat-icon>location_on</mat-icon>
+                  {{ job.address }}
+                </p>
+              </div>
+            </div>
+            <ng-template #noJobs>
+              <p class="no-jobs">Aucun job prévu</p>
+            </ng-template>
+          </div>
+        </div>
+      </ng-container>
+    </main>
+  </div>
+  
+  <!-- Loader -->
+  <ng-template #loader>
+    <div class="loading-overlay">
+      <mat-spinner diameter="50"></mat-spinner>
+      <p>Chargement des données...</p>
+    </div>
+  </ng-template>

@@ -1,11 +1,44 @@
-<nav class="sidebar">
-    <ul>
-      <li (click)="navigate('profile')" [class.active]="currentSection === 'profile'">Profile</li>
-      <li (click)="navigate('orders')" [class.active]="currentSection === 'orders'">Orders</li>
-      <li (click)="navigate('agenda')" [class.active]="currentSection === 'agenda'">Agenda</li>
-      <li (click)="navigate('revenu-mensuel')" [class.active]="currentSection === 'revenu-mensuel'">Revenu Mensuel</li>
-      <li (click)="navigate('revenu-annuel')" [class.active]="currentSection === 'revenu-annuel'">Revenu Annuel</li>
-      <li (click)="navigate('historic-orders')" [class.active]="currentSection === 'historic-orders'">Historic Orders</li>
-    </ul>
-  </nav>
+<nav class="cyber-sidebar">
+  <div class="brand-glow">
+    <h2 class="app-title">HELPER<span class="pulse">_</span></h2>
+  </div>
   
+  <ul class="nav-grid">
+    <li class="nav-item" 
+        [class.active]="isActive('/helper-dashboard/orders')"
+        (click)="router.navigate(['/helper-dashboard/orders'])">
+      <div class="nav-glitch"></div>
+      <i class="nav-icon material-icons">orders</i>
+      <span class="nav-label">orders</span>
+    </li>
+    <li class="nav-item" 
+        [class.active]="isActive('/helper-dashboard/dashboard')"
+        (click)="router.navigate(['/helper-dashboard/dashboard'])">
+      <div class="nav-glitch"></div>
+      <i class="nav-icon material-icons">dashboard</i>
+      <span class="nav-label">dashboard</span>
+    </li>
+    <li class="nav-item" 
+        [class.active]="isActive('/helper-dashboard/profile')"
+        (click)="router.navigate(['/helper-dashboard/profile'])">
+      <div class="nav-glitch"></div>
+      <i class="nav-icon material-icons">person</i>
+      <span class="nav-label">Profil</span>
+    </li>
+
+    <li class="nav-item" 
+        [class.active]="isActive('/helper-dashboard/agenda')"
+        (click)="router.navigate(['/helper-dashboard/agenda'])">
+      <div class="nav-glitch"></div>
+      <i class="nav-icon material-icons">schedule</i>
+      <span class="nav-label">Agenda</span>
+    </li>
+  </ul>
+
+  <div class="status-box">
+    <div class="user-holo">
+      <div class="avatar-pulse"></div>
+      <span class="user-role">{{ userRole }}</span>
+    </div>
+  </div>
+</nav>
