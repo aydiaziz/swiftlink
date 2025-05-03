@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Order } from '../models/order.model';
 
 @Injectable({
   providedIn: 'root'
@@ -44,5 +45,23 @@ export class OrderService {
     });
 
     return this.http.post(`${this.apiUrl}${orderID}/like/`, {}, { headers });
+  }
+  confirmOrderAssignment(conversationId: number) {
+    return this.http.post<{ success: boolean }>(
+      'http://127.0.0.1:8000/api/order/confirm-assignment/',
+      { conversation_id: conversationId }
+    );
+  }
+  getHelperAgenda(): Observable<Order[]> {
+    return this.http.get<Order[]>('http://127.0.0.1:8000/api/orders/agenda/');
+  }
+  updateOrderDuration(orderId: number, startTime: string, endTime: string) {
+    return this.http.post(`${this.apiUrl}${orderId}/update-duration/`, {
+      start_time: startTime,
+      end_time: endTime
+    });
+  }
+  getJobsToday() {
+    return this.http.get<any[]>(`${this.apiUrl}today/`);
   }
 }

@@ -1,0 +1,24 @@
+<div class="chat-popup">
+  <div class="chat-header">
+    <span>Chat</span>
+    <button (click)="close.emit()">×</button>
+  </div>
+
+  <div class="chat-messages">
+    <div *ngFor="let msg of messages"
+         [ngClass]="{'message': true, 'sent': msg.sender === currentUserId, 'received': msg.sender !== currentUserId}">
+      {{ msg.content }}
+    </div>
+  </div>
+  
+  <!-- Bouton Confirm pour le client uniquement -->
+  <div *ngIf="isClient" class="confirm-section">
+    <button class="confirm-btn" (click)="confirmOrder()">Confirm</button>
+  </div>
+  
+
+  <div class="input-bar">
+    <input [(ngModel)]="messageText" placeholder="Type a message..." />
+    <button (click)="send()">Send</button>
+  </div>
+</div>

@@ -1,9 +1,8 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { provideRouter, Routes } from '@angular/router';
-import { provideHttpClient } from '@angular/common/http';  // ✅ Ajout de HttpClientModule
+import { provideHttpClient,HTTP_INTERCEPTORS  } from '@angular/common/http';  // ✅ Ajout de HttpClientModule
 import { AppComponent } from './app/app.component';
 import { provideAnimations } from '@angular/platform-browser/animations';
-
 import { HomeComponent } from './app/home/home.component';
 import { ServicesComponent } from './app/home/services/services.component';
 import { AboutComponent } from './app/home/about/about.component';
@@ -18,7 +17,9 @@ import { ProfileComponent } from './app/helper-dashboard/profile/profile.compone
 import { AgendaComponent } from './app/helper-dashboard/agenda/agenda.component';
 import { DashboardComponent } from './app/helper-dashboard/dashboard/dashboard.component';
 import { OrdersComponent } from './app/helper-dashboard/orders/orders.component';
-
+import { withInterceptorsFromDi } from '@angular/common/http';
+import { AuthInterceptor } from './auth.interceptor';
+import { ChatComponent } from './app/chat/chat.component';
 const routes: Routes = [
   { path: '', component: HomeComponent },  
   { path: 'services', component: ServicesComponent },
@@ -39,12 +40,18 @@ const routes: Routes = [
     },
   { path: 'signinhelper', component: SigninhelperComponent },
   { path: 'signuphelper', component: SignuphelperComponent },
+  { path: 'chat/:id', component: ChatComponent },
 ];
 
 bootstrapApplication(AppComponent, {
   providers: [
     provideRouter(routes),
     provideAnimations(),
-    provideHttpClient()  
-  ],
+    provideHttpClient(withInterceptorsFromDi()),
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
+  ]
 }).catch(err => console.error(err));

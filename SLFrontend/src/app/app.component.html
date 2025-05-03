@@ -1,3 +1,10 @@
 <app-navbar></app-navbar>
 <router-outlet></router-outlet>
 <app-footer></app-footer>
+<app-chat
+  *ngIf="showPopup && popupData"
+  [conversationId]="popupData.conversationId"
+  [helperId]="popupData.helperId"
+  [orderId]="popupData.orderId"
+  (close)="closeChat()"
+></app-chat>

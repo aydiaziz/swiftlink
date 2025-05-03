@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'ServiceType',
     'JobRessources',
     'notification',
+    'chat'
 ]
 
 AUTH_USER_MODEL = 'Ref_User.Ref_User'

@@ -17,10 +17,7 @@ export class DashboardService {
   }
 
   getStats(): Observable<DashboardResponse> {
-    return this.http.get<DashboardResponse>(
-      `${this.apiUrl}/stats/`, 
-      { headers: this.getHeaders() } // Ajout des headers ici
-    );
+    return this.http.get<DashboardResponse>(`http://127.0.0.1:8000/api/dashboard/helper/`);
   }
 
   updateProfile(data: any): Observable<any> {

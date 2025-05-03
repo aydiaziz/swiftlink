@@ -28,9 +28,33 @@
       <li>
         <button (click)="onLogout()" class="logout-button">Logout</button>
       </li>
-      <li>
-        <img src="/icons/notification.png" alt="Notifications" class="notification-icon">
+      <li class="messages-wrapper" (click)="toggleMessagesPopup()">
+        <img src="/icons/message.png" class="message-icon" alt="Messages" />
+        <div *ngIf="showMessagesPopup" class="messages-popup">
+          <div *ngIf="conversations.length === 0">No messages</div>
+          <ul *ngIf="conversations.length > 0">
+            <li *ngFor="let conv of conversations"  (click)="openChat(conv.id, conv.helper, conv.order)">
+              Conversation with {{ getOtherUserName(conv) }}
+            </li>
+          </ul>
+        </div>
       </li>
+      <li class="notification-wrapper" (click)="toggleNotificationPopup()">
+        <img src="/icons/notification.png" alt="Notifications" class="notification-icon">
+        <span *ngIf="unreadCount > 0" class="notification-badge">{{ unreadCount }}</span>
+      
+        <!-- Popup notifications -->
+        <div class="notification-popup" *ngIf="showPopup">
+          <div *ngIf="notifications.length === 0" class="empty-msg">No notifications</div>
+          <ul *ngIf="notifications.length > 0">
+            <li *ngFor="let notif of notifications" (click)="handleNotificationClick(notif)">
+              <p>{{ notif.message }}</p>
+              <span>{{ notif.created_at | date:'short' }}</span>
+            </li>
+          </ul>
+        </div>
+      </li>
+      
     </ng-container>
   </ul>
 </nav>

@@ -7,18 +7,24 @@ import { HeroComponent } from "./hero/hero.component";
 import { FeaturesComponent } from "./features/features.component";
 import { TabsComponent } from "./tabs/tabs.component";
 import { ChatbotComponent } from '../chatbot/chatbot.component';
-
+import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { NgIf } from '@angular/common';
+import { ChatComponent } from '../chat/chat.component';
+import { CommunicationService } from '../services/communication.service';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [FormsModule, ChatbotComponent, FeaturesComponent, TabsComponent],
+  imports: [FormsModule, ChatbotComponent, FeaturesComponent, TabsComponent,],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
   helpMessage: string = '';
-
+  showChat = false;
+  selectedConversationId: number=0;
+  constructor( private communicationService: CommunicationService,private router: Router, private http: HttpClient) {}
   sendMessage() {
     if (this.helpMessage.trim()) {
       console.log('User message:', this.helpMessage);
@@ -26,5 +32,28 @@ export class HomeComponent {
       this.helpMessage = ''; // Réinitialiser le champ après envoi
     }
   }
-
+  ngOnInit(): void {
+    this.communicationService.helperId$.subscribe(helperId => {
+      if (helperId) {
+        this.startConversation(helperId);
+      }
+    });
+  }
+  startConversation(helperId: number) {
+    this.http.post('/api/start-conversation/', { helper_id: helperId }).subscribe({
+      next: (res: any) => {
+        this.selectedConversationId = res.conversation_id;
+        this.showChat = true;
+      },
+      error: (err) => {
+        console.error('Error starting conversation:', err);
+      }
+    });
+  }
+  onNotificationClick(helperId: number) {
+    this.http.post('/api/start-conversation/', { helper_id: helperId }).subscribe((res: any) => {
+      this.selectedConversationId = res.conversation_id;
+      this.showChat = true;
+    });
+  }
 }

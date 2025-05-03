@@ -1,1 +1,26 @@
-<p>agenda works!</p>
+<div class="agenda-container">
+    <div class="calendar-wrapper">
+      <h2>🗓️ My Job Calendar</h2>
+      <full-calendar [options]="calendarOptions"></full-calendar>
+    </div>
+  
+    <div class="jobs-today">
+      <h3>Today's Jobs</h3>
+  
+      <div class="job-card" *ngFor="let job of todayJobs">
+        <p><strong>{{ job.jobTitle }}</strong></p>
+        <p>⏰ {{ job.executionDate | date:'shortTime' }}</p>
+  
+        <!-- Chronomètre -->
+        <div class="timer" *ngIf="isTiming && selectedOrder?.orderID === job.orderID">
+          ⌛ {{ timerDisplay }}
+          <!--override ynajem y7ot l wa9t manuellement choice box 1, 1:30 ...-->
+        </div>
+  
+        <!-- Boutons -->
+        <button *ngIf="!isTiming" (click)="startJob(job)">Start</button>
+        <button *ngIf="isTiming && selectedOrder?.orderID === job.orderID" (click)="stopJob()">Stop</button>
+      </div>
+    </div>
+  </div>
+  

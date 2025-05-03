@@ -1,5 +1,6 @@
 // models/dashboard.model.ts
 export interface DashboardStats {
+    monthly_income: {};
     total_orders: number;
     monthly_completed: number;
     total_income: number;

@@ -1,14 +1,16 @@
 import { Component, ElementRef, OnInit, ViewChild, AfterViewInit } from '@angular/core';
-import { OrderService } from '../../services/order.service';
-import { AuthService } from '../../services/auth.service';
-import { CommonModule } from '@angular/common';
-import { DashboardService } from '../../services/dashboard.service';
-import { NgChartsModule } from 'ng2-charts';
+import { Router } from '@angular/router';
 import { Chart, registerables } from 'chart.js';
+import { CommonModule } from '@angular/common';
+import { NgChartsModule } from 'ng2-charts';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
+
+import { OrderService } from '../../services/order.service';
+import { AuthService } from '../../services/auth.service';
+import { DashboardService } from '../../services/dashboard.service';
+
 import { DashboardStats, Job, DashboardResponse } from '../../models/dashboard.model';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -36,6 +38,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   errorMessage = '';
   helperServiceTypes: string[] = [];
   orders: any[] = [];
+  monthlyIncomeMap: { [key: string]: number } = {};
+  chartInstance: Chart | null = null;
+  private readonly monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
   constructor(
     private orderService: OrderService,
@@ -58,6 +63,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   loadData(): void {
     this.dashboardService.getStats().subscribe({
       next: (data: DashboardResponse) => {
+        // ✅ store the income data map
+        this.monthlyIncomeMap = data.stats.monthly_income || {};
+        
+        // Continue with the rest...
         this.statsCards[0].value = data.stats.total_orders;
         this.statsCards[1].value = data.stats.monthly_completed;
         this.statsCards[2].value = data.stats.total_income;
@@ -66,16 +75,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           date: new Date(job.date)
         }));
         this.loading = false;
-      },
-      error: (err) => {
-        console.error('Error loading dashboard data', err);
-        this.errorMessage = 'Session expirée. Veuillez vous reconnecter.';
-        this.loading = false;
-        
-        if (err.status === 401) {
-          this.authService.logout();
-          this.router.navigate(['/login']); // Meilleure pratique que window.location
-        }
+    
+        // Re-init chart if needed
+        this.initChart();
       }
     });
   }
@@ -118,13 +120,18 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     const ctx = this.incomeChartRef.nativeElement.getContext('2d');
     if (!ctx) return;
   
-    // Calcul des 6 derniers mois de revenus
+    // 🔥 Important : détruire l'ancien graphique
+    if (this.chartInstance) {
+      this.chartInstance.destroy();
+    }
+  
     const monthlyIncomes = this.calculateLastSixMonthsIncome();
-    
-    new Chart(ctx, {
+    const labels = this.getLastSixMonthsLabels();
+  
+    this.chartInstance = new Chart(ctx, {
       type: 'line',
       data: {
-        labels: this.getLastSixMonthsLabels(),
+        labels,
         datasets: [{
           label: 'Revenus mensuels',
           data: monthlyIncomes,
@@ -137,77 +144,59 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       },
       options: {
         responsive: true,
-        maintainAspectRatio: false,
+        maintainAspectRatio: false, // autorise les dimensions personnalisées
         plugins: {
           legend: {
             display: true,
             position: 'top',
             labels: {
               color: '#002f5f',
-              font: {
-                weight: 'bold'
-              }
+              font: { weight: 'bold' }
             }
           },
           tooltip: {
             backgroundColor: '#002f5f',
-            titleColor: '#ffffff',
-            bodyColor: '#ffffff',
+            titleColor: '#fff',
+            bodyColor: '#fff',
             callbacks: {
-              label: (context) => {
-                return ` $${context.parsed.y.toFixed(2)}`;
-              }
+              label: (context) => ` $${context.parsed.y.toFixed(2)}`
             }
           }
         },
         scales: {
           y: {
             beginAtZero: true,
-            grid: {
-              color: 'rgba(0, 0, 0, 0.05)'
-            },
-            ticks: {
-              color: '#002f5f',
-              callback: (value) => `$${value}`
-            }
+            ticks: { color: '#002f5f' },
+            grid: { color: 'rgba(0, 0, 0, 0.05)' }
           },
           x: {
-            grid: {
-              display: false
-            },
-            ticks: {
-              color: '#002f5f'
-            }
+            ticks: { color: '#002f5f' },
+            grid: { display: false }
           }
         }
       }
     });
   }
-  private calculateLastSixMonthsIncome(): number[] {
-    // Implémentation basique - à adapter avec vos vraies données
-    if (!this.upcomingJobs?.length) return [0, 0, 0, 0, 0, 0];
-    
-    // Exemple: utilisez les revenus du composant ou calculez-les
-    return [
-      this.statsCards[2].value * 0.8, // Mois -6
-      this.statsCards[2].value * 0.9, // Mois -5
-      this.statsCards[2].value * 1.0, // Mois -4
-      this.statsCards[2].value * 1.1, // Mois -3
-      this.statsCards[2].value * 1.2, // Mois -2
-      this.statsCards[2].value        // Mois courant
-    ];
+  calculateLastSixMonthsIncome(): number[] {
+    const last6Keys = this.getLastSixMonthsLabelsRaw();
+    return last6Keys.map(monthKey => this.monthlyIncomeMap[monthKey] || 0);
   }
-  
-  private getLastSixMonthsLabels(): string[] {
-    const months = [];
+
+  getLastSixMonthsLabels(): string[] {
+    const raw = this.getLastSixMonthsLabelsRaw();
+    return raw.map(key => {
+      const [year, month] = key.split('-').map(Number);
+      return `${this.monthNames[month - 1]} ${year}`;
+    });
+  }
+
+  getLastSixMonthsLabelsRaw(): string[] {
+    const labels = [];
     const date = new Date();
-    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    
     for (let i = 5; i >= 0; i--) {
       const d = new Date(date.getFullYear(), date.getMonth() - i, 1);
-      months.push(`${monthNames[d.getMonth()]} ${d.getFullYear()}`);
+      labels.push(`${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, '0')}`);
     }
-    
-    return months;
+    return labels;
   }
 }

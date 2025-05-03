@@ -10,4 +10,5 @@ urlpatterns = [
     path('api/', include('Order.urls',)),
     path('api/', include('notification.urls',)),
     path('api/', include('Workforce.urls',)),
+    path('api/chat/', include('chat.urls')),
 ]
