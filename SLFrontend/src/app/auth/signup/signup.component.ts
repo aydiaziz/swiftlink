@@ -9,7 +9,7 @@ import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports:[NgIf,FormsModule,RouterModule,NgFor],
+  imports:[NgIf,FormsModule,RouterModule],
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.css']
 })

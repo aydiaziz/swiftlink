@@ -1,0 +1,30 @@
+<h2>Admin - Gestion des Helpers</h2>
+
+<div *ngIf="loading">Chargement...</div>
+<div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+
+<table *ngIf="!loading" class="helper-table">
+  <thead>
+    <tr>
+      <th>Nom</th>
+      <th>Email</th>
+      <th>Statut</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let h of helpers">
+      <td>{{ h.first_name }} {{ h.last_name }}</td>
+      <td>{{ h.email }}</td>
+      <td>
+        <span [ngClass]="{ 'pending': h.acces === 0, 'confirmed': h.acces === 1 }">
+          {{ h.acces === 0 ? 'Candidature' : 'Confirmé' }}
+        </span>
+      </td>
+      <td>
+        <button (click)="acceptHelper(h.UserId)" *ngIf="h.acces === 0">Accepter</button>
+        <button [routerLink]="['/admin/helper', h.UserId]">Consulter</button>
+      </td>
+    </tr>
+  </tbody>
+</table>

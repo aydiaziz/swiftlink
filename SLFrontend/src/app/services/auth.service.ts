@@ -4,12 +4,13 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, throwError, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { Client, Workforce } from '../models/user.model';
+import { environment } from '../../environments/environment.prod';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://127.0.0.1:8000/api';
+  private apiUrl = environment.apiUrl;
   private isClientLoggedInSubject = new BehaviorSubject<boolean>(this.hasClientToken());
   isClientLoggedIn$ = this.isClientLoggedInSubject.asObservable();
 
@@ -47,39 +48,46 @@ export class AuthService {
   }
 
   signupWorkforce(workforceData: Workforce): Observable<any> {
-    const formattedData = {
-      UserId: {
-        email: workforceData.email,
-        username: workforceData.email,
-        first_name: workforceData.firstName,
-        last_name: workforceData.lastName,
-        password: workforceData.password,
-        entityId: 1
-      },
-      phone: workforceData.phone || '',
-      gender: workforceData.gender,
-      driverLicence: workforceData.driverLicence || '',
-      driverLicenceExpiry: workforceData.driverLicenceExpiry || '',
-      credentials: workforceData.credentials || '',
-      credentialsExpiry: workforceData.credentialsExpiry || '',
-      training: workforceData.training || '',
-      workForceType: workforceData.workForceType,
-      dateOfBirth: workforceData.dateOfBirth,
-      socialSecurityNumber: workforceData.socialSecurityNumber || '',
-      skills: workforceData.skills || '',
-      address: workforceData.address || '',
-      workCategory: workforceData.workCategory || [],
-      availability: workforceData.availability || {},
-      hourlyRatebyService: workforceData.hourlyRatebyService || 0
-    };
+  const formattedData: any = {
+    entityID: 1,
+    UserId: {
+      email: workforceData.email,
+      username: workforceData.email,
+      first_name: workforceData.firstName,
+      last_name: workforceData.lastName,
+      password: workforceData.password,
+      entityId: 1
+    },
+    phone: workforceData.phone || '',
+    gender: workforceData.gender,
+    driverLicence: workforceData.driverLicence || '',
+    training: workforceData.training || '',
+    workForceType: workforceData.workForceType,
+    address: workforceData.address || '',
+    workCategory: workforceData.workCategory || [],
+    availability: workforceData.availability,
+    credentials: workforceData.credentials,
+    credentialsExpiry: workforceData.credentialsExpiry,
+    dateOfBirth: workforceData.dateOfBirth,
+    socialSecurityNumber: workforceData.socialSecurityNumber,
+    skills: workforceData.skills,
+    hourlyRatebyService: workforceData.hourlyRatebyService
+  };
 
-    return this.http.post(`${this.apiUrl}/signup/workforce/`, formattedData).pipe(
-      catchError(error => {
-        console.error("Signup Workforce Error:", error);
-        return throwError(() => new Error("Signup failed"));
-      })
-    );
+  // ✅ Ajouter driverLicenceExpiry uniquement si permis = "Yes"
+  if (workforceData.driverLicence === 'Yes' && workforceData.driverLicenceExpiry) {
+    const rawDate = new Date(workforceData.driverLicenceExpiry);
+    formattedData.driverLicenceExpiry = rawDate.toISOString().slice(0, 10);
   }
+
+  return this.http.post(`${this.apiUrl}/signup/workforce/`, formattedData).pipe(
+    catchError(error => {
+      console.error("Signup Workforce Error:", error);
+      return throwError(() => new Error("Signup failed"));
+    })
+  );
+}
+
 
   signin(credentials: { email: string; password: string }): Observable<any> {
     return this.http.post(`${this.apiUrl}/signin/`, credentials).pipe(
@@ -120,5 +128,8 @@ export class AuthService {
     return this.http.get(`${this.apiUrl}/me/`, {
       headers: { Authorization: `Bearer ${token}` }
     });
+  }
+  updateClientProfile(data: FormData) {
+    return this.http.patch(`${this.apiUrl}/client/profile/`, data);
   }
 }

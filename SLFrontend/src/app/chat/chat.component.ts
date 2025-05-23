@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ChatService } from '../services/chat.service';
 import { CommunicationService } from '../services/communication.service';
 import { AuthService } from '../services/auth.service';
@@ -24,8 +24,12 @@ export class ChatComponent implements OnInit {
   currentUserId!: number;
   isClient:boolean=false;
   @Input() orderId!: number;
+  orderConfirmed: boolean = false;
+  defaultProfileImage: string = '/default-user.jpg';
+  currentUser: any;
+  
 
-  constructor(private chatService: ChatService,private authService: AuthService,private orderService: OrderService) 
+  constructor(private router: Router,private chatService: ChatService,private authService: AuthService,private orderService: OrderService) 
   {}
 
   ngOnInit() {
@@ -39,6 +43,7 @@ export class ChatComponent implements OnInit {
       console.error('❌ conversationId not provided to ChatComponent');
     }
     this.authService.getCurrentUser().subscribe(user => {
+      this.currentUser = user;
       this.currentUserId = user.user_id;
       this.isClient = user.role === 'Client'; 
     });
@@ -46,7 +51,12 @@ export class ChatComponent implements OnInit {
   }
   confirmOrder() {
     if (!this.conversationId) return;
+    this.orderConfirmed = true;
 
+  this.messages.push({
+    content: "Your order has been confirmed",
+    system: true // tu peux utiliser ce flag pour les messages spéciaux
+  });
     this.orderService.confirmOrderAssignment(this.conversationId).subscribe({
       next: (res) => {
         if (res.success) {
@@ -67,12 +77,15 @@ export class ChatComponent implements OnInit {
     this.chatService.sendMessage(this.conversationId, this.messageText,this.currentUserId).subscribe(() => {
       this.messages.push({
         content: this.messageText,
-        sender:  this.currentUserId ,
+        sender: this.currentUserId,
+        senderImage: this.currentUser?.profileImage || this.defaultProfileImage,
         timestamp: new Date()
       });
       this.messageText = '';
     });
   }
-  
+  goToHelperProfile(helperId: number) {
+  this.router.navigate(['/helper-profile', helperId]);
+}
   
 }

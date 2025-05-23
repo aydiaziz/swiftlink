@@ -25,15 +25,22 @@ class WorkForce(models.Model):
         primary_key=True,
         limit_choices_to={'role': 'WORKFORCE'}
     )
-    
+    professionnelemail = models.EmailField(max_length=255, blank=True)
+    driverLicenceFile = models.FileField(upload_to='licenses/', null=True, blank=True)
+    wcbNumber = models.CharField(max_length=100, blank=True)
+    wcbFile = models.FileField(upload_to='wcb_clearances/', null=True, blank=True)
+    city = models.CharField(max_length=100, blank=True)
+    province = models.CharField(max_length=100, blank=True)
+    postalCode = models.CharField(max_length=20, blank=True)
+    country = models.CharField(max_length=100, default='Canada')
     phone = models.CharField(max_length=20)   
     gender = models.CharField(max_length=50, choices=Gender.choices)
-    dateOfBirth = models.DateField()
-    socialSecurityNumber = models.CharField(max_length=20) 
+    dateOfBirth = models.DateField(null=True,blank=True)
+    socialSecurityNumber = models.CharField(max_length=20, blank=True) 
     skills = models.TextField(null=True, blank=True)  
-    address = models.CharField(max_length=255)
+    address = models.CharField(max_length=255, blank=True)
     workCategory = models.ManyToManyField(ServiceType) 
-    availability = models.JSONField()  
+    availability = models.JSONField( blank=True)  
     hourlyRatebyService = models.DecimalField(max_digits=10, decimal_places=2,null=True, blank=True) 
     fixedRate = models.DecimalField(max_digits=10, decimal_places=2,null=True, blank=True)  
     driverLicence = models.CharField(max_length=50,null=True, blank=True)  
@@ -44,5 +51,16 @@ class WorkForce(models.Model):
     rating = models.DecimalField(max_digits=3, decimal_places=2, default=0.00,null=True, blank=True)  
     workForceType = models.CharField(max_length=50, choices=WorkForceType.choices)
     createdAt = models.DateTimeField(auto_now_add=True) 
+    acces = models.IntegerField(default=0)
+    careerExpectations = models.TextField(null=True, blank=True)
+    referralSource = models.CharField(max_length=100, blank=True)
+    wantsUpdates = models.BooleanField(default=False)
+    securityFundRate = models.DecimalField(max_digits=5, decimal_places=2, default=15.0)  # %
+    platformFeeRate = models.DecimalField(max_digits=5, decimal_places=2, default=5.0)   # %
+    clientChargeRate = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    consumablesFee = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    yearsOfExperience = models.TextField(blank=True, null=True)
+    resume = models.FileField(upload_to='resumes/', null=True, blank=True)
+    driverLicenceClass = models.CharField(max_length=50, blank=True, null=True)
     def __str__(self):
         return f"{self.firstName} {self.lastName} - {self.workForceType}"

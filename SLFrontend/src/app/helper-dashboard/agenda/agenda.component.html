@@ -6,21 +6,39 @@
   
     <div class="jobs-today">
       <h3>Today's Jobs</h3>
-  
+    
       <div class="job-card" *ngFor="let job of todayJobs">
         <p><strong>{{ job.jobTitle }}</strong></p>
         <p>⏰ {{ job.executionDate | date:'shortTime' }}</p>
-  
+    
+        
+    
         <!-- Chronomètre -->
         <div class="timer" *ngIf="isTiming && selectedOrder?.orderID === job.orderID">
           ⌛ {{ timerDisplay }}
-          <!--override ynajem y7ot l wa9t manuellement choice box 1, 1:30 ...-->
         </div>
-  
+    
         <!-- Boutons -->
         <button *ngIf="!isTiming" (click)="startJob(job)">Start</button>
         <button *ngIf="isTiming && selectedOrder?.orderID === job.orderID" (click)="stopJob()">Stop</button>
+        <div class="manual-duration">
+          <label for="manualDuration">Set Duration:</label>
+          <select [(ngModel)]="manualDuration" class="duration-select">
+            <option [value]="30">30 min</option>
+            <option [value]="60">1 hour</option>
+            <option [value]="90">1h 30min</option>
+            <option [value]="120">2 hours</option>
+            <option [value]="150">2h 30min</option>
+            <option [value]="180">3 hours</option>
+          </select>
+          <button class="set-duration-btn" (click)="setManualDuration(job)" [disabled]="manualDuration === 0">
+            Set Duration
+          </button>
+        </div>
       </div>
+    <!-- Choix manuel de la durée -->
+    
     </div>
+    
   </div>
   

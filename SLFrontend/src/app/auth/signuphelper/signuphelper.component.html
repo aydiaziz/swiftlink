@@ -1,1 +1,72 @@
-<p>signuphelper works!</p>
+<div *ngIf="isLoading" class="loader-overlay">
+  <div class="loader"></div>
+  <p>Sending your application...</p>
+</div>
+<div class="form">
+  <h2>Helper Application</h2>
+
+  <form (ngSubmit)="register()" #formRef="ngForm">
+
+    <!-- 1. Basic Identity and Location -->
+    <label class="label-title">Basic Identity and Location</label>
+    <div class="form-grid">
+      <input type="text" name="firstName" [(ngModel)]="workforceForm.firstName" placeholder="First Name *" required />
+      <input type="text" name="lastName" [(ngModel)]="workforceForm.lastName" placeholder="Last Name *" required />
+    </div>
+    <input type="email" name="email" [(ngModel)]="workforceForm.email" placeholder="Email Address *" required />
+    <input type="tel" name="phone" [(ngModel)]="workforceForm.phone" placeholder="Phone Number *" required />
+    <input type="text" name="city" [(ngModel)]="workforceForm.city" placeholder="City *" required />
+
+    <!-- 2. Service Categories -->
+    <label class="label-title">Select Your Services *</label>
+    <div class="checkbox-list">
+      <label *ngFor="let service of services">
+        <input type="checkbox"
+               [value]="service.serviceTypeID"
+               (change)="onServiceSelect($event)"
+               [checked]="workforceForm.workCategory.includes(service.serviceTypeID)" />
+        {{ service.serviceName }}
+      </label>
+    </div>
+
+    <!-- 3. Work Profile -->
+    <label class="label-title">Work Profile</label>
+    <textarea name="training" [(ngModel)]="workforceForm.training" rows="3" placeholder="Work Experience *" required></textarea>
+    <textarea name="yearsOfExperience" [(ngModel)]="workforceForm.yearsOfExperience" rows="2" placeholder="Years of Relevant Experience *" required></textarea>
+    <input type="file" name="resume" (change)="onFileChange($event, 'resume')" />
+
+    <!-- 4. Mobility -->
+    <label class="label-title">Mobility</label>
+    <select [(ngModel)]="workforceForm.driverLicence" name="driverLicence" required>
+      <option value="">Do you have a Driver’s License? *</option>
+      <option value="Yes">Yes</option>
+      <option value="No">No</option>
+    </select>
+    <input type="text" name="driverLicenceClass" [(ngModel)]="workforceForm.driverLicenceClass" placeholder="Driver’s License Class" />
+
+    <!-- 5. Vehicle and Tools -->
+    <label class="label-title">Vehicle and Work-Related Basic Tools *</label>
+    <div class="checkbox-list">
+      <label *ngFor="let vehicle of vehicleOptions">
+        <input type="checkbox"
+               [value]="vehicle"
+               (change)="onVehicleSelect($event)"
+               [checked]="workforceForm.availability[vehicle]" />
+        {{ vehicle }}
+      </label>
+    </div>
+
+    <!-- 6. Privacy Policy -->
+    <label class="label-title">
+      <input type="checkbox" [(ngModel)]="acceptedPolicy" name="privacyPolicy" required />
+      I agree to the Privacy Policy *
+    </label>
+
+    <!-- Error -->
+    <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+
+    <!-- 7. Submit -->
+    <button type="submit">Submit</button>
+
+  </form>
+</div>

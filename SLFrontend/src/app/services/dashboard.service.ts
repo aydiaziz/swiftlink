@@ -2,10 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { DashboardResponse } from '../models/dashboard.model';
+import { environment } from '../../environments/environment.prod';
 
 @Injectable({ providedIn: 'root' })
 export class DashboardService {
-  private apiUrl = 'http://127.0.0.1:8000/api';
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 
@@ -27,4 +28,7 @@ export class DashboardService {
       { headers: this.getHeaders() } // Headers également ici
     );
   }
+  getHelperProfile(userId: number) {
+  return this.http.get(`http://127.0.0.1:8000/api/helpers/${userId}/profile/`);
+}
 }

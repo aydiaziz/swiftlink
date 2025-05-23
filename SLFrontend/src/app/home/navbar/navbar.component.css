@@ -177,4 +177,23 @@
 .messages-popup li:hover {
   background-color: #f5f5f5;
 }
+.profile-wrapper {
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+}
+
+.profile-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.profile-icon:hover {
+  transform: scale(1.05);
+}
+
 

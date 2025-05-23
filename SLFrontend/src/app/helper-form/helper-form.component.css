@@ -1,0 +1,85 @@
+.helper-profile-form {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 30px 40px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.helper-profile-form h2 {
+  font-size: 26px;
+  color: #002f5f;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.helper-profile-form label {
+  display: block;
+  margin-top: 20px;
+  font-weight: 600;
+  color: #333;
+}
+
+.helper-profile-form input,
+.helper-profile-form select,
+.helper-profile-form textarea {
+  width: 100%;
+  padding: 10px 12px;
+  margin-top: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 15px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+.helper-profile-form input:focus,
+.helper-profile-form select:focus,
+.helper-profile-form textarea:focus {
+  border-color: #0078d4;
+  outline: none;
+}
+
+.helper-profile-form textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.rate-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.radio-group {
+  display: flex;
+  gap: 20px;
+  margin-top: 10px;
+}
+
+button {
+  margin-top: 30px;
+  background-color: #002f5f;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 100%;
+}
+
+button:hover {
+  background-color: #004080;
+}
+
+.error {
+  color: #d9534f;
+  font-weight: 500;
+  margin-top: 12px;
+  text-align: center;
+}

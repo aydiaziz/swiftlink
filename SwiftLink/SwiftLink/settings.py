@@ -52,7 +52,8 @@ INSTALLED_APPS = [
     'ServiceType',
     'JobRessources',
     'notification',
-    'chat'
+    'chat',
+    'invoice'
 ]
 
 AUTH_USER_MODEL = 'Ref_User.Ref_User'
@@ -73,7 +74,7 @@ ROOT_URLCONF = 'SwiftLink.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -156,3 +157,13 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     "USER_ID_FIELD": "user_id",
 }
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'mail.swift-helpers.com'
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True  # ✅ car tu utilises le port 465 (SSL)
+EMAIL_USE_TLS = False  # ❌ Pas besoin de TLS si SSL est actif
+EMAIL_HOST_USER = 'accounts@swift-helpers.com'
+EMAIL_HOST_PASSWORD = 'Fort$2025'  # Le mot de passe de l’email
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'

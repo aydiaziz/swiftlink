@@ -1,0 +1,55 @@
+<div class="profile-container">
+    <h2>Profile Settings</h2>
+  
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
+      
+      <!-- Image -->
+      <div class="profile-image">
+        <img [src]="profileImageUrl " alt="Profile" />
+        <input type="file" (change)="onFileChange($event)" />
+      </div>
+  
+      <!-- Email avec bouton d’édition -->
+      <div class="editable-field">
+        <label>Email</label>
+        <div *ngIf="!editingEmail">
+          {{ form.get('email')?.value }}
+          <button type="button" (click)="toggleEdit('email')">✏️</button>
+        </div>
+        <input *ngIf="editingEmail" type="email" formControlName="email" />
+        <div *ngIf="form.get('email')?.invalid && form.get('email')?.touched" class="error">Invalid email</div>
+      </div>
+  
+      <!-- Adresse avec bouton d’édition -->
+      <div class="editable-field">
+        <label>Address</label>
+        <div *ngIf="!editingAddress">
+          {{ form.get('address')?.value }}
+          <button type="button" (click)="toggleEdit('address')">✏️</button>
+        </div>
+        <input *ngIf="editingAddress" type="text" formControlName="address" />
+      </div>
+      <!--phone number-->
+      <!-- Carte (à intégrer plus tard avec coords/map component) -->
+      <!-- <app-map (addressSelected)="updateAddress($event)"></app-map> -->
+  
+      <!-- Password -->
+      <label>Change Password</label>
+      <input type="password" formControlName="oldPassword" placeholder="Current Password" />
+      <input type="password" formControlName="newPassword" placeholder="New Password" />
+      <input type="password" formControlName="confirmPassword" placeholder="Confirm New Password" />
+      <div *ngIf="form.hasError('passwordMismatch') && form.get('confirmPassword')?.touched" class="error">
+        Passwords do not match
+      </div>
+  
+      <button type="submit" [disabled]="form.invalid">Save Changes</button>
+    </form>
+    <div *ngIf="successMessage" class="success-message">
+        {{ successMessage }}
+      </div>
+      
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
+  </div>
+  

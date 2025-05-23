@@ -1,0 +1,25 @@
+<div class="helper-detail-container">
+  <h2><i class="fas fa-id-card"></i> Helper Application Details</h2>
+
+  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+
+  <div *ngIf="helper">
+    <p><strong>Full Name:</strong> {{ helper.first_name }} {{ helper.last_name }}</p>
+    <p><strong>Email:</strong> {{ helper.email }}</p>
+    <p><strong>Phone:</strong> {{ helper.phone }}</p>
+    <p><strong>Gender:</strong> {{ helper.gender }}</p>
+    <p><strong>Date of Birth:</strong> {{ helper.dateOfBirth }}</p>
+    <p><strong>Address:</strong> {{ helper.address }}</p>
+    <p><strong>Social Security Number:</strong> {{ helper.socialSecurityNumber }}</p>
+    <p><strong>Experience:</strong> {{ helper.training }}</p>
+    <p><strong>Skills:</strong> {{ helper.skills || '-' }}</p>
+    <p><strong>Certifications:</strong> {{ helper.credentials || '-' }}</p>
+
+    <div class="actions">
+      <button *ngIf="helper.acces === 0" (click)="acceptHelper()">
+        ✅ Accept Application
+      </button>
+      <button routerLink="/admindashboard">← Back to List</button>
+    </div>
+  </div>
+</div>

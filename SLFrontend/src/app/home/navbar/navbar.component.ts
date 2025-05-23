@@ -51,8 +51,8 @@ export class NavbarComponent implements OnInit {
     
   }
   handleNotificationClick(notification: any) {
-    const helperId = notification.related_helper.user_id;
-    const orderId = notification.order.orderID;
+    const helperId = notification.related_helper;
+    const orderId = notification.order;
   
     if (!helperId || !orderId) {
       console.error('Missing helper or order info in notification');

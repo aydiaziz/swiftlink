@@ -55,11 +55,17 @@ export class OrderService {
   getHelperAgenda(): Observable<Order[]> {
     return this.http.get<Order[]>('http://127.0.0.1:8000/api/orders/agenda/');
   }
-  updateOrderDuration(orderId: number, startTime: string, endTime: string) {
-    return this.http.post(`${this.apiUrl}${orderId}/update-duration/`, {
+  updateOrderDuration(orderId: number, startTime: string, endTime: string, manualDuration: number | null = null) {
+    const body: any = {
       start_time: startTime,
-      end_time: endTime
-    });
+      end_time: endTime,
+    };
+  
+    if (manualDuration !== null && manualDuration > 0) {
+      body.manual_duration = manualDuration;
+    }
+  
+    return this.http.post(`${this.apiUrl}${orderId}/update-duration/`, body);
   }
   getJobsToday() {
     return this.http.get<any[]>(`${this.apiUrl}today/`);

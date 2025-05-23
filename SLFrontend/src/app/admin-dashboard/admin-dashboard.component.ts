@@ -1,0 +1,53 @@
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { AdminService } from '../services/admin.service';
+import { RouterModule } from '@angular/router';
+
+@Component({
+  selector: 'app-admin-dashboard',
+  standalone: true,
+  imports: [CommonModule, RouterModule],
+  templateUrl: './admin-dashboard.component.html',
+  styleUrl: './admin-dashboard.component.css'
+})
+export class AdminDashboardComponent implements OnInit{
+  helpers: any[] = [];
+  loading = false;
+  errorMessage = '';
+
+  constructor(private adminService: AdminService) {}
+
+  ngOnInit() {
+    this.loadHelpers();
+  }
+
+  loadHelpers() {
+    this.loading = true;
+    this.adminService.getAllHelpers().subscribe({
+      next: (data) => {
+        this.helpers = data;
+        this.loading = false;
+      },
+      error: (err) => {
+        this.errorMessage = 'Erreur lors du chargement des helpers.';
+        this.loading = false;
+      }
+    });
+  }
+
+  acceptHelper(helperId: number) {
+    if (!confirm('Are you sure you want to accept this helper?')) return;
+
+    this.adminService.acceptHelper(helperId).subscribe({
+      next: () => {
+        alert('Helper accepté. Email envoyé.');
+        this.loadHelpers(); // Refresh list
+      },
+      error: () => {
+        alert("Erreur lors de l'acceptation du helper.");
+      }
+    });
+  }
+}
+
+

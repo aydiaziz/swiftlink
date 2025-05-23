@@ -115,26 +115,69 @@ def helper_agenda(request):
     orders = Order.objects.filter(assignedTo=helper_id).exclude(executionDate=None)
     serializer = OrderSerializer(orders, many=True)
     return Response(serializer.data)
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from datetime import datetime, timedelta
+from .models import Order  # adapte si besoin
+
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def update_order_duration(request, order_id):
     start_time = request.data.get('start_time')
     end_time = request.data.get('end_time')
-#si 1:01->1:30; si 1:31 ->2
+    manual_duration = request.data.get('manual_duration')  # en minutes (optionnel)
+
     if not start_time or not end_time:
         return Response({'error': 'start_time and end_time are required'}, status=400)
 
     try:
         order = Order.objects.get(orderID=order_id)
         fmt = "%Y-%m-%dT%H:%M:%S.%fZ"
+
         start = datetime.strptime(start_time, fmt)
         end = datetime.strptime(end_time, fmt)
-        duration = end - start
-        order.orderDuration = duration
+
+        if manual_duration:
+            try:
+                manual_duration = int(manual_duration)
+                final_duration = timedelta(minutes=manual_duration)
+                arrondi = 'manual'
+            except ValueError:
+                return Response({'error': 'manual_duration must be an integer'}, status=400)
+        else:
+            duration = end - start
+            total_minutes = duration.total_seconds() / 60
+
+            # Arrondi logique (par paliers de 30 min)
+            if total_minutes <= 30:
+                final_minutes = 30
+            elif total_minutes <= 60:
+                final_minutes = 60
+            elif total_minutes <= 90:
+                final_minutes = 90
+            elif total_minutes <= 120:
+                final_minutes = 120
+            elif total_minutes <= 150:
+                final_minutes = 150
+            else:
+                final_minutes = 180  # max fallback
+
+            final_duration = timedelta(minutes=final_minutes)
+            arrondi = f'auto ({final_minutes} min)'
+
+        order.orderDuration = final_duration
         order.save()
-        return Response({'success': True, 'duration': str(duration)})
+
+        return Response({
+            'success': True,
+            'order_id': order_id,
+            'final_duration': str(final_duration),
+            'arrondi': arrondi
+        })
     except Order.DoesNotExist:
         return Response({'error': 'Order not found'}, status=404)
+
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def orders_today(request):

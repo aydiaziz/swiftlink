@@ -14,6 +14,11 @@ import { ProfileComponent } from './helper-dashboard/profile/profile.component';
 import { AgendaComponent } from './helper-dashboard/agenda/agenda.component';
 import { DashboardComponent } from './helper-dashboard/dashboard/dashboard.component';
 import { OrdersComponent } from './helper-dashboard/orders/orders.component';
+import { InvoiceComponent } from './helper-dashboard/invoice/invoice.component';
+import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
+import { AdminHelperViewComponent } from './admin-helper-view/admin-helper-view.component';
+import { HelperFormComponent } from './helper-form/helper-form.component';
+import { ConfirmationComponent } from './confirmation/confirmation.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent },
@@ -22,9 +27,12 @@ export const routes: Routes = [
     { path: 'about', component: AboutComponent },
     { path: 'contact', component: ContactComponent },
     { path: 'notifications', component: NotificationsComponent },
-    
+    { path: 'admindashboard', component: AdminDashboardComponent },
     { path: 'signinhelper', component: SigninhelperComponent },
     { path: 'signuphelper', component: SignuphelperComponent },
+    { path: 'admin/helper/:id', component: AdminHelperViewComponent },
+    { path: 'helper/form/:id', component: HelperFormComponent },
+    { path: 'confirmation', component: ConfirmationComponent },
    { path: 'helper-dashboard', 
     component: HelperDashboardComponent,
     children: [
@@ -32,8 +40,11 @@ export const routes: Routes = [
       { path: 'agenda', component: AgendaComponent },
       { path: 'dashboard', component: DashboardComponent },
       { path: 'orders', component: OrdersComponent },
+      { path: 'invoice/:orderId', component: InvoiceComponent },
+      
     ]
   },
+  
   
 
     { path: '**', redirectTo: '' },

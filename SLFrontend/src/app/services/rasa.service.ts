@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment.prod';
 
 @Injectable({ providedIn: 'root' })
 export class RasaService {
-  private rasaUrl = 'http://localhost:5005/webhooks/rest/webhook';
+  private rasaUrl = environment.chatUrl;
 
   constructor(private http: HttpClient) {}
 

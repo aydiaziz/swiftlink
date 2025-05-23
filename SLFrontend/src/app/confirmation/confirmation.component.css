@@ -1,0 +1,39 @@
+.confirmation-container {
+  max-width: 800px;
+  margin: 60px auto;
+  padding: 30px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  font-family: 'Segoe UI', sans-serif;
+  text-align: center;
+}
+
+.confirmation-card h1 {
+  color: #28a745;
+  font-size: 32px;
+  margin-bottom: 20px;
+}
+
+.confirmation-card p {
+  font-size: 17px;
+  margin-bottom: 14px;
+  color: #444;
+  line-height: 1.6;
+}
+
+.home-button {
+  display: inline-block;
+  margin-top: 30px;
+  padding: 12px 24px;
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.home-button:hover {
+  background-color: #0056b3;
+}

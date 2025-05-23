@@ -18,11 +18,16 @@ class Ref_User(AbstractUser):
     first_name = models.CharField(max_length=100) 
     last_name = models.CharField(max_length=100)   
     email = models.EmailField(max_length=255)
-    password = models.CharField(max_length=255) 
+    password = models.CharField(max_length=255,blank=True) 
     role = models.CharField(max_length=50, choices=RoleType.choices)
     status = models.CharField(max_length=50, choices=[('Active', 'Active'), ('Inactive', 'Inactive')])
     assigned_date = models.DateTimeField(auto_now_add=True)
-
+    profileImage = models.ImageField(
+            upload_to='user_profiles/',
+            null=True,
+            blank=True,
+            verbose_name='Profile Image'
+        )
     def __str__(self):
         return f"{self.user_id} - {self.role}"
 

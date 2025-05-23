@@ -38,7 +38,7 @@ export interface Workforce extends User {
   phone: string;
   gender: Gender;  // ✅ Utilisation de l'énumération
   driverLicence?: string;
-  driverLicenceExpiry?: string;
+  driverLicenceExpiry?: string | null ;
   credentials?: string;
   credentialsExpiry?: string;
   training?: string;

@@ -1,0 +1,9 @@
+<div class="helper-profile" *ngIf="profile">
+  <img [src]="profile.profileImage || '/default-user.jpg'" alt="Profile" />
+  <h2>{{ profile.firstName }} {{ profile.lastName }}</h2>
+  <p><strong>Type:</strong> {{ profile.workForceType }}</p>
+  <p><strong>Email:</strong> {{ profile.email }}</p>
+  <p><strong>Hourly Rate:</strong> {{ profile.hourlyRatebyService }} $</p>
+  <p><strong>Skills:</strong> {{ profile.skills }}</p>
+  <p><strong>Rating:</strong> {{ profile.rating }} ⭐</p>
+</div>

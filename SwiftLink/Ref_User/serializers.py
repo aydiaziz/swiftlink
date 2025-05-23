@@ -8,9 +8,10 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.settings import api_settings
 
 class UserSerializer(serializers.ModelSerializer):
+    profileImage = serializers.ImageField(read_only=True)
     class Meta:
         model = Ref_User
-        fields = ['user_id', 'email', 'password', 'username', 'first_name', 'last_name', 'role', 'entityId']
+        fields = ['user_id', 'email', 'password', 'username', 'first_name', 'last_name', 'role', 'entityId','profileImage']
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
@@ -112,3 +113,32 @@ class WorkForceSerializer(serializers.ModelSerializer):
         if work_categories_data:
             workforce.workCategory.set(work_categories_data)
         return workforce
+
+
+class ClientProfileSerializer(serializers.Serializer):
+    email = serializers.EmailField(required=False)
+    password = serializers.CharField(required=False, write_only=True)
+    address = serializers.CharField(required=False, allow_blank=True)
+    profileImage = serializers.ImageField(required=False)
+
+    def update(self, instance, validated_data):
+        user = instance['user']
+        client = instance['client']
+
+        if 'email' in validated_data:
+            user.email = validated_data['email']
+
+        if 'password' in validated_data:
+            user.set_password(validated_data['password'])
+
+        if 'profileImage' in validated_data:
+            user.profileImage = validated_data['profileImage']
+
+        user.save()
+
+        if 'address' in validated_data:
+            client.address = validated_data['address']
+            client.save()
+
+        return {'user': user, 'client': client}
+

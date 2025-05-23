@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Invoice {{ invoice.invoiceID }}</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; }
+        h1 { color: #002f5f; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        table, th, td { border: 1px solid #ddd; }
+        th, td { padding: 8px; text-align: left; }
+        .total { font-size: 18px; font-weight: bold; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Invoice #{{ invoice.invoiceID }}</h1>
+    <p>Service: {{ invoice.serviceType }}</p>
+    <p>Duration: {{ invoice.duration }}</p>
+    <p>Unit Price: {{ invoice.unitPrice }} $ CAD</p>
+    <p>Base Amount: {{ invoice.baseAmount }} $ CAD</p>
+
+    <h3>Extras</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Label</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for extra in invoice.extras %}
+            <tr>
+                <td>{{ extra.label }}</td>
+                <td>{{ extra.price }} $ CAD</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="2">No extras.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <p class="total">Total: {{ invoice.totalAmount }} $ CAD</p>
+</body>
+</html>

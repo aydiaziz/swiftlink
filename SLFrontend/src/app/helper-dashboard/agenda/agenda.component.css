@@ -68,4 +68,63 @@
   .job-card button:hover {
     background-color: #004080;
   }
+  .manual-duration {
+    margin: 15px 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;
+    color: #333;
+  }
+  
+  .manual-duration label {
+    font-weight: 600;
+  }
+  
+  .duration-select {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    background-color: #fff;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    appearance: none; /* remove default arrow */
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23002f5f' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.5 5.5l6 6 6-6z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 16px;
+  }
+  
+  .duration-select:hover {
+    border-color: #004080;
+  }
+  
+  .duration-select:focus {
+    border-color: #004080;
+    box-shadow: 0 0 0 2px rgba(0, 47, 95, 0.2);
+    outline: none;
+  }
+  .set-duration-btn {
+    padding: 8px 14px;
+    background-color: #007b5e;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .set-duration-btn:hover {
+    background-color: #005f46;
+  }
+  
+  .set-duration-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  
+  
   

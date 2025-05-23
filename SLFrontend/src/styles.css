@@ -5,7 +5,7 @@
   }
   
   body {
-    font-family: 'Arial', sans-serif;
+    font-family: 'Open Sans', sans-serif;
     background: #f4f4f4;
     color: #333;
   }
@@ -15,4 +15,5 @@
     margin: auto;
     padding: 0 20px;
   }
-  
+  head{font-family: 'Open Sans', sans-serif;
+  }

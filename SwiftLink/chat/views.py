@@ -1,7 +1,9 @@
 # chat/views.py
+from urllib import request
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+
 
 from Order.models import Order 
 from .models import models
@@ -35,7 +37,7 @@ def start_conversation(request):
 @api_view(['GET'])
 def get_conversation(request, conversation_id):
     conversation = Conversation.objects.get(id=conversation_id)
-    serializer = ConversationSerializer(conversation)
+    serializer = ConversationSerializer(conversation, context={'request': request})
     return Response(serializer.data)
 
 @api_view(['POST'])
@@ -53,5 +55,5 @@ def get_user_conversations(request):
     conversations = Conversation.objects.filter(
         models.Q(client=user) | models.Q(helper=user)
     ).order_by('-created_at')
-    serializer = ConversationSerializer(conversations, many=True)
+    serializer = ConversationSerializer(conversations, context={'request': request}, many=True)
     return Response(serializer.data)

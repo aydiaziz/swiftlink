@@ -20,12 +20,20 @@ import { OrdersComponent } from './app/helper-dashboard/orders/orders.component'
 import { withInterceptorsFromDi } from '@angular/common/http';
 import { AuthInterceptor } from './auth.interceptor';
 import { ChatComponent } from './app/chat/chat.component';
+import { InvoiceComponent } from './app/helper-dashboard/invoice/invoice.component';
+import { UserProfileComponent } from './app/user-profile/user-profile.component';
+import { HelperProfileComponent } from './app/helper-profile/helper-profile.component';
+import { AdminDashboardComponent } from './app/admin-dashboard/admin-dashboard.component';
+import { AdminHelperViewComponent } from './app/admin-helper-view/admin-helper-view.component';
+import { HelperFormComponent } from './app/helper-form/helper-form.component';
+import { ConfirmationComponent } from './app/confirmation/confirmation.component';
 const routes: Routes = [
   { path: '', component: HomeComponent },  
   { path: 'services', component: ServicesComponent },
   { path: 'about', component: AboutComponent },
   { path: 'contact', component: ContactComponent },
   { path: 'signup', component: SignupComponent },
+  { path: 'signuphelper', component: SignuphelperComponent },
   { path: 'notifications', component: NotificationsComponent },
   { path: 'signin', component: SigninComponent },
    { path: 'helper-dashboard', 
@@ -35,12 +43,20 @@ const routes: Routes = [
         { path: 'agenda', component: AgendaComponent },
         { path: 'dashboard', component: DashboardComponent },
         { path: 'orders', component: OrdersComponent },
+        { path: 'invoice/:orderId', component: InvoiceComponent },
         
       ]
     },
   { path: 'signinhelper', component: SigninhelperComponent },
   { path: 'signuphelper', component: SignuphelperComponent },
   { path: 'chat/:id', component: ChatComponent },
+  { path: 'userprofile', component: UserProfileComponent },
+  {path:'helper-profile/:id',component:HelperProfileComponent},
+  {path:'admindashboard',component:AdminDashboardComponent},
+  { path: 'admin/helper/:id', component: AdminHelperViewComponent },
+  { path: 'helper/form/:id', component: HelperFormComponent },
+  { path: 'confirmation', component: ConfirmationComponent },
+  
 ];
 
 bootstrapApplication(AppComponent, {

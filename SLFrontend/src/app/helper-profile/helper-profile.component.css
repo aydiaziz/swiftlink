@@ -1,0 +1,41 @@
+.helper-profile {
+  max-width: 600px;
+  margin: 40px auto;
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  font-family: 'Segoe UI', sans-serif;
+  text-align: center;
+}
+
+.helper-profile img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 20px;
+  border: 3px solid #002f5f;
+}
+
+.helper-profile h2 {
+  font-size: 24px;
+  color: #002f5f;
+  margin-bottom: 10px;
+}
+
+.helper-profile p {
+  font-size: 16px;
+  color: #333;
+  margin: 8px 0;
+}
+
+.helper-profile p strong {
+  color: #002f5f;
+}
+
+.helper-profile .rating {
+  font-size: 18px;
+  color: #ffb400;
+  margin-top: 10px;
+}

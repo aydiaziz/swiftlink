@@ -1,0 +1,25 @@
+.helper-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.helper-table th, .helper-table td {
+  padding: 12px;
+  border: 1px solid #ccc;
+  text-align: left;
+}
+
+.pending {
+  color: #ff9800;
+  font-weight: bold;
+}
+
+.confirmed {
+  color: #4caf50;
+  font-weight: bold;
+}
+
+button {
+  margin-right: 10px;
+}

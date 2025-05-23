@@ -5,10 +5,39 @@
   </div>
 
   <div class="chat-messages">
-    <div *ngFor="let msg of messages"
-         [ngClass]="{'message': true, 'sent': msg.sender === currentUserId, 'received': msg.sender !== currentUserId}">
-      {{ msg.content }}
-    </div>
+    <ng-container *ngFor="let msg of messages">
+      
+      <!-- ✅ Message système centré -->
+      <div *ngIf="msg.system" class="system-message">
+        {{ msg.content }}
+      </div>
+  
+      <!-- ✅ Message utilisateur -->
+      <div *ngIf="!msg.system"
+           class="message-wrapper"
+           [ngClass]="{
+             'sent': +msg.sender === currentUserId,
+             'received': +msg.sender !== currentUserId
+           }">
+  
+        <img
+  *ngIf="+msg.sender !== currentUserId"
+  class="sender-image clickable"
+  [src]="msg.senderImage || defaultProfileImage"
+  alt="Helper"
+  (click)="goToHelperProfile(msg.sender)" />
+
+<img
+  *ngIf="+msg.sender === currentUserId"
+  class="sender-image"
+  [src]="msg.senderImage || defaultProfileImage"
+  alt="You" />
+  
+        <div class="message">
+          {{ msg.content }}
+        </div>
+      </div>
+    </ng-container>
   </div>
   
   <!-- Bouton Confirm pour le client uniquement -->

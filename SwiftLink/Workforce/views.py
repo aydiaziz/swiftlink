@@ -1,11 +1,15 @@
 from django.db.models import Sum
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from rest_framework.response import Response
 from Order.models import Order
 from Workforce.models import WorkForce
 import logging
 from django.utils import timezone
+from .Serializers import WorkForceProfileSerializer,WorkForceListSerializer,WorkForceDetailSerializer,WorkforceProfileCompletionSerializer
+from django.core.mail import send_mail
+
+
 
 logger = logging.getLogger(__name__)
 
@@ -73,3 +77,65 @@ def dashboard_stats(request):
     except Exception as e:
         logger.exception("Error in dashboard_stats:")
         return Response({"error": str(e)}, status=500)
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_helper_profile(request, user_id):
+    try:
+        helper = WorkForce.objects.select_related('UserId').get(UserId__user_id=user_id)
+        serializer = WorkForceProfileSerializer(helper, context={'request': request})
+        return Response(serializer.data)
+    except WorkForce.DoesNotExist:
+        return Response({'error': 'Helper not found'}, status=404)
+@api_view(['GET'])
+
+def list_helpers(request):
+    helpers = WorkForce.objects.all().select_related('UserId')
+    serializer = WorkForceListSerializer(helpers, many=True)
+    return Response(serializer.data)
+@api_view(['POST'])
+
+def accept_helper(request, helper_id):
+    try:
+        helper = WorkForce.objects.get(UserId__user_id=helper_id)
+        helper.acces = 1
+        helper.save()
+
+        # Envoi d’email
+        send_mail(
+            subject='🎉 Your Application has been Accepted!',
+            message='Please complete your onboarding by filling this form:http://localhost:4200/helper/form/16',
+            from_email='aziz.aydi@inotekplus.com',
+            recipient_list=[helper.UserId.email],
+            fail_silently=False,
+        )
+        return Response({'message': 'Helper accepted and email sent.'})
+    except WorkForce.DoesNotExist:
+        return Response({'error': 'Helper not found'}, status=404)
+@api_view(['GET'])
+
+def get_helper_detail(request, user_id):
+    try:
+        helper = WorkForce.objects.select_related('UserId').get(UserId__user_id=user_id)
+        serializer = WorkForceDetailSerializer(helper)
+        return Response(serializer.data)
+    except WorkForce.DoesNotExist:
+        return Response({'error': 'Helper not found'}, status=404)
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def complete_helper_profile(request):
+    try:
+        helper = WorkForce.objects.get(UserId=request.user)
+
+        if helper.acces == 1:
+            return Response({"detail": "Profile already completed."}, status=400)
+
+        serializer = WorkforceProfileCompletionSerializer(helper, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            helper.acces = 1
+            helper.save()
+            return Response({"success": True})
+        return Response(serializer.errors, status=400)
+
+    except WorkForce.DoesNotExist:
+        return Response({"error": "Helper not found."}, status=404)

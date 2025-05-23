@@ -1,0 +1,77 @@
+<div class="helper-profile-form">
+  <h2>Complete Your Profile</h2>
+
+  <form (ngSubmit)="submit()" #helperForm="ngForm">
+
+    <!-- Email Pro -->
+    <label>Email *</label>
+    <input type="email" name="professionnelemail" [(ngModel)]="form.professionnelemail" required placeholder="firstname.lastname@swift-helpers.com" />
+
+    <!-- Hourly rates -->
+    <div class="rate-group">
+      <div>
+        <label>Hourly rate (100% to you)</label>
+        <input type="number" [(ngModel)]="form.hourlyRatebyService" name="hourlyRatebyService" (input)="calculateRates()" required />
+      </div>
+      <div>
+        <label>15% Security Fund</label>
+        <input type="text" [value]="form.securityFundRate" disabled />
+      </div>
+      <div>
+        <label>5% Platform Fee</label>
+        <input type="text" [value]="form.platformFeeRate" disabled />
+      </div>
+      <div>
+        <label>Hourly Rate Chargeable to Client</label>
+        <input type="text" [value]="form.clientChargeRate" disabled />
+      </div>
+      <div>
+        <label>Consumables Fee</label>
+        <input type="number" [(ngModel)]="form.consumablesFee" name="consumablesFee" />
+      </div>
+    </div>
+
+    <!-- Driver License -->
+    <label>Driver's License Number</label>
+    <input type="text" name="driverLicence" [(ngModel)]="form.driverLicence" />
+
+    <label>Driver's License Expiry</label>
+    <input type="date" name="driverLicenceExpiry" [(ngModel)]="form.driverLicenceExpiry" />
+
+    <label>Upload Driver's License</label>
+    <input type="file" (change)="onFileSelect($event, 'driverLicenceFile')" />
+
+    <!-- WCB -->
+    <label>WCB Number</label>
+    <input type="text" name="wcbNumber" [(ngModel)]="form.wcbNumber" />
+
+    <label>Upload WCB Clearance</label>
+    <input type="file" (change)="onFileSelect($event, 'wcbFile')" />
+
+    <!-- Address -->
+    <label>Address</label>
+    <input type="text" name="address" [(ngModel)]="form.address" />
+
+    <input type="text" name="city" [(ngModel)]="form.city" placeholder="City" />
+    <input type="text" name="province" [(ngModel)]="form.province" placeholder="Province" />
+    <input type="text" name="postalCode" [(ngModel)]="form.postalCode" placeholder="Postal Code" />
+    <input type="text" name="country" [(ngModel)]="form.country" placeholder="Country" />
+
+    <!-- Career Goals -->
+    <label>Tell us about your career expectations</label>
+    <textarea name="careerExpectations" [(ngModel)]="form.careerExpectations"></textarea>
+
+    <label>How did you hear about Swift Helpers?</label>
+    <input type="text" name="referralSource" [(ngModel)]="form.referralSource" />
+
+    <label>Would you like to receive helpful updates?</label>
+    <div class="radio-group">
+      <label><input type="radio" name="wantsUpdates" [(ngModel)]="form.wantsUpdates" [value]="true" /> Yes</label>
+      <label><input type="radio" name="wantsUpdates" [(ngModel)]="form.wantsUpdates" [value]="false" /> No</label>
+    </div>
+
+    <!-- Submit -->
+    <button type="submit">Submit</button>
+    <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+  </form>
+</div>
