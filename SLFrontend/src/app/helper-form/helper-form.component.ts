@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { NgIf } from '@angular/common';
+import { environment } from '../../environments/environment.prod';
 @Component({
   selector: 'app-helper-form',
   standalone: true,
@@ -46,7 +47,7 @@ calculateRates() {
       formData.append(fileKey, this.files[fileKey]);
     }
 
-    this.http.post('http://127.0.0.1:8000/api/helper/profile-completion/', formData).subscribe({
+    this.http.post(`${environment.apiUrl}/helper/profile-completion/`, formData).subscribe({
       next: () => {
         alert("✅ Your profile has been completed successfully!");
         this.router.navigate(['/helper-dashboard']);

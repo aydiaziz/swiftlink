@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Order } from '../models/order.model';
+import { environment } from '../../environments/environment.prod';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrderService {
-  private apiUrl = 'http://127.0.0.1:8000/api/orders/';
+  private apiUrl = `${environment.apiUrl}/orders/`;
 
   constructor(private http: HttpClient) {}
   getAllOrders(): Observable<any> {
@@ -48,12 +49,12 @@ export class OrderService {
   }
   confirmOrderAssignment(conversationId: number) {
     return this.http.post<{ success: boolean }>(
-      'http://127.0.0.1:8000/api/order/confirm-assignment/',
+      `${environment.apiUrl}/order/confirm-assignment/`,
       { conversation_id: conversationId }
     );
   }
   getHelperAgenda(): Observable<Order[]> {
-    return this.http.get<Order[]>('http://127.0.0.1:8000/api/orders/agenda/');
+    return this.http.get<Order[]>(`${environment.apiUrl}/orders/agenda/`);
   }
   updateOrderDuration(orderId: number, startTime: string, endTime: string, manualDuration: number | null = null) {
     const body: any = {

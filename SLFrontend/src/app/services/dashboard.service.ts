@@ -18,7 +18,7 @@ export class DashboardService {
   }
 
   getStats(): Observable<DashboardResponse> {
-    return this.http.get<DashboardResponse>(`http://127.0.0.1:8000/api/dashboard/helper/`);
+    return this.http.get<DashboardResponse>(`${environment.apiUrl}/dashboard/helper/`);
   }
 
   updateProfile(data: any): Observable<any> {
@@ -29,6 +29,6 @@ export class DashboardService {
     );
   }
   getHelperProfile(userId: number) {
-  return this.http.get(`http://127.0.0.1:8000/api/helpers/${userId}/profile/`);
+  return this.http.get(`${environment.apiUrl}/helpers/${userId}/profile/`);
 }
 }
