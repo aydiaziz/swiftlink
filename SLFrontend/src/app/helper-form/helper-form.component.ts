@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { NgIf } from '@angular/common';
-import { environment } from '../../environments/environment.prod';
+import { environment } from '../../environments/environment';
 @Component({
   selector: 'app-helper-form',
   standalone: true,
