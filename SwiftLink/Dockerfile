@@ -5,9 +5,9 @@ ENV PYTHONUNBUFFERED 1
 
 WORKDIR /app
 
-COPY backend/requirements.txt .
+COPY ./requirements.txt .
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
-COPY backend/ .
+COPY ./ .
 
 CMD ["gunicorn", "backend.wsgi:application", "--bind", "0.0.0.0:8000"]
