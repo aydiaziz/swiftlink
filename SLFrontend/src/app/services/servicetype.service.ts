@@ -15,7 +15,7 @@ export interface ServiceType {
   providedIn: 'root'
 })
 export class ServicetypeService {
-  private apiUrl = `${environment.apiUrl}/services/`;
+  private apiUrl = `/api/services/`;
 
   constructor(private http: HttpClient) {}
 
