@@ -100,7 +100,8 @@ DATABASES = {
         'NAME': 'SwiftLink',
         'USER': 'postgres',
         'HOST': '127.0.0.1',
-        'PASSWORD': '0000'
+        'PASSWORD': '0000',
+        'PORT': '5431',
     }
 }
 
