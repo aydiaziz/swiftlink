@@ -1,5 +1,5 @@
 export const environment = {
     production: true,
-    apiUrl: 'https://api.swiftlink.tn',
+    apiUrl: 'http://www.swift-helpers.com:8001/api',
     chatUrl:'' 
 };
