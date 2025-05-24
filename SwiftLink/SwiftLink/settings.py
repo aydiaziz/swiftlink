@@ -25,7 +25,12 @@ SECRET_KEY = 'django-insecure-7y&(fmi!1@7lc7v-kr3gue83bgeb$$*bm_l$sl0ezip!tb&hzb
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['www.swift-helpers.com', 'swift-helpers.com']
+ALLOWED_HOSTS = [
+    "165.140.159.63",
+    "www.swift-helpers.com",
+    "localhost",
+    "127.0.0.1",
+]
 
 
 
@@ -97,14 +102,13 @@ WSGI_APPLICATION = 'SwiftLink.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'SwiftLink',
+        'NAME': 'postgres',
         'USER': 'postgres',
-        'HOST': '127.0.0.1',
-        'PASSWORD': '0000',
-        'PORT': '5431',
+        'PASSWORD': 'mypostgrespass',
+        'HOST': '172.17.0.1',  # ← Container name as host
+        'PORT': '5432',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -169,3 +173,8 @@ EMAIL_HOST_PASSWORD = 'Fort$2025'  # Le mot de passe de l’email
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+# settings.py
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = True  # Redirect HTTP to HTTPS
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
