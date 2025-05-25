@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://www.swift-helpers.com/api',      // ✅ correct
+  apiUrl: '/api',      // ✅ correct
   chatUrl: ''
 };
