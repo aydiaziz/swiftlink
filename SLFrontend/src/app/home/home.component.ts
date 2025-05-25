@@ -12,6 +12,7 @@ import { HttpClient } from '@angular/common/http';
 import { NgIf } from '@angular/common';
 import { ChatComponent } from '../chat/chat.component';
 import { CommunicationService } from '../services/communication.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-home',
@@ -40,7 +41,7 @@ export class HomeComponent {
     });
   }
   startConversation(helperId: number) {
-    this.http.post('/api/start-conversation/', { helper_id: helperId }).subscribe({
+    this.http.post(`${environment.apiUrl}/start-conversation/`, { helper_id: helperId }).subscribe({
       next: (res: any) => {
         this.selectedConversationId = res.conversation_id;
         this.showChat = true;
@@ -51,7 +52,7 @@ export class HomeComponent {
     });
   }
   onNotificationClick(helperId: number) {
-    this.http.post('/api/start-conversation/', { helper_id: helperId }).subscribe((res: any) => {
+    this.http.post(`${environment.apiUrl}/start-conversation/`, { helper_id: helperId }).subscribe((res: any) => {
       this.selectedConversationId = res.conversation_id;
       this.showChat = true;
     });
