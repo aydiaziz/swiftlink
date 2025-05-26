@@ -6,13 +6,13 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('Ref_User.urls',)),
-    path('api/', include('Ref_Entity.urls',)),
-    path('api/', include('ServiceType.urls',)),
-    path('api/', include('Order.urls',)),
-    path('api/', include('notification.urls',)),
-    path('api/', include('Workforce.urls',)),
-    path('api/chat/', include('chat.urls')),
-    path('api/', include('invoice.urls')),
+    path('', include('Ref_User.urls',)),
+    path('', include('Ref_Entity.urls',)),
+    path('', include('ServiceType.urls',)),
+    path('', include('Order.urls',)),
+    path('', include('notification.urls',)),
+    path('', include('Workforce.urls',)),
+    path('chat/', include('chat.urls')),
+    path('', include('invoice.urls')),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
