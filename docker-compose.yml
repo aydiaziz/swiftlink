@@ -1,12 +1,9 @@
-
-
 services:
   backend:
     image: django-backend
     container_name: django-backend
+    network_mode: host
     restart: unless-stopped
-    ports:
-      - "8001:8001"
     volumes:
       - static_volume:/app/static
     env_file:
@@ -15,9 +12,8 @@ services:
   frontend:
     image: angular-frontend
     container_name: angular-frontend
+    network_mode: host
     restart: unless-stopped
-    ports:
-      - "8080:80"
 
   watchtower:
     image: containrrr/watchtower
@@ -25,7 +21,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     restart: unless-stopped
-    command: --interval 30
+    command: --interval 300  # ← interval plus raisonnable
 
 volumes:
   static_volume:
