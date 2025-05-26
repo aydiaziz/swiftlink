@@ -40,7 +40,7 @@ export class AdminDashboardComponent implements OnInit{
 
     this.adminService.acceptHelper(helperId).subscribe({
       next: () => {
-        alert('Helper accepté. Email envoyé.');
+        alert('Application accepted. Confirmation email delivered');
         this.loadHelpers(); // Refresh list
       },
       error: () => {

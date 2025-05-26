@@ -18,7 +18,10 @@
     <input type="text" name="city" [(ngModel)]="workforceForm.city" placeholder="City *" required />
 
     <!-- 2. Service Categories -->
-    <label class="label-title">Select Your Services *</label>
+    <label class="label-title">Select the types of services you're comfortable offering as a
+General Helper. These tasks involve hands-on support, physical
+labor, and property-related assistance across a variety of
+environments. *</label>
     <div class="checkbox-list">
       <label *ngFor="let service of services">
         <input type="checkbox"
@@ -66,7 +69,7 @@
     <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
 
     <!-- 7. Submit -->
-    <button type="submit">Submit</button>
+    <button type="submit">Apply</button>
 
   </form>
 </div>

@@ -39,17 +39,21 @@ class WorkForceListSerializer(serializers.ModelSerializer):
         fields = ['UserId', 'first_name', 'last_name', 'email', 'acces']
 class WorkForceDetailSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(source='UserId.email')
-    first_name = serializers.CharField(source='UserId.first_name')
-    last_name = serializers.CharField(source='UserId.last_name')
-    acces = serializers.IntegerField()
+    full_name = serializers.SerializerMethodField()
+    services = serializers.StringRelatedField(source='workCategory', many=True)
 
     class Meta:
         model = WorkForce
         fields = [
-            'email', 'first_name', 'last_name', 'gender', 'phone',
-            'address', 'dateOfBirth', 'socialSecurityNumber',
-            'training', 'skills', 'credentials', 'acces'
+            'full_name', 'email', 'phone',
+            'services', 'resume', 'driverLicence',
+            'driverLicenceClass', 'availability',
+            'training', 'address'
         ]
+
+    def get_full_name(self, obj):
+        return f"{obj.firstName} {obj.lastName}"
+
 class WorkforceProfileCompletionSerializer(serializers.ModelSerializer):
     class Meta:
         model = WorkForce

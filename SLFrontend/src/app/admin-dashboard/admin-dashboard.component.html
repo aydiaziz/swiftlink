@@ -1,6 +1,6 @@
 <h2>Admin - Gestion des Helpers</h2>
 
-<div *ngIf="loading">Chargement...</div>
+<div *ngIf="loading">loading...</div>
 <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
 
 <table *ngIf="!loading" class="helper-table">
@@ -18,12 +18,12 @@
       <td>{{ h.email }}</td>
       <td>
         <span [ngClass]="{ 'pending': h.acces === 0, 'confirmed': h.acces === 1 }">
-          {{ h.acces === 0 ? 'Candidature' : 'Confirmé' }}
+          {{ h.acces === 0 ? 'Application' : 'Approved' }}
         </span>
       </td>
       <td>
-        <button (click)="acceptHelper(h.UserId)" *ngIf="h.acces === 0">Accepter</button>
-        <button [routerLink]="['/admin/helper', h.UserId]">Consulter</button>
+        <button (click)="acceptHelper(h.UserId)" *ngIf="h.acces === 0">Approve</button>
+        <button [routerLink]="['/admin/helper', h.UserId]">view</button>
       </td>
     </tr>
   </tbody>
