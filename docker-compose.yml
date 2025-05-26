@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   backend:
-    build: ./backend
+    build: ./SwiftLink
     container_name: django-backend
     restart: unless-stopped
     ports:
@@ -10,7 +10,7 @@ services:
     volumes:
       - static_volume:/app/static
     env_file:
-      - backend/.env
+      - SwiftLink/.env
 
   frontend:
     build: ./frontend
