@@ -13,6 +13,14 @@
 .header {
   margin-bottom: 2rem;
 }
+.centered-message {
+  text-align: center;
+  padding: 60px 20px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #444;
+}
+
 .header h1 {
   font-size: 1.875rem;
   font-weight: 700;
