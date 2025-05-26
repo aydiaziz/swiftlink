@@ -15,6 +15,7 @@ services:
   frontend:
     image: angular-frontend
     container_name: angular-frontend
+    network_mode: host
     restart: unless-stopped
     ports:
       - "80:80"
