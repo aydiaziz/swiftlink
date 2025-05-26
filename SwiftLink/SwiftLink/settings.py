@@ -108,7 +108,7 @@ DATABASES = {
         'USER': 'postgres',
         'PASSWORD': 'mypostgrespass',
         'HOST': '127.0.0.1',   # ✅ fixed
-        'PORT': '5432',
+        'PORT': '5434',
     }
 }
 
