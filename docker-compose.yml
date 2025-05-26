@@ -21,7 +21,12 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     restart: unless-stopped
-    command: --interval 300  # ← interval plus raisonnable
+    command: --interval 300
 
 volumes:
   static_volume:
+
+networks:
+  default:
+    external: true
+    name: host
