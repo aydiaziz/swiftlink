@@ -17,7 +17,7 @@ services:
     container_name: angular-frontend
     restart: unless-stopped
     ports:
-      - "3100:80"
+      - "3100:443"
 
   watchtower:
     image: containrrr/watchtower
