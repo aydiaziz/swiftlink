@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   backend:
-    build: ./SwiftLink
+    
     container_name: django-backend
     restart: unless-stopped
     ports:
