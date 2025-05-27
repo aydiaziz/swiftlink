@@ -71,7 +71,10 @@ export class AuthService {
     dateOfBirth: workforceData.dateOfBirth,
     socialSecurityNumber: workforceData.socialSecurityNumber,
     skills: workforceData.skills,
-    hourlyRatebyService: workforceData.hourlyRatebyService
+    hourlyRatebyService: workforceData.hourlyRatebyService,
+    resume:workforceData.resume || null,
+    YearsOfExperience:workforceData.yearsOfExperience,
+    driverLicenceClass:workforceData.driverLicenceClass
   };
 
   // ✅ Ajouter driverLicenceExpiry uniquement si permis = "Yes"

@@ -52,4 +52,5 @@ export interface Workforce extends User {
   hourlyRatebyService?: number;
   yearsOfExperience: string;
   resume:File | null;
+  driverLicenceClass: string;
 }

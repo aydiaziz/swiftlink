@@ -55,7 +55,8 @@ export class SignupComponent {
     availability: {},
     hourlyRatebyService: 0,
     resume: null,
-    yearsOfExperience:""
+    yearsOfExperience:"",
+    driverLicenceClass:""
   };
 
   constructor(private authService: AuthService, private router: Router) {}
