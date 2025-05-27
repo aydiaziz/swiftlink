@@ -132,35 +132,54 @@ onVehicleSelect(event: Event, type: 'vehicle' | 'tool'): void {
     this.errorMessage = 'Please complete all required fields and accept the Privacy Policy.';
     return;
   }
-   this.isLoading = true;
-  const payload = { ...this.workforceForm };
-  payload.username = payload.email;
+
+  this.isLoading = true;
+
+  const formData = new FormData();
+
+  // Set up formatted date fields
   const dateFields = ['dateOfBirth', 'credentialsExpiry', 'driverLicenceExpiry'];
   dateFields.forEach(field => {
-    const value = payload[field];
-
+    const value = this.workforceForm[field];
     if (value && typeof value === 'string' && value.trim() !== '') {
       const parsedDate = new Date(value);
       if (!isNaN(parsedDate.getTime())) {
-        payload[field] = parsedDate.toISOString().slice(0, 10);
-      } else {
-        delete payload[field];
+        formData.append(field, parsedDate.toISOString().slice(0, 10));
       }
-    } else {
-      delete payload[field];
     }
   });
 
-  this.authService.signupWorkforce(payload).subscribe({
+  // Append basic fields
+  for (const key in this.workforceForm) {
+    if (!this.workforceForm.hasOwnProperty(key)) continue;
+    const value = this.workforceForm[key];
+
+    if (value === null || value === undefined) continue;
+
+    if (Array.isArray(value)) {
+      value.forEach(val => formData.append(`${key}[]`, val));
+    } else if (typeof value === 'object' && !(value instanceof File)) {
+      formData.append(key, JSON.stringify(value));
+    } else {
+      formData.append(key, value);
+    }
+  }
+
+  // username = email
+  formData.append('username', this.workforceForm.email);
+
+  this.authService.signupWorkforce(formData).subscribe({
     next: () => {
       this.isLoading = false;
       this.router.navigate(['/confirmation']);
     },
     error: err => {
+      this.isLoading = false;
       this.errorMessage = err?.error?.message || '❌ Registration error.';
     }
   });
 }
+
 showPrivacy(event: Event): void {
   const input = event.target as HTMLInputElement | null;
   if (input?.checked) {

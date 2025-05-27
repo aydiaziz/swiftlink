@@ -49,7 +49,7 @@ class WorkForceDetailSerializer(serializers.ModelSerializer):
             'first_name', 'last_name', 'email', 'phone',
             'services', 'resume', 'driverLicence',
             'driverLicenceClass', 'availability',
-            'training', 'address'
+            'training', 'address', 'yearsOfExperience'
         ]
 
 

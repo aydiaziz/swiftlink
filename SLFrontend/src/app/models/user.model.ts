@@ -50,4 +50,6 @@ export interface Workforce extends User {
   workCategory: number[];  // IDs des catégories
   availability: any;
   hourlyRatebyService?: number;
+  yearsOfExperience: string;
+  resume:File | null;
 }

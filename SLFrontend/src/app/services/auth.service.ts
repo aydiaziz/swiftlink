@@ -47,40 +47,8 @@ export class AuthService {
     );
   }
 
-  signupWorkforce(workforceData: Workforce): Observable<any> {
-  const formattedData: any = {
-    entityID: 1,
-    UserId: {
-      email: workforceData.email,
-      username: workforceData.email,
-      first_name: workforceData.firstName,
-      last_name: workforceData.lastName,
-      password: workforceData.password,
-      entityId: 1
-    },
-    phone: workforceData.phone || '',
-    gender: workforceData.gender,
-    driverLicence: workforceData.driverLicence || '',
-    training: workforceData.training || '',
-    workForceType: workforceData.workForceType,
-    address: workforceData.address || '',
-    workCategory: workforceData.workCategory || [],
-    availability: workforceData.availability,
-    credentials: workforceData.credentials,
-    credentialsExpiry: workforceData.credentialsExpiry,
-    dateOfBirth: workforceData.dateOfBirth,
-    socialSecurityNumber: workforceData.socialSecurityNumber,
-    skills: workforceData.skills,
-    hourlyRatebyService: workforceData.hourlyRatebyService
-  };
-
-  // ✅ Ajouter driverLicenceExpiry uniquement si permis = "Yes"
-  if (workforceData.driverLicence === 'Yes' && workforceData.driverLicenceExpiry) {
-    const rawDate = new Date(workforceData.driverLicenceExpiry);
-    formattedData.driverLicenceExpiry = rawDate.toISOString().slice(0, 10);
-  }
-
-  return this.http.post(`${this.apiUrl}/signup/workforce/`, formattedData).pipe(
+signupWorkforce(formData: FormData): Observable<any> {
+  return this.http.post(`${this.apiUrl}/signup/workforce/`, formData).pipe(
     catchError(error => {
       console.error("Signup Workforce Error:", error);
       return throwError(() => new Error("Signup failed"));
