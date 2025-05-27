@@ -46,8 +46,73 @@ export class AuthService {
       })
     );
   }
+  private buildWorkforceFormData(data: Workforce): FormData {
+  const formData = new FormData();
 
-signupWorkforce(formData: FormData): Observable<any> {
+  // User JSON object
+  const userObj = {
+    email: data.email,
+    username: data.email,
+    first_name: data.firstName,
+    last_name: data.lastName,
+    password: data.password,
+    entityId: 1
+  };
+  formData.append('UserId', JSON.stringify(userObj));
+
+  // Flat fields
+  formData.append('entityID', '1');
+  formData.append('phone', data.phone || '');
+  formData.append('gender', data.gender);
+  formData.append('driverLicence', data.driverLicence || '');
+  formData.append('training', data.training || '');
+  formData.append('workForceType', data.workForceType);
+  formData.append('address', data.address || '');
+  formData.append('credentials', data.credentials || '');
+  formData.append('skills', data.skills || '');
+  formData.append('hourlyRatebyService', (data.hourlyRatebyService ?? '0').toString());
+
+  if (data.resume) formData.append('resume', data.resume);
+  if (data.yearsOfExperience) formData.append('yearsOfExperience', data.yearsOfExperience);
+  if (data.socialSecurityNumber) formData.append('socialSecurityNumber', data.socialSecurityNumber);
+
+  const parseDate = (d: string | undefined): string | null =>
+    d ? new Date(d).toISOString().slice(0, 10) : null;
+
+  const dob = parseDate(data.dateOfBirth);
+  const credExp = parseDate(data.credentialsExpiry);
+const licenceExp = data.driverLicence === 'Yes' && data.driverLicenceExpiry
+  ? parseDate(data.driverLicenceExpiry)
+  : null;
+  
+  if (dob) formData.append('dateOfBirth', dob);
+  if (credExp) formData.append('credentialsExpiry', credExp);
+  if (licenceExp) formData.append('driverLicenceExpiry', licenceExp);
+
+  if (Array.isArray(data.workCategory)) {
+    data.workCategory.forEach(cat => {
+      formData.append('workCategory[]', cat.toString());
+    });
+  }
+
+  if (data.availability) {
+    formData.append('availability', JSON.stringify(data.availability));
+  }
+
+  return formData;
+}
+
+signupWorkforce1(workforceData: FormData): Observable<any> {
+  return this.http.post(`${this.apiUrl}/signup/workforce/`, workforceData).pipe(
+    catchError(error => {
+      console.error("Signup Workforce Error:", error);
+      return throwError(() => new Error("Signup failed"));
+    })
+  );
+}
+signupWorkforce(workforceData: Workforce): Observable<any> {
+  const formData = this.buildWorkforceFormData(workforceData);
+
   return this.http.post(`${this.apiUrl}/signup/workforce/`, formData).pipe(
     catchError(error => {
       console.error("Signup Workforce Error:", error);
@@ -55,6 +120,8 @@ signupWorkforce(formData: FormData): Observable<any> {
     })
   );
 }
+
+
 
 
   signin(credentials: { email: string; password: string }): Observable<any> {

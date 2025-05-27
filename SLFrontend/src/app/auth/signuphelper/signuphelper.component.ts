@@ -127,7 +127,7 @@ onVehicleSelect(event: Event, type: 'vehicle' | 'tool'): void {
     }
   }
 
- register(): void {
+register(): void {
   if (!this.acceptedPolicy || !this.workforceForm.firstName || !this.workforceForm.training) {
     this.errorMessage = 'Please complete all required fields and accept the Privacy Policy.';
     return;
@@ -135,40 +135,9 @@ onVehicleSelect(event: Event, type: 'vehicle' | 'tool'): void {
 
   this.isLoading = true;
 
-  const formData = new FormData();
+  const formData = this.authService['buildWorkforceFormData'](this.workforceForm); // or extract this logic to a shared service
 
-  // Set up formatted date fields
-  const dateFields = ['dateOfBirth', 'credentialsExpiry', 'driverLicenceExpiry'];
-  dateFields.forEach(field => {
-    const value = this.workforceForm[field];
-    if (value && typeof value === 'string' && value.trim() !== '') {
-      const parsedDate = new Date(value);
-      if (!isNaN(parsedDate.getTime())) {
-        formData.append(field, parsedDate.toISOString().slice(0, 10));
-      }
-    }
-  });
-
-  // Append basic fields
-  for (const key in this.workforceForm) {
-    if (!this.workforceForm.hasOwnProperty(key)) continue;
-    const value = this.workforceForm[key];
-
-    if (value === null || value === undefined) continue;
-
-    if (Array.isArray(value)) {
-      value.forEach(val => formData.append(`${key}[]`, val));
-    } else if (typeof value === 'object' && !(value instanceof File)) {
-      formData.append(key, JSON.stringify(value));
-    } else {
-      formData.append(key, value);
-    }
-  }
-
-  // username = email
-  formData.append('username', this.workforceForm.email);
-
-  this.authService.signupWorkforce(formData).subscribe({
+  this.authService.signupWorkforce(this.workforceForm).subscribe({
     next: () => {
       this.isLoading = false;
       this.router.navigate(['/confirmation']);
@@ -179,6 +148,8 @@ onVehicleSelect(event: Event, type: 'vehicle' | 'tool'): void {
     }
   });
 }
+
+
 
 showPrivacy(event: Event): void {
   const input = event.target as HTMLInputElement | null;

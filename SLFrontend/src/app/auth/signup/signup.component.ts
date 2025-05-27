@@ -60,37 +60,44 @@ export class SignupComponent {
 
   constructor(private authService: AuthService, private router: Router) {}
 
- onSignup() {
+onSignup(): void {
   if (this.userType === 'client') {
-    this.authService.signupClient(this.clientForm).subscribe(response => {
-      console.log('Client created:', response);
-      this.router.navigate(['/']);
+    this.authService.signupClient(this.clientForm).subscribe({
+      next: response => {
+        console.log('Client created:', response);
+        this.router.navigate(['/']);
+      },
+      error: err => {
+        console.error('Client signup failed:', err);
+      }
     });
   } else {
-    // ✅ Convert workforceForm to FormData
     const formData = new FormData();
 
-    // UserId fields (nested object)
-    formData.append('UserId.email', this.workforceForm.email);
-    formData.append('UserId.username', this.workforceForm.email);
-    formData.append('UserId.first_name', this.workforceForm.firstName);
-    formData.append('UserId.last_name', this.workforceForm.lastName);
-    formData.append('UserId.password', this.workforceForm.password);
-    formData.append('UserId.entityId', '1');
+    // ✅ Nested user object as JSON
+    const userObj = {
+      email: this.workforceForm.email,
+      username: this.workforceForm.email,
+      first_name: this.workforceForm.firstName,
+      last_name: this.workforceForm.lastName,
+      password: this.workforceForm.password,
+      entityId: 1
+    };
+    formData.append('UserId', JSON.stringify(userObj));
 
-    // Main fields
+    // ✅ Basic fields
     formData.append('entityID', '1');
     formData.append('phone', this.workforceForm.phone || '');
-    formData.append('gender', this.workforceForm.gender);
+    formData.append('gender', this.workforceForm.gender || '');
     formData.append('driverLicence', this.workforceForm.driverLicence || '');
     formData.append('training', this.workforceForm.training || '');
     formData.append('workForceType', this.workforceForm.workForceType);
     formData.append('address', this.workforceForm.address || '');
     formData.append('credentials', this.workforceForm.credentials || '');
     formData.append('skills', this.workforceForm.skills || '');
-    formData.append('hourlyRatebyService', this.workforceForm.hourlyRatebyService?.toString() || '0');
+    formData.append('hourlyRatebyService', (this.workforceForm.hourlyRatebyService ?? '0').toString());
 
-    // Optional fields
+    // ✅ Optional fields
     if (this.workforceForm.resume) {
       formData.append('resume', this.workforceForm.resume);
     }
@@ -103,47 +110,53 @@ export class SignupComponent {
       formData.append('socialSecurityNumber', this.workforceForm.socialSecurityNumber);
     }
 
-    // Dates
-  const parseDate = (value: string | undefined): string | null => {
-    if (!value) return null;
-    const parsed = new Date(value);
-    return isNaN(parsed.getTime()) ? null : parsed.toISOString().slice(0, 10);
-  };
+    // ✅ Handle date fields safely
+    const parseDate = (value: string | null | undefined): string | undefined => {
+      if (!value) return undefined;
+      const parsed = new Date(value);
+      return isNaN(parsed.getTime()) ? undefined : parsed.toISOString().slice(0, 10);
+    };
 
     const dob = parseDate(this.workforceForm.dateOfBirth);
     const credExp = parseDate(this.workforceForm.credentialsExpiry);
-    const licenceExp = this.workforceForm.driverLicence === 'Yes' && this.workforceForm.driverLicenceExpiry
+    const licenceExp = this.workforceForm.driverLicence === 'Yes'
       ? parseDate(this.workforceForm.driverLicenceExpiry)
-      : null;
+      : undefined;
 
     if (dob) formData.append('dateOfBirth', dob);
     if (credExp) formData.append('credentialsExpiry', credExp);
     if (licenceExp) formData.append('driverLicenceExpiry', licenceExp);
 
-    // workCategory[]
+    // ✅ workCategory[]
     if (Array.isArray(this.workforceForm.workCategory)) {
       this.workforceForm.workCategory.forEach(cat => {
         formData.append('workCategory[]', cat.toString());
       });
     }
 
-    // availability
+    // ✅ availability (object as JSON string)
     if (this.workforceForm.availability) {
       formData.append('availability', JSON.stringify(this.workforceForm.availability));
     }
 
-    // ✅ Submit the FormData
-    this.authService.signupWorkforce(formData).subscribe(response => {
-      console.log('Workforce created:', response);
+    // ✅ Submit workforce signup
+    this.authService.signupWorkforce1(formData).subscribe({
+      next: response => {
+        console.log('Workforce created:', response);
 
-      const type = this.workforceForm.workForceType;
-      if (type === WorkForceType.PROFESSIONAL_HELPER || type === WorkForceType.GENERAL_HELPER) {
-        this.router.navigate(['/helper-dashboard']);
-      } else {
-        this.router.navigate(['/']);
+        const type = this.workforceForm.workForceType;
+        if (type === WorkForceType.PROFESSIONAL_HELPER || type === WorkForceType.GENERAL_HELPER) {
+          this.router.navigate(['/helper-dashboard']);
+        } else {
+          this.router.navigate(['/']);
+        }
+      },
+      error: err => {
+        console.error('Workforce signup failed:', err);
       }
     });
   }
 }
+
 
 }
