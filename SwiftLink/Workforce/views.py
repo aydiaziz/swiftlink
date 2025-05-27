@@ -102,9 +102,9 @@ def accept_helper(request, helper_id):
 
         # Envoi d’email
         send_mail(
-            subject='🎉 Your Application has been Accepted!',
-            message='Please complete your onboarding by filling this form:http://localhost:4200/helper/form/16',
-            from_email='aziz.aydi@inotekplus.com',
+            subject=' Your Application has been Accepted!',
+            message='Please complete your onboarding by filling this form:https://www.swift-helpers.com/helper/form/16',
+            from_email='application@swift-helpers.com',
             recipient_list=[helper.UserId.email],
             fail_silently=False,
         )
@@ -117,7 +117,41 @@ def get_helper_detail(request, user_id):
     try:
         helper = WorkForce.objects.select_related('UserId').get(UserId__user_id=user_id)
         serializer = WorkForceDetailSerializer(helper)
+
+        # Compose email
+        first_name = helper.firstName or "there"
+        subject = "Swift Helpers Application Received – Next Steps Inside"
+        message = f"""Hi {first_name},
+
+Thank you for submitting your initial application to join the Swift Helpers Self-Employment Network.
+
+We’re reviewing your information and might contact you to schedule an interview. This conversation will help us confirm a mutual fit before proceeding to the full application and platform activation.
+
+What’s Next:
+• You will receive a call and/or an email from our us within the next 2 weeks
+• Please watch your inbox for scheduling updates and further instructions
+• Once approved, you’ll move forward to set up your full profile and begin onboarding to access Swift Helpers job board
+
+Swift Helpers is more than a job board. It is your pathway to flexible, commission-free self-employment in the property services sector with professional tools, real opportunities, and a support system designed around your success.
+
+We’re excited to support your journey.
+
+Warm regards,  
+Recruitment/Onboarding Team  
+www.swift-helpers.com  
+application@swift-helpers.com"""
+
+        # Send email
+        send_mail(
+            subject=subject,
+            message=message,
+            from_email='application@swift-helpers.com',
+            recipient_list=[helper.UserId.email],
+            fail_silently=False,
+        )
+
         return Response(serializer.data)
+
     except WorkForce.DoesNotExist:
         return Response({'error': 'Helper not found'}, status=404)
 @api_view(['POST'])

@@ -4,6 +4,22 @@
 </div>
 <div class="form">
   <h2>Helper Application</h2>
+<div class="onboarding-banner">
+  <h1>Work for Yourself. Not by Yourself!</h1>
+  <p>
+    <strong>Swift Helpers</strong> empowers self-employed individuals with meaningful jobs, maximized earnings, and a reliable path to future-ready, dignified service delivery.
+  </p>
+  <p>
+    Whether you’re seeking flexible side income, a full-time opportunity, or a short-term pathway while transitioning back into the workforce, Swift Helpers meets you where you are.
+    From basic tasks to professional trade work, our job board connects you directly with clients in need, designed for clarity, fair pay, and straightforward coordination.
+  </p>
+  <p><strong>What makes Swift Helpers different?</strong></p>
+  <ul>
+    <li>You’re paid directly by the client and keep your full rate. Clients also cover fees that support your Workboard and contribute to your Income Security Fund, your built-in financial safety net.</li>
+    <li>Earn on your terms. Choose the jobs you want, set your rates, and build your own schedule.</li>
+    <li>Get expert-backed guidance through Swift Academy. Unlock premium work opportunities as you progress toward Assured Helper status.</li>
+  </ul>
+</div>
 
   <form (ngSubmit)="register()" #formRef="ngForm">
 
@@ -15,7 +31,14 @@
     </div>
     <input type="email" name="email" [(ngModel)]="workforceForm.email" placeholder="Email Address *" required />
     <input type="tel" name="phone" [(ngModel)]="workforceForm.phone" placeholder="Phone Number *" required />
-    <input type="text" name="city" [(ngModel)]="workforceForm.city" placeholder="City *" required />
+    <input
+  type="text"
+  name="city"
+  [(ngModel)]="workforceForm.city"
+  placeholder="Fort McMurray"
+  [value]="'Fort McMurray'"
+  required
+/>
 
     <!-- 2. Service Categories -->
     <label class="label-title">Select the types of services you're comfortable offering as a

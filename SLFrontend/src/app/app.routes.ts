@@ -29,7 +29,7 @@ export const routes: Routes = [
     { path: 'notifications', component: NotificationsComponent },
     { path: 'admindashboard', component: AdminDashboardComponent },
     { path: 'signinhelper', component: SigninhelperComponent },
-    { path: 'signuphelper', component: SignuphelperComponent },
+    { path: 'application', component: SignuphelperComponent },
     { path: 'admin/helper/:id', component: AdminHelperViewComponent },
     { path: 'helper/form/:id', component: HelperFormComponent },
     { path: 'confirmation', component: ConfirmationComponent },

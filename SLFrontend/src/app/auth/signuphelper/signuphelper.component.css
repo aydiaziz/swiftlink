@@ -173,5 +173,38 @@ button[type="submit"]:hover {
   font-size: 16px;
   color: #333;
 }
+.onboarding-banner {
+  background: linear-gradient(to right, #f9fafb, #eef2f7);
+  border-left: 6px solid #3b82f6;
+  border-radius: 12px;
+  padding: 24px;
+  margin: 30px auto;
+  max-width: 900px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.onboarding-banner h1 {
+  color: #1e3a8a;
+  font-size: 1.8rem;
+  margin-bottom: 16px;
+}
+
+.onboarding-banner p {
+  margin-bottom: 10px;
+  font-size: 1rem;
+  color: #374151;
+  line-height: 1.5;
+}
+
+.onboarding-banner ul {
+  padding-left: 20px;
+  color: #1f2937;
+}
+
+.onboarding-banner li {
+  margin-bottom: 8px;
+  font-size: 0.98rem;
+}
 
 }
