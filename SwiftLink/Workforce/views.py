@@ -119,7 +119,7 @@ def get_helper_detail(request, user_id):
         serializer = WorkForceDetailSerializer(helper)
 
         # Compose email
-        first_name = helper.firstName or "there"
+        first_name = helper.UserId.first_name or "there"
         subject = "Swift Helpers Application Received – Next Steps Inside"
         message = f"""Hi {first_name},
 
