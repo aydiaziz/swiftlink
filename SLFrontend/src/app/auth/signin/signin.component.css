@@ -3,7 +3,7 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: stretch;
   gap: 40px;
   padding: 80px 100px;
   font-family: 'Segoe UI', sans-serif;
@@ -12,7 +12,7 @@
   box-sizing: border-box;
 }
 
-/* Partie gauche : texte d'introduction */
+/* Intro Section */
 .info-section {
   max-width: 600px;
   flex: 1;
@@ -20,60 +20,73 @@
 }
 
 .info-section h1 {
-  font-size: 36px;
+  font-size: 2.5rem;
   color: #062a44;
-  margin-bottom: 10px;
+  margin-bottom: 16px;
+  font-weight: 700;
 }
 
 .info-section p {
-  font-size: 16px;
+  font-size: 1rem;
   color: #5a6e7a;
-  line-height: 1.6;
-  margin-bottom: 15px;
+  line-height: 1.7;
+  margin-bottom: 18px;
 }
 
 .info-details h2 {
-  font-size: 22px;
+  font-size: 1.25rem;
   color: #062a44;
-  margin-top: 60px;
-  margin-bottom: 10px;
+  margin-top: 50px;
+  margin-bottom: 12px;
 }
 
 .info-details p {
-  font-size: 15px;
-  color: #333;
-  margin-bottom: 10px;
+  font-size: 0.95rem;
+  color: #374151;
+  margin-bottom: 8px;
 }
 
-/* Formulaire à droite */
+/* Formulaire */
 .signin-container form {
   display: flex;
   flex-direction: column;
   width: 100%;
   max-width: 400px;
   flex: 1;
+  background-color: #f9fafb;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
 }
 
+/* Inputs */
 .signin-container input[type="email"],
 .signin-container input[type="password"] {
-  padding: 12px;
+  padding: 14px;
   font-size: 16px;
   margin-bottom: 20px;
-  background-color: #f0f0f0;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  background-color: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Bouton de connexion */
+.signin-container input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+}
+
+/* Submit Button */
 .signin-button {
   padding: 14px;
   background-color: #f56a1d;
   color: white;
-  font-weight: bold;
+  font-weight: 600;
   font-size: 16px;
   border: none;
+  border-radius: 6px;
   cursor: pointer;
-  border-radius: 4px;
   transition: background-color 0.3s ease;
 }
 
@@ -81,43 +94,61 @@
   background-color: #e95b10;
 }
 
-/* Message d'erreur */
+/* Error Message */
 .error-message {
-  color: red;
+  color: #dc2626;
   margin-top: 10px;
   font-size: 14px;
+  font-weight: 500;
 }
 
-/* Lien vers le signup */
+/* Switch Link */
 .switch-auth {
   margin-top: 30px;
   font-size: 14px;
-  color: #333;
+  color: #4b5563;
+  text-align: center;
 }
 
 .switch-auth a {
   color: #f56a1d;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 600;
 }
 
 .switch-auth a:hover {
   text-decoration: underline;
 }
 
-/* Responsive */
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .signin-container {
+    padding: 60px 50px;
+  }
+}
+
 @media (max-width: 768px) {
   .signin-container {
     flex-direction: column;
-    padding: 40px 20px;
+    padding: 40px 24px;
   }
 
   .info-section {
     padding-right: 0;
     max-width: 100%;
+    text-align: center;
+  }
+
+  .info-section h1 {
+    font-size: 2rem;
+  }
+
+  .info-details h2 {
+    margin-top: 40px;
   }
 
   .signin-container form {
     max-width: 100%;
+    padding: 24px;
   }
 }

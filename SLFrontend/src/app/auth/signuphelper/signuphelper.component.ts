@@ -15,6 +15,7 @@ import { Gender, Workforce, WorkForceType } from '../../models/user.model';
 })
 export class SignuphelperComponent implements OnInit {
   errorMessage = '';
+  showPrivacyModal = false;
   services: ServiceType[] = [];
   vehicleOptions: string[] = [
     'Car',
@@ -139,6 +140,11 @@ export class SignuphelperComponent implements OnInit {
     }
   });
 }
-
+showPrivacy(event: Event): void {
+  const input = event.target as HTMLInputElement | null;
+  if (input?.checked) {
+    this.showPrivacyModal = true;
+  }
+}
 
 }

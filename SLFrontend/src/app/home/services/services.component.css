@@ -62,13 +62,14 @@
 
 .service-box {
   flex: 1;
-  background: white;
+  background: #ffffff;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
   min-height: 250px;
   font-size: 100%;
 }
+
 
 .service-box.highlight {
   background: #002f5f;
@@ -85,7 +86,7 @@
 }
 
 .service-box.highlight h3 {
-  border-bottom: 2px solid rgba(255,255,255,0.3);
+  border-bottom: 2px solid #ffffff4d;
 }
 
 .service-box ul {

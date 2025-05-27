@@ -84,7 +84,13 @@ environments. *</label>
 
     <!-- 6. Privacy Policy -->
     <label class="label-title">
-      <input type="checkbox" [(ngModel)]="acceptedPolicy" name="privacyPolicy" required />
+      <input
+  type="checkbox"
+  [(ngModel)]="acceptedPolicy"
+  name="privacyPolicy"
+  (change)="showPrivacy($event)"
+  required
+/>
       I agree to the Privacy Policy *
     </label>
 
@@ -95,4 +101,17 @@ environments. *</label>
     <button type="submit">Apply</button>
 
   </form>
+  <div class="modal-backdrop" *ngIf="showPrivacyModal" (click)="showPrivacyModal = false">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h3>Privacy Policy</h3>
+    <p>
+      By joining Swift Helpers, you agree to our policies governing personal data collection, service coordination, and helper-client relationships.
+      Your data will only be used to match you with jobs, support payment processes, and improve your experience. We never sell your data.
+    </p>
+    <p>
+      You can request access to or deletion of your data by contacting <strong>office&#64;swift-helpers.com</strong>.
+    </p>
+    <button (click)="showPrivacyModal = false">Close</button>
+  </div>
+</div>
 </div>
