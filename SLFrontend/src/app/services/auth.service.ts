@@ -46,82 +46,47 @@ export class AuthService {
       })
     );
   }
-  private buildWorkforceFormData(data: Workforce): FormData {
-  const formData = new FormData();
 
-  // User JSON object
-  const userObj = {
-    email: data.email,
-    username: data.email,
-    first_name: data.firstName,
-    last_name: data.lastName,
-    password: data.password,
-    entityId: 1
+  signupWorkforce(workforceData: Workforce): Observable<any> {
+  const formattedData: any = {
+    entityID: 1,
+    UserId: {
+      email: workforceData.email,
+      username: workforceData.email,
+      first_name: workforceData.firstName,
+      last_name: workforceData.lastName,
+      password: workforceData.password,
+      entityId: 1
+    },
+    phone: workforceData.phone || '',
+    gender: workforceData.gender,
+    driverLicence: workforceData.driverLicence || '',
+    training: workforceData.training || '',
+    workForceType: workforceData.workForceType,
+    address: workforceData.address || '',
+    workCategory: workforceData.workCategory || [],
+    availability: workforceData.availability,
+    credentials: workforceData.credentials,
+    credentialsExpiry: workforceData.credentialsExpiry,
+    dateOfBirth: workforceData.dateOfBirth,
+    socialSecurityNumber: workforceData.socialSecurityNumber,
+    skills: workforceData.skills,
+    hourlyRatebyService: workforceData.hourlyRatebyService
   };
-  formData.append('UserId', JSON.stringify(userObj));
 
-  // Flat fields
-  formData.append('entityID', '1');
-  formData.append('phone', data.phone || '');
-  formData.append('gender', data.gender);
-  formData.append('driverLicence', data.driverLicence || '');
-  formData.append('training', data.training || '');
-  formData.append('workForceType', data.workForceType);
-  formData.append('address', data.address || '');
-  formData.append('credentials', data.credentials || '');
-  formData.append('skills', data.skills || '');
-  formData.append('hourlyRatebyService', (data.hourlyRatebyService ?? '0').toString());
-
-  if (data.resume) formData.append('resume', data.resume);
-  if (data.yearsOfExperience) formData.append('yearsOfExperience', data.yearsOfExperience);
-  if (data.socialSecurityNumber) formData.append('socialSecurityNumber', data.socialSecurityNumber);
-
-  const parseDate = (d: string | undefined): string | null =>
-    d ? new Date(d).toISOString().slice(0, 10) : null;
-
-  const dob = parseDate(data.dateOfBirth);
-  const credExp = parseDate(data.credentialsExpiry);
-const licenceExp = data.driverLicence === 'Yes' && data.driverLicenceExpiry
-  ? parseDate(data.driverLicenceExpiry)
-  : null;
-  
-  if (dob) formData.append('dateOfBirth', dob);
-  if (credExp) formData.append('credentialsExpiry', credExp);
-  if (licenceExp) formData.append('driverLicenceExpiry', licenceExp);
-
-  if (Array.isArray(data.workCategory)) {
-    data.workCategory.forEach(cat => {
-      formData.append('workCategory[]', cat.toString());
-    });
+  // ✅ Ajouter driverLicenceExpiry uniquement si permis = "Yes"
+  if (workforceData.driverLicence === 'Yes' && workforceData.driverLicenceExpiry) {
+    const rawDate = new Date(workforceData.driverLicenceExpiry);
+    formattedData.driverLicenceExpiry = rawDate.toISOString().slice(0, 10);
   }
 
-  if (data.availability) {
-    formData.append('availability', JSON.stringify(data.availability));
-  }
-
-  return formData;
-}
-
-signupWorkforce1(workforceData: FormData): Observable<any> {
-  return this.http.post(`${this.apiUrl}/signup/workforce/`, workforceData).pipe(
+  return this.http.post(`${this.apiUrl}/signup/workforce/`, formattedData).pipe(
     catchError(error => {
       console.error("Signup Workforce Error:", error);
       return throwError(() => new Error("Signup failed"));
     })
   );
 }
-signupWorkforce(workforceData: Workforce): Observable<any> {
-  const formData = this.buildWorkforceFormData(workforceData);
-
-  return this.http.post(`${this.apiUrl}/signup/workforce/`, formData).pipe(
-    catchError(error => {
-      console.error("Signup Workforce Error:", error);
-      return throwError(() => new Error("Signup failed"));
-    })
-  );
-}
-
-
 
 
   signin(credentials: { email: string; password: string }): Observable<any> {

@@ -54,109 +54,30 @@ export class SignupComponent {
     workCategory: [],
     availability: {},
     hourlyRatebyService: 0,
-    yearsOfExperience:"",
-    resume: null
+    resume: null,
+    yearsOfExperience:""
   };
 
   constructor(private authService: AuthService, private router: Router) {}
 
-onSignup(): void {
-  if (this.userType === 'client') {
-    this.authService.signupClient(this.clientForm).subscribe({
-      next: response => {
+  onSignup() {
+    if (this.userType === 'client') {
+      this.authService.signupClient(this.clientForm).subscribe(response => {
         console.log('Client created:', response);
-        this.router.navigate(['/']);
-      },
-      error: err => {
-        console.error('Client signup failed:', err);
-      }
-    });
-  } else {
-    const formData = new FormData();
-
-    // ✅ Nested user object as JSON
-    const userObj = {
-      email: this.workforceForm.email,
-      username: this.workforceForm.email,
-      first_name: this.workforceForm.firstName,
-      last_name: this.workforceForm.lastName,
-      password: this.workforceForm.password,
-      entityId: 1
-    };
-    formData.append('UserId', JSON.stringify(userObj));
-
-    // ✅ Basic fields
-    formData.append('entityID', '1');
-    formData.append('phone', this.workforceForm.phone || '');
-    formData.append('gender', this.workforceForm.gender || '');
-    formData.append('driverLicence', this.workforceForm.driverLicence || '');
-    formData.append('training', this.workforceForm.training || '');
-    formData.append('workForceType', this.workforceForm.workForceType);
-    formData.append('address', this.workforceForm.address || '');
-    formData.append('credentials', this.workforceForm.credentials || '');
-    formData.append('skills', this.workforceForm.skills || '');
-    formData.append('hourlyRatebyService', (this.workforceForm.hourlyRatebyService ?? '0').toString());
-
-    // ✅ Optional fields
-    if (this.workforceForm.resume) {
-      formData.append('resume', this.workforceForm.resume);
-    }
-
-    if (this.workforceForm.yearsOfExperience) {
-      formData.append('yearsOfExperience', this.workforceForm.yearsOfExperience);
-    }
-
-    if (this.workforceForm.socialSecurityNumber) {
-      formData.append('socialSecurityNumber', this.workforceForm.socialSecurityNumber);
-    }
-
-    // ✅ Handle date fields safely
-    const parseDate = (value: string | null | undefined): string | undefined => {
-      if (!value) return undefined;
-      const parsed = new Date(value);
-      return isNaN(parsed.getTime()) ? undefined : parsed.toISOString().slice(0, 10);
-    };
-
-    const dob = parseDate(this.workforceForm.dateOfBirth);
-    const credExp = parseDate(this.workforceForm.credentialsExpiry);
-    const licenceExp = this.workforceForm.driverLicence === 'Yes'
-      ? parseDate(this.workforceForm.driverLicenceExpiry)
-      : undefined;
-
-    if (dob) formData.append('dateOfBirth', dob);
-    if (credExp) formData.append('credentialsExpiry', credExp);
-    if (licenceExp) formData.append('driverLicenceExpiry', licenceExp);
-
-    // ✅ workCategory[]
-    if (Array.isArray(this.workforceForm.workCategory)) {
-      this.workforceForm.workCategory.forEach(cat => {
-        formData.append('workCategory[]', cat.toString());
+        this.router.navigate(['/']);  // ✅ Redirection vers Home
       });
-    }
-
-    // ✅ availability (object as JSON string)
-    if (this.workforceForm.availability) {
-      formData.append('availability', JSON.stringify(this.workforceForm.availability));
-    }
-
-    // ✅ Submit workforce signup
-    this.authService.signupWorkforce1(formData).subscribe({
-      next: response => {
+    } else {
+      this.authService.signupWorkforce(this.workforceForm).subscribe(response => {
         console.log('Workforce created:', response);
 
-        const type = this.workforceForm.workForceType;
-        if (type === WorkForceType.PROFESSIONAL_HELPER || type === WorkForceType.GENERAL_HELPER) {
+        // ✅ Redirection vers dashboard si Helper, sinon Home
+        if (this.workforceForm.workForceType === WorkForceType.PROFESSIONAL_HELPER || 
+            this.workforceForm.workForceType === WorkForceType.GENERAL_HELPER) {
           this.router.navigate(['/helper-dashboard']);
         } else {
           this.router.navigate(['/']);
         }
-      },
-      error: err => {
-        console.error('Workforce signup failed:', err);
-      }
-    });
+      });
+    }
   }
-}
-
-
 }

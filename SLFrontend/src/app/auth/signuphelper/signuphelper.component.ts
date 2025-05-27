@@ -127,30 +127,40 @@ onVehicleSelect(event: Event, type: 'vehicle' | 'tool'): void {
     }
   }
 
-register(): void {
+ register(): void {
   if (!this.acceptedPolicy || !this.workforceForm.firstName || !this.workforceForm.training) {
     this.errorMessage = 'Please complete all required fields and accept the Privacy Policy.';
     return;
   }
+   this.isLoading = true;
+  const payload = { ...this.workforceForm };
+  payload.username = payload.email;
+  const dateFields = ['dateOfBirth', 'credentialsExpiry', 'driverLicenceExpiry'];
+  dateFields.forEach(field => {
+    const value = payload[field];
 
-  this.isLoading = true;
+    if (value && typeof value === 'string' && value.trim() !== '') {
+      const parsedDate = new Date(value);
+      if (!isNaN(parsedDate.getTime())) {
+        payload[field] = parsedDate.toISOString().slice(0, 10);
+      } else {
+        delete payload[field];
+      }
+    } else {
+      delete payload[field];
+    }
+  });
 
-  const formData = this.authService['buildWorkforceFormData'](this.workforceForm); // or extract this logic to a shared service
-
-  this.authService.signupWorkforce(this.workforceForm).subscribe({
+  this.authService.signupWorkforce(payload).subscribe({
     next: () => {
       this.isLoading = false;
       this.router.navigate(['/confirmation']);
     },
     error: err => {
-      this.isLoading = false;
       this.errorMessage = err?.error?.message || '❌ Registration error.';
     }
   });
 }
-
-
-
 showPrivacy(event: Event): void {
   const input = event.target as HTMLInputElement | null;
   if (input?.checked) {
