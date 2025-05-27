@@ -15,17 +15,13 @@ import { Gender, Workforce, WorkForceType } from '../../models/user.model';
 })
 export class SignuphelperComponent implements OnInit {
   errorMessage = '';
+  isNoVehicleSelected = false;
   showPrivacyModal = false;
   services: ServiceType[] = [];
-  vehicleOptions: string[] = [
-    'Car',
-    'Passenger Van / SUV',
-    'Pickup Truck',
-    'Cargo Van',
-    'No Vehicle',
-    'Work Related Basic Tools',
-    'No Tools'
-  ];
+vehicleOptions = {
+  vehicle: ['Car', 'Passenger Van / SUV', 'Pickup Truck', 'Cargo Van', 'No Vehicle',], 
+  tools: ['Work Related Basic Tools','No Tools']
+};
  isLoading: boolean = false;
   workForceTypes = Object.values(WorkForceType);
   genders = Object.values(Gender);
@@ -89,15 +85,40 @@ export class SignuphelperComponent implements OnInit {
     }
   }
 
-  onVehicleSelect(event: any): void {
-    const value = event.target.value;
-    this.workforceForm.availability = this.workforceForm.availability || {};
-    if (event.target.checked) {
-      this.workforceForm.availability[value] = true;
+onVehicleSelect(event: Event, type: 'vehicle' | 'tool'): void {
+  const input = event.target as HTMLInputElement;
+  const value = input.value;
+
+  if (type === 'vehicle') {
+    this.workforceForm.availability[value] = input.checked;
+
+    if (value === 'No Vehicle') {
+      this.isNoVehicleSelected = input.checked;
+
+      if (input.checked) {
+        // Uncheck other vehicles
+        this.vehicleOptions.vehicle.forEach(opt => {
+          if (opt !== 'No Vehicle') {
+            this.workforceForm.availability[opt] = false;
+          }
+        });
+
+      }
     } else {
-      delete this.workforceForm.availability[value];
+      if (input.checked) {
+        this.workforceForm.availability['No Vehicle'] = false;
+        this.isNoVehicleSelected = false;
+      }
     }
+
+  } else if (type === 'tool') {
+    // Allow only one tool to be selected at a time
+    this.vehicleOptions.tools.forEach(tool => {
+      this.workforceForm.availability[tool] = (tool === value) ? input.checked : false;
+    });
   }
+}
+
 
   onFileChange(event: any, field: string): void {
     const file = event.target.files[0];

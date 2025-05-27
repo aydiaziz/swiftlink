@@ -34,7 +34,7 @@
     <input
   type="text"
   name="city"
-  [(ngModel)]="workforceForm.city"
+  [(ngModel)]="workforceForm.adress"
   placeholder="Fort McMurray"
   [value]="'Fort McMurray'"
   required
@@ -71,16 +71,32 @@ environments. *</label>
     <input type="text" name="driverLicenceClass" [(ngModel)]="workforceForm.driverLicenceClass" placeholder="Driver’s License Class" />
 
     <!-- 5. Vehicle and Tools -->
-    <label class="label-title">Vehicle and Work-Related Basic Tools *</label>
-    <div class="checkbox-list">
-      <label *ngFor="let vehicle of vehicleOptions">
-        <input type="checkbox"
-               [value]="vehicle"
-               (change)="onVehicleSelect($event)"
-               [checked]="workforceForm.availability[vehicle]" />
-        {{ vehicle }}
-      </label>
-    </div>
+<label class="label-title">Vehicles *</label>
+<div class="checkbox-list">
+  <label *ngFor="let vehicle of vehicleOptions.vehicle">
+    <input
+      type="checkbox"
+      [value]="vehicle"
+      (change)="onVehicleSelect($event, 'vehicle')"
+      [checked]="workforceForm.availability[vehicle]"
+    />
+    {{ vehicle }}
+  </label>
+</div>
+
+<label class="label-title">Work-Related Basic Tools *</label>
+<div class="checkbox-list">
+  <label *ngFor="let tool of vehicleOptions.tools">
+    <input
+      type="checkbox"
+      [value]="tool"
+      (change)="onVehicleSelect($event, 'tool')"
+      [checked]="workforceForm.availability[tool]"
+      
+    />
+    {{ tool }}
+  </label>
+</div>
 
     <!-- 6. Privacy Policy -->
     <label class="label-title">
