@@ -132,6 +132,7 @@ onVehicleSelect(event: Event, type: 'vehicle' | 'tool'): void {
     this.errorMessage = 'Please complete all required fields and accept the Privacy Policy.';
     return;
   }
+  
    this.isLoading = true;
   const payload = { ...this.workforceForm };
   payload.username = payload.email;

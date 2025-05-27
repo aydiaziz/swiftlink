@@ -73,7 +73,7 @@ export class AuthService {
     skills: workforceData.skills,
     hourlyRatebyService: workforceData.hourlyRatebyService,
     resume:workforceData.resume || null,
-    YearsOfExperience:workforceData.yearsOfExperience,
+    yearsOfExperience:workforceData.yearsOfExperience,
     driverLicenceClass:workforceData.driverLicenceClass
   };
 

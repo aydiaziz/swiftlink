@@ -30,7 +30,8 @@
     </p>
 
     <p><strong>Experience:</strong> {{ helper.training || '-' }}</p>
-    <p><strong>City:</strong> {{ helper.adress || '-' }}</p>
+    <p><strong>Years Of Experience:</strong> {{ helper.yearsOfExperience || '-' }}</p>
+    <p><strong>City:</strong> {{ helper.address || '-' }}</p>
 
     <div class="actions">
       <button *ngIf="helper.acces === 0" (click)="acceptHelper()">✅ Approve</button>

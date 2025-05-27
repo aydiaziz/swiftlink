@@ -55,22 +55,31 @@ class WorkforceSignupView(generics.CreateAPIView):
             try:
                 # Récupération de l'adresse email et prénom (si disponible)
                 email = response.data.get('professionnelemail') or response.data.get('UserId', {}).get('email')
-                first_name = response.data.get('UserId', {}).get('firstName', 'Applicant')
+                first_name = response.data.get('UserId', {}).get('first_name', 'Applicant')
 
                 if email:
                     subject = "Welcome to Swift Helpers"
                     message = f"""
 Hello {first_name},
 
-✅ Thank you for registering as a helper with Swift Helpers!
+✅ hank you for submitting your initial application to join the Swift Helpers Self-Employment Network.
 
-Our team will review your application and contact you to schedule a phone interview.
+We’re reviewing your information and might contact you to schedule an interview. This conversation will help us confirm a mutual fit before proceeding to the full application and platform activation.
 
-Meanwhile, feel free to explore how Swift Helpers empowers independent workers like you.
+What’s Next:
+• You will receive a call and/or an email from our us within the next 2 weeks
+• Please watch your inbox for scheduling updates and further instructions
+• Once approved, you’ll move forward to set up your full profile and begin onboarding to access Swift Helpers job board
 
-See you soon!
-The Swift Helpers Team
-"""
+Swift Helpers is more than a job board. It is your pathway to flexible, commission-free self-employment in the property services sector with professional tools, real opportunities, and a support system designed around your success.
+
+We’re excited to support your journey.
+
+Warm regards,  
+Recruitment/Onboarding Team  
+www.swift-helpers.com  
+application@swift-helpers.com"""
+
                     send_mail(
                         subject,
                         message,
