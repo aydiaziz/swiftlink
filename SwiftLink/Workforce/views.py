@@ -87,23 +87,23 @@ def get_helper_profile(request, user_id):
     except WorkForce.DoesNotExist:
         return Response({'error': 'Helper not found'}, status=404)
 @api_view(['GET'])
-
+@permission_classes([IsAuthenticated])
 def list_helpers(request):
     helpers = WorkForce.objects.all().select_related('UserId')
     serializer = WorkForceListSerializer(helpers, many=True)
     return Response(serializer.data)
 @api_view(['POST'])
-
+@permission_classes([IsAuthenticated])
 def accept_helper(request, helper_id):
     try:
         helper = WorkForce.objects.get(UserId__user_id=helper_id)
         helper.acces = 1
         helper.save()
-
+        form_url = f'https://www.swift-helpers.com/helper/form/{helper_id}'
         # Envoi d’email
         send_mail(
             subject=' Your Application has been Accepted!',
-            message='Please complete your onboarding by filling this form:https://www.swift-helpers.com/helper/form/16',
+            message=f'Please complete your onboarding by filling out this form: {form_url}',
             from_email='application@swift-helpers.com',
             recipient_list=[helper.UserId.email],
             fail_silently=False,

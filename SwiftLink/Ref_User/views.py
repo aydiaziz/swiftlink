@@ -2,8 +2,8 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
-from .models import Ref_User
-from .serializers import UserSerializer, ClientSerializer, WorkForceSerializer
+from .models import Ref_User, RoleType
+from .serializers import UserSerializer, ClientSerializer, WorkForceSerializer,SuperAdminLoginSerializer
 from Client.models import Client
 from Workforce.models import WorkForce
 from .serializers import SigninSerializer
@@ -13,7 +13,8 @@ from .serializers import ClientProfileSerializer
 from rest_framework.decorators import api_view, permission_classes
 from django.core.mail import send_mail
 from django.conf import settings
-
+from django.contrib.auth.hashers import make_password
+from rest_framework.permissions import AllowAny
 
 # Signup pour Client
 class ClientSignupView(generics.CreateAPIView):
@@ -122,3 +123,35 @@ def update_client_profile(request):
         return Response({'success': True})
     else:
         return Response(serializer.errors, status=400)
+@api_view(['POST'])
+@permission_classes([AllowAny])  # You might restrict this later
+def create_superadmin(request):
+    required_fields = ['first_name', 'last_name', 'email', 'password', 'entityId']
+    for field in required_fields:
+        if field not in request.data:
+            return Response({"error": f"{field} is required"}, status=400)
+
+    if Ref_User.objects.filter(email=request.data['email']).exists():
+        return Response({"error": "Email already exists"}, status=400)
+
+    try:
+        user = Ref_User.objects.create(
+            first_name=request.data['first_name'],
+            last_name=request.data['last_name'],
+            email=request.data['email'],
+            username=request.data['email'],  # username = email
+            entityId_id=request.data['entityId'],
+            password=make_password(request.data['password']),
+            role=RoleType.SUPER_ADMIN,
+            status='Active'
+        )
+        return Response({"success": True, "user_id": user.user_id})
+    except Exception as e:
+        return Response({"error": str(e)}, status=500)
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def superadmin_login(request):
+    serializer = SuperAdminLoginSerializer(data=request.data)
+    if serializer.is_valid():
+        return Response(serializer.validated_data)
+    return Response(serializer.errors, status=400)

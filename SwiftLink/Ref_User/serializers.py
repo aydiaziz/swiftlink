@@ -141,4 +141,31 @@ class ClientProfileSerializer(serializers.Serializer):
             client.save()
 
         return {'user': user, 'client': client}
+class SuperAdminLoginSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField(write_only=True)
+
+    def validate(self, data):
+        email = data['email']
+        password = data['password']
+        try:
+            user = Ref_User.objects.get(email=email)
+        except Ref_User.DoesNotExist:
+            raise serializers.ValidationError("Invalid credentials")
+
+        if not user.check_password(password):
+            raise serializers.ValidationError("Invalid credentials")
+
+        if user.role != "Super Admin":
+            raise serializers.ValidationError("Not authorized as Super Admin")
+
+        refresh = RefreshToken.for_user(user)
+        return {
+            "access": str(refresh.access_token),
+            "refresh": str(refresh),
+            "user_id": user.user_id,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "role": user.role
+        }
 
