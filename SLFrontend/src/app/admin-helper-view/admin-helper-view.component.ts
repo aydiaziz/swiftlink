@@ -36,7 +36,10 @@ export class AdminHelperViewComponent implements OnInit {
       });
     }
   }
-
+getAvailableTools(availability: { [key: string]: boolean }): string[] {
+  if (!availability) return [];
+  return Object.keys(availability).filter(tool => availability[tool]);
+}
   acceptHelper() {
     if (!this.helper) return;
     this.adminService.acceptHelper(this.helper.UserId).subscribe({

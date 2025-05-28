@@ -23,11 +23,12 @@
     <p><strong>License Class:</strong> {{ helper.driverLicenceClass || '-' }}</p>
 
     <p><strong>Basic Tools:</strong>
-      <span *ngIf="helper.availability?.tools?.length">
-        {{ helper.availability.tools.join(', ') }}
+      <span *ngIf="getAvailableTools(helper.availability).length > 0">
+        {{ getAvailableTools(helper.availability).join(', ') }}
       </span>
-      <span *ngIf="!helper.availability?.tools?.length">Not specified</span>
+      <span *ngIf="getAvailableTools(helper.availability).length === 0">Not specified</span>
     </p>
+
 
     <p><strong>Experience:</strong> {{ helper.training || '-' }}</p>
     <p><strong>Years Of Experience:</strong> {{ helper.yearsOfExperience || '-' }}</p>
