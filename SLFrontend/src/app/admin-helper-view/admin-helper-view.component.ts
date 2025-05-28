@@ -35,7 +35,7 @@ export class AdminHelperViewComponent implements OnInit {
         }
       });
     }
-    console.log('Availability:', this.helper.availability);
+    
   }
   
 getAvailableTools(availability: any): string[] {
