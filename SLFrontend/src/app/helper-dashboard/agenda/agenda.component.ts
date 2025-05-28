@@ -106,7 +106,7 @@ export class AgendaComponent implements OnInit {
         }
       }
   
-      console.log(`🛠 Final duration: ${durationInMinutes} minutes`);
+      
   
       // Envoi vers l'API
       this.orderService.updateOrderDuration(
@@ -116,7 +116,7 @@ export class AgendaComponent implements OnInit {
         durationInMinutes  // Envoie la durée finale
       ).subscribe({
         next: res => {
-          console.log('✅ Duration saved:', res);
+          
           const orderId = this.selectedOrder?.orderID;
           this.selectedOrder = null;
           this.timerDisplay = '00:00:00';
@@ -147,7 +147,7 @@ export class AgendaComponent implements OnInit {
         this.manualDuration
       ).subscribe({
         next: res => {
-          console.log('✅ Manual duration saved:', res);
+          
           const orderId = job.orderID;
           this.manualDuration = 0;
           alert('Duration has been set successfully!');

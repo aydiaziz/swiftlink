@@ -17,7 +17,7 @@ export class ContactComponent {
   };
 
   onSubmit() {
-    console.log('Form Submitted:', this.contactForm);
+    
     alert('Thank you for reaching out! We will get back to you soon.');
   }
 }

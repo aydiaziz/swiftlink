@@ -35,10 +35,12 @@ export class AdminHelperViewComponent implements OnInit {
         }
       });
     }
+    console.log('Availability:', this.helper.availability);
   }
-getAvailableTools(availability: { [key: string]: boolean }): string[] {
-  if (!availability) return [];
-  return Object.keys(availability).filter(tool => availability[tool]);
+  
+getAvailableTools(availability: any): string[] {
+  if (!availability || typeof availability !== 'object') return [];
+  return Object.keys(availability).filter(key => availability[key]);
 }
   acceptHelper() {
     if (!this.helper) return;

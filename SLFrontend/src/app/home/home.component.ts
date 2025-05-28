@@ -28,7 +28,7 @@ export class HomeComponent {
   constructor( private communicationService: CommunicationService,private router: Router, private http: HttpClient) {}
   sendMessage() {
     if (this.helpMessage.trim()) {
-      console.log('User message:', this.helpMessage);
+      
       alert(`Message sent: ${this.helpMessage}`);
       this.helpMessage = ''; // Réinitialiser le champ après envoi
     }

@@ -64,12 +64,12 @@ export class SignupComponent {
   onSignup() {
     if (this.userType === 'client') {
       this.authService.signupClient(this.clientForm).subscribe(response => {
-        console.log('Client created:', response);
+        
         this.router.navigate(['/']);  // ✅ Redirection vers Home
       });
     } else {
       this.authService.signupWorkforce(this.workforceForm).subscribe(response => {
-        console.log('Workforce created:', response);
+        
 
         // ✅ Redirection vers dashboard si Helper, sinon Home
         if (this.workforceForm.workForceType === WorkForceType.PROFESSIONAL_HELPER || 

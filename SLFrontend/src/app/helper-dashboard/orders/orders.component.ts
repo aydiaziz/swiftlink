@@ -28,7 +28,7 @@ export class OrdersComponent implements OnInit {
   likeOrder(orderID: number): void {
     this.orderService.likeOrder(orderID).subscribe({
       next: () => {
-        console.log(`Order ${orderID} liked!`);
+        
         this.loadOrders();  // 🔄 Rafraîchir les ordres après le like
       },
       error: (err) => {

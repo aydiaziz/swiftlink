@@ -46,7 +46,7 @@ export class NavbarComponent implements OnInit {
   loadNotifications() {
     this.notifService.getNotifications().subscribe(data => {
       this.notifications = data;
-      console.log('Notifications:', this.notifications);
+      
     });
     
   }
@@ -97,9 +97,7 @@ export class NavbarComponent implements OnInit {
       });
     }
     getOtherUserName(conv: any): string {
-      console.log('🔍 Current user:', this.currentUser);
-      console.log('🔍 Conversation object:', conv);
-    
+     
       if (!this.currentUser || !conv.client || !conv.helper) {
         return 'Unknown';
       }
@@ -109,7 +107,7 @@ export class NavbarComponent implements OnInit {
           ? conv.helper.first_name
           : conv.client.first_name;
     
-      console.log('✅ Other user firstname:', name);
+      
       return name;
     }
     

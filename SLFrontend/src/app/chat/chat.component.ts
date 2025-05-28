@@ -36,7 +36,7 @@ export class ChatComponent implements OnInit {
     if (this.conversationId) {
       this.chatService.getConversation(this.conversationId).subscribe(data => {
         this.messages = data.messages;
-        console.log(this.messages);
+        
         
       });
     } else {
@@ -60,7 +60,7 @@ export class ChatComponent implements OnInit {
     this.orderService.confirmOrderAssignment(this.conversationId).subscribe({
       next: (res) => {
         if (res.success) {
-          console.log("✅ Order assigned successfully");
+          
           
         }
       },
@@ -72,7 +72,7 @@ export class ChatComponent implements OnInit {
   }
   send() {
     if (!this.messageText.trim()) return;
-    console.log(this.currentUserId);
+    
     
     this.chatService.sendMessage(this.conversationId, this.messageText,this.currentUserId).subscribe(() => {
       this.messages.push({

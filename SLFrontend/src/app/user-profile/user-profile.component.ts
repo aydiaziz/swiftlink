@@ -41,9 +41,9 @@ get profileImageUrl(): string {
   ngOnInit(): void {
   this.authService.getCurrentUser().subscribe(user => {
     this.user = user;
-    console.log('User from API:', user);
+   
     this.profilePreview = user.profileImage;
-    console.log(this.profilePreview);
+    
     
 
     this.form.patchValue({
