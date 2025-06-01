@@ -1,31 +1,37 @@
-version: '3.8'
 
 services:
+  postgres-db:
+    image: postgres:16
+    container_name: postgres-db
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mypostgrespass
+    volumes:
+      - /home/helpers/Swifthelpers/swiftlink:/var/lib/postgresql/data
+    command:
+      -c port=5434
+      -c listen_addresses=*
+
   backend:
     image: django-backend
     container_name: django-backend
     restart: unless-stopped
-    ports:
-      - "8001:8001"
-    volumes:
-      - static_volume:/app/static
     env_file:
       - SwiftLink/.env
+    network_mode: host
+    depends_on:
+      - postgres-db
+    volumes:
+      - static_volume:/app/static
 
   frontend:
     image: angular-frontend
     container_name: angular-frontend
     restart: unless-stopped
-    ports:
-      - "3100:443"
-
-  watchtower:
-    image: containrrr/watchtower
-    container_name: watchtower
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    restart: unless-stopped
-    command: --interval 30
+    network_mode: host
 
 volumes:
   static_volume:
