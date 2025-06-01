@@ -9,13 +9,12 @@ services:
       POSTGRES_DB: postgres
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: mypostgrespass
-      PGDATA: /var/lib/postgresql/data  # 👈 ajoute ceci
+      PGDATA: /var/lib/postgresql/data
     volumes:
-      - /home/helpers/Swifthelpers/swiftlink:/var/lib/postgresql/data
+      - /home/helpers/Swifthelpers/postgres-data:/var/lib/postgresql/data
     command:
       -c port=5434
       -c listen_addresses=*
-
   backend:
     image: django-backend
     container_name: django-backend
