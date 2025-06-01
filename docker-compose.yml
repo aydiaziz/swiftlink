@@ -9,6 +9,7 @@ services:
       POSTGRES_DB: postgres
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: mypostgrespass
+      PGDATA: /var/lib/postgresql/data  # 👈 ajoute ceci
     volumes:
       - /home/helpers/Swifthelpers/swiftlink:/var/lib/postgresql/data
     command:
