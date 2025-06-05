@@ -155,7 +155,7 @@ application@swift-helpers.com"""
     except WorkForce.DoesNotExist:
         return Response({'error': 'Helper not found'}, status=404)
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+
 def complete_helper_profile(request):
     try:
         helper = WorkForce.objects.get(UserId=request.user)
