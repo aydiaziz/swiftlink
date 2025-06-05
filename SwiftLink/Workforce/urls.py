@@ -8,5 +8,5 @@ urlpatterns = [
     path('admin/helpers', list_helpers),
     path('admin/helpers/<int:helper_id>/accept', accept_helper),
     path('admin/helper/<int:user_id>', get_helper_detail),
-    path('helper/profile-completion', complete_helper_profile),
+    path('helper/profile-completion/<int:id>/', complete_helper_profile),
 ]

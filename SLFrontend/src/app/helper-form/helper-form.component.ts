@@ -66,6 +66,7 @@ calculateRates() {
   }
 }
  submit() {
+   const helperId = this.route.snapshot.paramMap.get('id');
   if (this.form.password !== this.form.confirmPassword) {
     this.passwordError = "Passwords do not match";
     return;
@@ -87,7 +88,7 @@ calculateRates() {
     formData.append(fileKey, this.files[fileKey]);
   }
 
-  this.http.post(`${environment.apiUrl}/helper/profile-completion`, formData).subscribe({
+  this.http.post(`${environment.apiUrl}/helper/profile-completion/${helperId}/`, formData).subscribe({
     next: () => {
       alert("✅ Your profile has been completed successfully!");
       this.router.navigate(['/helper-dashboard']);

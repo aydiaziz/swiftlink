@@ -156,14 +156,14 @@ application@swift-helpers.com"""
         return Response({'error': 'Helper not found'}, status=404)
 @api_view(['POST'])
 
-def complete_helper_profile(request):
+def complete_helper_profile(request, id):
     try:
-        helper = WorkForce.objects.get(UserId=request.user)
+        helper = WorkForce.objects.get(pk=id)
 
         if helper.acces == 1:
             return Response({"detail": "Profile already completed."}, status=400)
 
-        serializer = WorkforceProfileCompletionSerializer(helper, data=request.data, partial=True)
+        serializer = WorkforceProfileCompletionSerializer(helper, data=request.data, partial=True, context={'request': request})
         if serializer.is_valid():
             serializer.save()
             helper.acces = 1
