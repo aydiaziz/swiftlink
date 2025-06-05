@@ -78,7 +78,7 @@ def dashboard_stats(request):
         logger.exception("Error in dashboard_stats:")
         return Response({"error": str(e)}, status=500)
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+
 def get_helper_profile(request, user_id):
     try:
         helper = WorkForce.objects.select_related('UserId').get(UserId__user_id=user_id)
