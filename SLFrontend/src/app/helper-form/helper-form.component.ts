@@ -11,7 +11,7 @@ import { environment } from '../../environments/environment';
   templateUrl: './helper-form.component.html',
   styleUrl: './helper-form.component.css'
 })
-export class HelperFormComponent  {
+export class HelperFormComponent implements OnInit {
   errorMessage: string = '';
 form: any = {
   country: 'Canada'  // valeur par défaut
@@ -19,10 +19,27 @@ form: any = {
   files: { [key: string]: File } = {};
 emailError: string = '';
 passwordError: string = '';
-
-  constructor(private http: HttpClient, private router: Router) {}
 countries: string[] = ['Canada', 'United States', 'France', 'Germany', 'Australia', 'India', 'Tunisia', 'Other'];
+constructor(private http: HttpClient, private router: Router,
+  private route: ActivatedRoute,) {}
 
+ngOnInit() {
+  const helperId = this.route.snapshot.paramMap.get('id');
+  if (helperId) {
+    this.loadHelperData(helperId);
+  }
+}
+loadHelperData(id: string): void {
+  this.http.get(`${environment.apiUrl}/helper/${id}/profile/`).subscribe({
+    next: (data) => {
+      this.form = data;
+    },
+    error: (err) => {
+      console.error("Error loading helper profile:", err);
+      this.errorMessage = "Unable to load your profile.";
+    }
+  });
+}
   onFileChange(event: any, field: string) {
     const file = event.target.files[0];
     if (file) {
