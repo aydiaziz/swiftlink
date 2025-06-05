@@ -160,8 +160,7 @@ def complete_helper_profile(request, id):
     try:
         helper = WorkForce.objects.get(pk=id)
 
-        if helper.acces == 1:
-            return Response({"detail": "Profile already completed."}, status=400)
+
 
         serializer = WorkforceProfileCompletionSerializer(helper, data=request.data, partial=True, context={'request': request})
         if serializer.is_valid():
