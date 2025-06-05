@@ -2,16 +2,50 @@
   <h2>Complete Your Profile</h2>
 
   <form (ngSubmit)="submit()" #helperForm="ngForm">
+    
+    <!-- Identity -->
+    <label>First Name *</label>
+    <input type="text" name="firstName" [(ngModel)]="form.firstName" required />
+
+    <label>Last Name *</label>
+    <input type="text" name="lastName" [(ngModel)]="form.lastName" required />
+
+    <label>Date of Birth *</label>
+    <input type="date" name="dateOfBirth" [(ngModel)]="form.dateOfBirth" required />
+
+    <label>Gender *</label>
+    <select name="gender" [(ngModel)]="form.gender" required>
+      <option value="">Select</option>
+      <option value="Male">Male</option>
+      <option value="Female">Female</option>
+      <option value="Prefer not to say">Prefer not to say</option>
+    </select>
 
     <!-- Email Pro -->
     <label>Email *</label>
-    <input type="email" name="professionnelemail" [(ngModel)]="form.professionnelemail" required placeholder="firstname.lastname@swift-helpers.com" />
+    <input type="email" name="professionnelemail" [(ngModel)]="form.professionnelemail" required
+           placeholder="firstname.lastname@swift-helpers.com"
+           (blur)="validateEmail()" />
+    <div class="error" *ngIf="emailError">{{ emailError }}</div>
+
+    <!-- Password -->
+    <label>Password *</label>
+    <input type="password" name="password" [(ngModel)]="form.password" required />
+
+    <label>Confirm Password *</label>
+    <input type="password" name="confirmPassword" [(ngModel)]="form.confirmPassword" required />
+    <div class="error" *ngIf="passwordError">{{ passwordError }}</div>
+
+    <!-- Profile Photo -->
+<label>Upload Profile Photo</label>
+<input type="file" (change)="onFileSelect($event, 'profileImage')" />
 
     <!-- Hourly rates -->
     <div class="rate-group">
       <div>
         <label>Hourly rate (100% to you)</label>
-        <input type="number" [(ngModel)]="form.hourlyRatebyService" name="hourlyRatebyService" (input)="calculateRates()" required />
+        <input type="number" [(ngModel)]="form.hourlyRatebyService" name="hourlyRatebyService"
+               (input)="calculateRates()" required />
       </div>
       <div>
         <label>15% Security Fund</label>
@@ -22,7 +56,10 @@
         <input type="text" [value]="form.platformFeeRate" disabled />
       </div>
       <div>
-        <label>Hourly Rate Chargeable to Client</label>
+        <label>
+          Hourly Rate Chargeable to Client
+          <span title="This is the rate charged to the client, including platform and security fund.">❓</span>
+        </label>
         <input type="text" [value]="form.clientChargeRate" disabled />
       </div>
       <div>
@@ -50,25 +87,93 @@
 
     <!-- Address -->
     <label>Address</label>
-    <input type="text" name="address" [(ngModel)]="form.address" />
+    <input type="text" name="address" [(ngModel)]="form.address" placeholder="address" />
 
     <input type="text" name="city" [(ngModel)]="form.city" placeholder="City" />
     <input type="text" name="province" [(ngModel)]="form.province" placeholder="Province" />
     <input type="text" name="postalCode" [(ngModel)]="form.postalCode" placeholder="Postal Code" />
-    <input type="text" name="country" [(ngModel)]="form.country" placeholder="Country" />
+
+    <label>Country</label>
+<select name="country" [(ngModel)]="form.country" required>
+  <option value="Canada">Canada</option>
+  <option value="United States">United States</option>
+  <option value="Afghanistan">Afghanistan</option>
+  <option value="Albania">Albania</option>
+  <option value="Algeria">Algeria</option>
+  <option value="Andorra">Andorra</option>
+  <option value="Angola">Angola</option>
+  <option value="Argentina">Argentina</option>
+  <option value="Armenia">Armenia</option>
+  <option value="Australia">Australia</option>
+  <option value="Austria">Austria</option>
+  <option value="Azerbaijan">Azerbaijan</option>
+  <option value="Bahamas">Bahamas</option>
+  <option value="Bahrain">Bahrain</option>
+  <option value="Bangladesh">Bangladesh</option>
+  <option value="Barbados">Barbados</option>
+  <option value="Belarus">Belarus</option>
+  <option value="Belgium">Belgium</option>
+  <option value="Belize">Belize</option>
+  <option value="Benin">Benin</option>
+  <option value="Bhutan">Bhutan</option>
+  <option value="Bolivia">Bolivia</option>
+  <option value="Bosnia and Herzegovina">Bosnia and Herzegovina</option>
+  <option value="Botswana">Botswana</option>
+  <option value="Brazil">Brazil</option>
+  <option value="Brunei">Brunei</option>
+  <option value="Bulgaria">Bulgaria</option>
+  <option value="Burkina Faso">Burkina Faso</option>
+  <option value="Burundi">Burundi</option>
+  <option value="Cambodia">Cambodia</option>
+  <option value="Cameroon">Cameroon</option>
+  <option value="Cape Verde">Cape Verde</option>
+  <option value="Central African Republic">Central African Republic</option>
+  <option value="Chad">Chad</option>
+  <option value="Chile">Chile</option>
+  <option value="China">China</option>
+  <option value="Colombia">Colombia</option>
+  <option value="Comoros">Comoros</option>
+  <option value="Costa Rica">Costa Rica</option>
+  <option value="Croatia">Croatia</option>
+  <option value="Cuba">Cuba</option>
+  <option value="Cyprus">Cyprus</option>
+  <option value="Czech Republic">Czech Republic</option>
+  <option value="Denmark">Denmark</option>
+    </select>
+
+    <!-- SSN -->
+    <label>Social Security Number</label>
+    <input type="text" name="socialSecurityNumber" [(ngModel)]="form.socialSecurityNumber" />
 
     <!-- Career Goals -->
     <label>Tell us about your career expectations</label>
     <textarea name="careerExpectations" [(ngModel)]="form.careerExpectations"></textarea>
 
+    <!-- Referral Source -->
     <label>How did you hear about Swift Helpers?</label>
-    <input type="text" name="referralSource" [(ngModel)]="form.referralSource" />
+    <select name="referralSource" [(ngModel)]="form.referralSource">
+      <option value="AI Search">AI Search</option>
+      <option value="Google Search">Google Search</option>
+      <option value="Social Media">Social Media</option>
+      <option value="Advertisement">Advertisement</option>
+      <option value="Job fair">Job fair</option>
+      <option value="Word of Mouth">Word of Mouth</option>
+      <option value="Other">Other</option>
+    </select>
 
+    <!-- Updates -->
     <label>Would you like to receive helpful updates?</label>
     <div class="radio-group">
       <label><input type="radio" name="wantsUpdates" [(ngModel)]="form.wantsUpdates" [value]="true" /> Yes</label>
       <label><input type="radio" name="wantsUpdates" [(ngModel)]="form.wantsUpdates" [value]="false" /> No</label>
     </div>
+
+    <!-- Contract Terms -->
+    <label>
+      <input type="checkbox" [(ngModel)]="form.contractAccepted" name="contractAccepted" required />
+      I agree to the Self-employment Contract Terms*
+    </label>
+    <p><a routerLink="/self-employment-contract" target="_blank">Read the contract terms</a></p>
 
     <!-- Submit -->
     <button type="submit">Submit</button>

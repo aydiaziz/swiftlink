@@ -13,10 +13,15 @@ import { environment } from '../../environments/environment';
 })
 export class HelperFormComponent  {
   errorMessage: string = '';
- form: any = {};
+form: any = {
+  country: 'Canada'  // valeur par défaut
+};
   files: { [key: string]: File } = {};
+emailError: string = '';
+passwordError: string = '';
 
   constructor(private http: HttpClient, private router: Router) {}
+countries: string[] = ['Canada', 'United States', 'France', 'Germany', 'Australia', 'India', 'Tunisia', 'Other'];
 
   onFileChange(event: any, field: string) {
     const file = event.target.files[0];
@@ -24,6 +29,13 @@ export class HelperFormComponent  {
       this.files[field] = file;
     }
   }
+  validateEmail(): void {
+  if (this.form.professionnelemail && !this.form.professionnelemail.endsWith('@swift-helpers.com')) {
+    this.emailError = 'Email must end with @swift-helpers.com';
+  } else {
+    this.emailError = '';
+  }
+}
 calculateRates() {
   if (this.form.hourlyRatebyService) {
     const base = this.form.hourlyRatebyService;
@@ -36,29 +48,40 @@ calculateRates() {
     this.form.clientChargeRate = 0;
   }
 }
-  submit() {
-    const formData = new FormData();
-    for (const key in this.form) {
-      if (this.form[key] !== undefined && this.form[key] !== null) {
-        formData.append(key, this.form[key]);
-      }
-    }
-    for (const fileKey in this.files) {
-      formData.append(fileKey, this.files[fileKey]);
-    }
-
-    this.http.post(`${environment.apiUrl}/helper/profile-completion/`, formData).subscribe({
-      next: () => {
-        alert("✅ Your profile has been completed successfully!");
-        this.router.navigate(['/helper-dashboard']);
-      },
-      error: err => {
-        alert("❌ Error submitting profile.");
-        console.error(err);
-      }
-    });
+ submit() {
+  if (this.form.password !== this.form.confirmPassword) {
+    this.passwordError = "Passwords do not match";
+    return;
+  } else {
+    this.passwordError = '';
   }
-  onFileSelect(event: Event, field: 'driverLicenceFile' | 'wcbFile'): void {
+
+  if (this.emailError) {
+    return;
+  }
+
+  const formData = new FormData();
+  for (const key in this.form) {
+    if (this.form[key] !== undefined && this.form[key] !== null) {
+      formData.append(key, this.form[key]);
+    }
+  }
+  for (const fileKey in this.files) {
+    formData.append(fileKey, this.files[fileKey]);
+  }
+
+  this.http.post(`${environment.apiUrl}/helper/profile-completion/`, formData).subscribe({
+    next: () => {
+      alert("✅ Your profile has been completed successfully!");
+      this.router.navigate(['/helper-dashboard']);
+    },
+    error: err => {
+      alert("❌ Error submitting profile.");
+      console.error(err);
+    }
+  });
+}
+onFileSelect(event: Event, field: 'profileImage' | 'driverLicenceFile' | 'wcbFile'): void {
   const input = event.target as HTMLInputElement;
   if (input.files && input.files.length > 0) {
     const file = input.files[0];

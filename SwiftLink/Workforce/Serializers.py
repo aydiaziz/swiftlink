@@ -1,6 +1,7 @@
 # dashboard/serializers.py
 from rest_framework import serializers
 from Workforce.models import WorkForce
+from Ref_User.models import Ref_User
 
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
@@ -54,10 +55,19 @@ class WorkForceDetailSerializer(serializers.ModelSerializer):
 
 
 class WorkforceProfileCompletionSerializer(serializers.ModelSerializer):
+    profileImage = serializers.ImageField(source='UserId.profileImage', required=False)
+    first_name = serializers.CharField(source='UserId.first_name', required=False)
+    last_name = serializers.CharField(source='UserId.last_name', required=False)
+    password = serializers.CharField(source='UserId.password', write_only=True, required=False)
+    
     class Meta:
         model = WorkForce
         fields = [
             'professionnelemail',
+            'profileImage',
+            'first_name',
+            'last_name',
+            'password',
             'driverLicence', 'driverLicenceExpiry', 'driverLicenceFile',
             'wcbNumber', 'wcbFile',
             'address', 'city', 'province', 'postalCode', 'country',
@@ -65,3 +75,19 @@ class WorkforceProfileCompletionSerializer(serializers.ModelSerializer):
             'hourlyRatebyService', 'securityFundRate', 'platformFeeRate',
             'clientChargeRate', 'consumablesFee'
         ]
+
+    def update(self, instance, validated_data):
+        # Update Ref_User fields
+        user_data = validated_data.pop('UserId', {})
+        user = instance.UserId
+
+        for attr, value in user_data.items():
+            setattr(user, attr, value)
+        user.save()
+
+        # Update WorkForce fields
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+
+        return instance
