@@ -30,7 +30,7 @@ ngOnInit() {
   }
 }
 loadHelperData(id: string): void {
-  this.http.get(`${environment.apiUrl}/helper/${id}/profile/`).subscribe({
+  this.http.get(`${environment.apiUrl}/helpers/${id}/profile/`).subscribe({
     next: (data) => {
       this.form = data;
     },
