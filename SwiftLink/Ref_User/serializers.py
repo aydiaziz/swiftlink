@@ -6,6 +6,7 @@ from Workforce.models import WorkForce
 from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.settings import api_settings
+from django.contrib.auth import authenticate
 
 class UserSerializer(serializers.ModelSerializer):
     profileImage = serializers.ImageField(read_only=True)
@@ -60,20 +61,34 @@ class SigninSerializer(serializers.Serializer):
     password = serializers.CharField(write_only=True)
 
     def validate(self, data):
-        from Ref_User.models import Ref_User  # 🔥 Importer le bon modèle
+        email = data.get('email')
+        password = data.get('password')
+
+        if not email or not password:
+            raise serializers.ValidationError("Email and password are required.")
+
+        # 🔍 Étape 1 : essayer Ref_User
         try:
-            user = Ref_User.objects.get(email=data['email'])
+            user = Ref_User.objects.get(email=email)
         except Ref_User.DoesNotExist:
-            raise serializers.ValidationError({"non_field_errors": ["Invalid email or password"]})
+            # 🔄 Étape 2 : fallback via WorkForce.professionnelemail
+            try:
+                helper = WorkForce.objects.select_related('UserId').get(professionnelemail=email)
+                user = helper.UserId
+            except WorkForce.DoesNotExist:
+                raise serializers.ValidationError("User not found.")
 
-        if not user.check_password(data['password']):
-            raise serializers.ValidationError({"non_field_errors": ["Invalid email or password"]})
+        # 🔐 Auth via username (car AbstractUser → username est unique)
+        user = authenticate(username=user.username, password=password)
+        if not user:
+            raise serializers.ValidationError("Invalid credentials.")
 
-        from rest_framework_simplejwt.tokens import RefreshToken
+        if not user.is_active:
+            raise serializers.ValidationError("User is inactive.")
 
+        # 🔑 JWT Tokens
         refresh = RefreshToken.for_user(user)
-        refresh[api_settings.USER_ID_FIELD] = str(user.user_id)  
-
+        refresh[api_settings.USER_ID_FIELD] = str(user.user_id)
 
         return {
             "user_id": user.user_id,
@@ -83,7 +98,6 @@ class SigninSerializer(serializers.Serializer):
             "access": str(refresh.access_token),
             "refresh": str(refresh),
         }
-
 
     
 class WorkForceSerializer(serializers.ModelSerializer):

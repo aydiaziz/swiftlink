@@ -91,7 +91,7 @@ calculateRates() {
   this.http.post(`${environment.apiUrl}/helper/profile-completion/${helperId}/`, formData).subscribe({
     next: () => {
       alert("✅ Your profile has been completed successfully!");
-      this.router.navigate(['/helper-dashboard']);
+      this.router.navigate(['/signinhelper']);
     },
     error: err => {
       alert("❌ Error submitting profile.");
