@@ -77,17 +77,23 @@ class WorkforceProfileCompletionSerializer(serializers.ModelSerializer):
         ]
 
     def update(self, instance, validated_data):
-        # Update Ref_User fields
         user_data = validated_data.pop('UserId', {})
         user = instance.UserId
 
+        # Gestion sécurisée du mot de passe
+        password = user_data.pop('password', None)
+
         for attr, value in user_data.items():
             setattr(user, attr, value)
+
+        if password:
+            user.set_password(password)  # ✅ hachage sécurisé
+
         user.save()
 
-        # Update WorkForce fields
+        # Mise à jour des champs WorkForce
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
-        instance.save()
 
+        instance.save()
         return instance
