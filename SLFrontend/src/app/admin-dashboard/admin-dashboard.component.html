@@ -23,7 +23,7 @@
 
         <button (click)="requestInterview(h.UserId)" *ngIf="h.acces === 0">Interview</button>
 
-        <button (click)="acceptHelper(h.UserId)" *ngIf="h.acces === 0">Onboard</button>
+        <button (click)="acceptHelper(h.UserId)" *ngIf="h.acces === 0 || h.acces === 2">Onboard</button>
 
         <button (click)="activateHelper(h.UserId)" *ngIf="h.acces === 3">Activate</button>
       </td>

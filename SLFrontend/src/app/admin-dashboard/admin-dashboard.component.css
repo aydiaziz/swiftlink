@@ -60,7 +60,10 @@
   font-size: 13px;
   display: inline-block;
 }
-
+.helper-table td span.interviewing {
+   background-color: #0078d4; color: white; padding: 6px 12px; border-radius: 12px; }
+.helper-table td span.onboarded {
+     background-color: #17a2b8; color: white; padding: 6px 12px; border-radius: 12px; }
 .helper-table td span.confirmed {
   background-color: #28a745;
   color: white;
@@ -133,7 +136,7 @@
     margin: 6px 0;
   }
 .pending { background-color: #ffc107; color: #222; padding: 6px 12px; border-radius: 12px; }
-.interviewing { background-color: #0078d4; color: white; padding: 6px 12px; border-radius: 12px; }
+
 .onboarded { background-color: #17a2b8; color: white; padding: 6px 12px; border-radius: 12px; }
 .confirmed { background-color: #28a745; color: white; padding: 6px 12px; border-radius: 12px; }
 
