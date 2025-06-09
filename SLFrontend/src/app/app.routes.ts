@@ -31,7 +31,7 @@ export const routes: Routes = [
     { path: 'signinhelper', component: SigninhelperComponent },
     { path: 'application', component: SignuphelperComponent },
     { path: 'admin/helper/:id', component: AdminHelperViewComponent },
-    { path: 'helper/form/:id', component: HelperFormComponent },
+    { path: 'onborading/:id', component: HelperFormComponent },
     { path: 'confirmation', component: ConfirmationComponent },
    { path: 'helper-dashboard', 
     component: HelperDashboardComponent,

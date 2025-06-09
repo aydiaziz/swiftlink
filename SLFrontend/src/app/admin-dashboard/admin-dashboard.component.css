@@ -1,25 +1,140 @@
 .helper-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
+  margin: 30px 0;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 15px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  border-radius: 10px;
+  overflow: hidden;
 }
 
-.helper-table th, .helper-table td {
-  padding: 12px;
-  border: 1px solid #ccc;
+.helper-table thead {
+  background-color: #002f5f;
+  color: white;
   text-align: left;
 }
 
-.pending {
-  color: #ff9800;
-  font-weight: bold;
+.helper-table th,
+.helper-table td {
+  padding: 16px 20px;
+  border-bottom: 1px solid #eaeaea;
 }
 
-.confirmed {
-  color: #4caf50;
-  font-weight: bold;
+.helper-table tr:nth-child(even) {
+  background-color: #f9f9f9;
 }
 
-button {
-  margin-right: 10px;
+.helper-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+.helper-table button {
+  background-color: #0078d4;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  margin: 6px 4px 0 0;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.helper-table button:hover {
+  background-color: #005fa3;
+}
+
+.helper-table button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Status tags */
+.helper-table td span.pending {
+  background-color: #ffc107;
+  color: #222;
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-weight: 600;
+  font-size: 13px;
+  display: inline-block;
+}
+
+.helper-table td span.confirmed {
+  background-color: #28a745;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-weight: 600;
+  font-size: 13px;
+  display: inline-block;
+}
+
+.error {
+  color: #d9534f;
+  background: #fcebea;
+  padding: 10px 16px;
+  border-left: 4px solid #d9534f;
+  margin: 16px 0;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+[ngIf="loading"] {
+  font-style: italic;
+  color: #555;
+}
+
+/* 🔁 Mobile Responsive Style */
+@media (max-width: 768px) {
+  .helper-table,
+  .helper-table thead,
+  .helper-table tbody,
+  .helper-table th,
+  .helper-table td,
+  .helper-table tr {
+    display: block;
+    width: 100%;
+  }
+
+  .helper-table thead {
+    display: none;
+  }
+
+  .helper-table tr {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    padding: 16px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  }
+
+  .helper-table td {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border: none;
+  }
+
+  .helper-table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #002f5f;
+  }
+
+  .helper-table td:last-child {
+    flex-direction: column;
+  }
+
+  .helper-table button {
+    width: 100%;
+    margin: 6px 0;
+  }
+.pending { background-color: #ffc107; color: #222; padding: 6px 12px; border-radius: 12px; }
+.interviewing { background-color: #0078d4; color: white; padding: 6px 12px; border-radius: 12px; }
+.onboarded { background-color: #17a2b8; color: white; padding: 6px 12px; border-radius: 12px; }
+.confirmed { background-color: #28a745; color: white; padding: 6px 12px; border-radius: 12px; }
+
 }

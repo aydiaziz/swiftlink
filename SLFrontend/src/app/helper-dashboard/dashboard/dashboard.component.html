@@ -26,28 +26,7 @@
 
           </div>
         
-          <!-- Prochains Jobs -->
-          <div class="card">
-            <h3>Prochains Jobs</h3>
-            <div *ngIf="upcomingJobs?.length; else noJobs">
-              <div *ngFor="let job of upcomingJobs" class="job-item">
-                <div class="job-header">
-                  <span class="job-date">{{ job.date | date:'shortDate' }}</span>
-                  <span class="job-priority" [class]="'priority-' + job.priority">
-                    {{ job.priority }}
-                  </span>
-                </div>
-                <h4 class="job-title">{{ job.title }}</h4>
-                <p class="job-address">
-                  <mat-icon>location_on</mat-icon>
-                  {{ job.address }}
-                </p>
-              </div>
-            </div>
-            <ng-template #noJobs>
-              <p class="no-jobs">Aucun job prévu</p>
-            </ng-template>
-          </div>
+          
         </div>
       </ng-container>
     </main>

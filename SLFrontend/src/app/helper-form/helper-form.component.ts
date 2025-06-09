@@ -56,8 +56,8 @@ loadHelperData(id: string): void {
 calculateRates() {
   if (this.form.hourlyRatebyService) {
     const base = this.form.hourlyRatebyService;
-    this.form.securityFundRate = +(base * 0.15).toFixed(2);
-    this.form.platformFeeRate = +(base * 0.05).toFixed(2);
+    this.form.securityFundRate = +(base * 0.10).toFixed(2);
+    this.form.platformFeeRate = +(base * 0.10).toFixed(2);
     this.form.clientChargeRate = +(base * 1.20).toFixed(2); // 100% + 15% + 5%
   } else {
     this.form.securityFundRate = 0;

@@ -48,6 +48,31 @@ export class AdminDashboardComponent implements OnInit{
       }
     });
   }
+  requestInterview(helperId: number) {
+    this.adminService.sendInterviewEmail(helperId).subscribe({
+      next: () => {
+        alert('Interview email sent successfully.');
+        const helper = this.helpers.find(h => h.UserId === helperId);
+      if (helper) helper.acces = 2;
+        
+      },
+      error: err => {
+        this.errorMessage = err.error?.error || 'Could not send interview email.';
+      }
+    });
+  }
+  activateHelper(userId: number) {
+  this.adminService.activateHelper(userId).subscribe({
+    next: () => {
+      alert('Helper activated successfully.');
+      const helper = this.helpers.find(h => h.UserId === userId);
+      if (helper) helper.acces = 1; // Update UI status to Active
+    },
+    error: () => {
+      this.errorMessage = 'Failed to activate helper.';
+    }
+  });
+}
 }
 
 

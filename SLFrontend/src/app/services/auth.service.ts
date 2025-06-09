@@ -101,9 +101,9 @@ export class AuthService {
           localStorage.setItem('role', response.role);
           localStorage.setItem('user_id', response.user_id);
   
-          if (response.role === 'Client') {
+          
             this.isClientLoggedInSubject.next(true);
-          }
+          
         }
       }),
       catchError(error => {

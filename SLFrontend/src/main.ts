@@ -54,7 +54,7 @@ const routes: Routes = [
   {path:'helper-profile/:id',component:HelperProfileComponent},
   {path:'admindashboard',component:AdminDashboardComponent},
   { path: 'admin/helper/:id', component: AdminHelperViewComponent },
-  { path: 'helper/form/:id', component: HelperFormComponent },
+  { path: 'onborading/:id', component: HelperFormComponent },
   { path: 'confirmation', component: ConfirmationComponent },
   
 ];

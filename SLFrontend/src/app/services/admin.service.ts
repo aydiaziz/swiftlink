@@ -19,4 +19,10 @@ acceptHelper(helperId: number): Observable<any> {
 getHelperById(id: number): Observable<any> {
   return this.http.get(`${this.apiUrl}/admin/helper/${id}`);
 }
+sendInterviewEmail(userId: number) {
+    return this.http.post(`${this.apiUrl}/admin/helper/${userId}/send-interview/`, {});
+  }
+  activateHelper(userId: number) {
+    return this.http.post(`${this.apiUrl}/helpers/${userId}/activate/`, {});
+  }
 }

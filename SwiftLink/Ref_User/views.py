@@ -59,27 +59,22 @@ class WorkforceSignupView(generics.CreateAPIView):
                 first_name = response.data.get('UserId', {}).get('first_name', 'Applicant')
 
                 if email:
-                    subject = "Welcome to Swift Helpers"
+                    subject = "Swift Helpers Application Received"
                     message = f"""
-Hello {first_name},
+Hi {first_name},
 
-✅ hank you for submitting your initial application to join the Swift Helpers Self-Employment Network.
+As a self-employed professional operating as a Dependent Contractor, you'll have the freedom to set your own schedule, with the added benefit of Swift Helpers' platform protections and supports.
+Thank you for your interest in joining Your Swift Helpers Self-Employment Network.
+We’re reviewing your information and might contact you to schedule an interview to assess mutual fit. If successful, you’ll move forward to complete your full application and onboarding process.
 
-We’re reviewing your information and might contact you to schedule an interview. This conversation will help us confirm a mutual fit before proceeding to the full application and platform activation.
+“Swift Helpers is more than a job board. It’s your launchpad to sustainable self-employment and long-term growth in the property services sector.”
+Warm regards,
 
-What’s Next:
-• You will receive a call and/or an email from our us within the next 2 weeks
-• Please watch your inbox for scheduling updates and further instructions
-• Once approved, you’ll move forward to set up your full profile and begin onboarding to access Swift Helpers job board
+Recruitment/Onboarding Team
+www.swift-helpers.com 
+application@swift-helpers.com 
 
-Swift Helpers is more than a job board. It is your pathway to flexible, commission-free self-employment in the property services sector with professional tools, real opportunities, and a support system designed around your success.
-
-We’re excited to support your journey.
-
-Warm regards,  
-Recruitment/Onboarding Team  
-www.swift-helpers.com  
-application@swift-helpers.com"""
+"""
 
                     send_mail(
                         subject,
