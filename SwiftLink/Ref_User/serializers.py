@@ -101,31 +101,30 @@ class SigninSerializer(serializers.Serializer):
 
     
 class WorkForceSerializer(serializers.ModelSerializer):
-    UserId = UserSerializer()  
+    UserId = UserSerializer()
+    resume = serializers.FileField(required=False, allow_null=True)
 
     class Meta:
         model = WorkForce
         fields = '__all__'
 
     def create(self, validated_data):
-        """Créer d'abord l'utilisateur, puis le workforce"""
-        user_data = validated_data.pop('UserId') 
+        """Create the user, then the workforce, with optional resume and categories."""
+        user_data = validated_data.pop('UserId')
         work_categories_data = validated_data.pop('workCategory', [])
+        resume_file = validated_data.pop('resume', None)
 
-        # 🔥 Vérifier que entityId est bien fourni
         if 'entityId' not in user_data:
-            raise serializers.ValidationError({"entityId": "Ce champ est requis pour WorkForce."})
+            raise serializers.ValidationError({"entityId": "This field is required for WorkForce."})
 
-        # 🔥 Hashage du mot de passe du workforce
         user_data['password'] = make_password(user_data['password'])
-
-        # 🔥 Créer l'utilisateur
         user = Ref_User.objects.create(**user_data)
 
-        # 🔹 Créer le workforce en associant l'utilisateur
-        workforce = WorkForce.objects.create(UserId=user, **validated_data)
+        workforce = WorkForce.objects.create(UserId=user, resume=resume_file, **validated_data)
+
         if work_categories_data:
             workforce.workCategory.set(work_categories_data)
+
         return workforce
 
 
