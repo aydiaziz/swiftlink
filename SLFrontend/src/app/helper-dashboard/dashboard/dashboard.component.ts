@@ -28,9 +28,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   @ViewChild('incomeChart') incomeChartRef!: ElementRef;
 
   statsCards = [
-    { title: 'Travaux Totaux', value: 0, type: 'number' },
-    { title: 'Ce Mois', value: 0, type: 'number' },
-    { title: 'Revenu Total', value: 0, type: 'currency' }
+    { title: 'Total Works', value: 0, type: 'number' },
+    { title: 'This Month', value: 0, type: 'number' },
+    { title: 'Total income', value: 0, type: 'currency' }
   ];
 
   upcomingJobs: Job[] = [];
@@ -133,7 +133,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       data: {
         labels,
         datasets: [{
-          label: 'Revenus mensuels',
+          label: 'Monthly income',
           data: monthlyIncomes,
           borderColor: '#002f5f',
           backgroundColor: 'rgba(0, 47, 95, 0.1)',
