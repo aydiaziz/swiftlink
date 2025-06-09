@@ -59,7 +59,7 @@ environments. *</label>
     <label class="label-title">Work Profile</label>
     <textarea name="training" [(ngModel)]="workforceForm.training" rows="3" placeholder="Work Experience *" required></textarea>
     <textarea name="yearsOfExperience" [(ngModel)]="workforceForm.yearsOfExperience" rows="2" placeholder="Years of Relevant Experience *" required></textarea>
-    <input type="file" name="resume" (change)="onFileChange($event, 'resume')" />
+    <input type="file" name="resume" (change)="onFileSelect($event, 'resume')" />
 
     <!-- 4. Mobility -->
     <label class="label-title">Mobility</label>
