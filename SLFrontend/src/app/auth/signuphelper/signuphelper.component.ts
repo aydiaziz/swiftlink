@@ -126,13 +126,7 @@ onVehicleSelect(event: Event, type: 'vehicle' | 'tool'): void {
       this.workforceForm[field] = file;
     }
   }
-onFileSelect(event: Event, field: 'resume'): void {
-  const input = event.target as HTMLInputElement;
-  if (input.files && input.files.length > 0) {
-    const file = input.files[0];
-    this.workforceForm[field] = file;
-  }
-}
+
  register(): void {
   if (!this.acceptedPolicy || !this.workforceForm.firstName || !this.workforceForm.training) {
     this.errorMessage = 'Please complete all required fields and accept the Privacy Policy.';
