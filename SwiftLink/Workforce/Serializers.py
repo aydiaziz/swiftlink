@@ -37,7 +37,7 @@ class WorkForceListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = WorkForce
-        fields = ['UserId', 'first_name', 'last_name', 'email', 'acces']
+        fields = ['UserId', 'first_name', 'last_name', 'email', 'acces','createdAt']
 class WorkForceDetailSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(source='UserId.email')
     first_name = serializers.CharField(source='UserId.first_name')
