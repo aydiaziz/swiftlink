@@ -176,3 +176,5 @@ SECURE_PROXY_SSL_HEADER = None
 SECURE_SSL_REDIRECT = False  # Redirect HTTP to HTTPS
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
+CSRF_COOKIE_NAME = 'csrftoken'
+CSRF_COOKIE_HTTPONLY = False  # allow frontend to read it
