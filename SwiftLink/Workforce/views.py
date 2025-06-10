@@ -1,6 +1,6 @@
 from django.db.models import Sum
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated,IsAdminUser
+from rest_framework.permissions import IsAuthenticated,IsAdminUser,AllowAny
 from rest_framework.response import Response
 from Order.models import Order
 from Workforce.models import WorkForce
@@ -138,7 +138,7 @@ def onboard_helper(request, helper_id):
     except WorkForce.DoesNotExist:
         return Response({'error': 'Helper not found'}, status=404)
 @api_view(['GET'])
-
+@permission_classes([AllowAny])
 def get_helper_detail(request, user_id):
     try:
         helper = WorkForce.objects.select_related('UserId').get(UserId__user_id=user_id)
@@ -150,6 +150,7 @@ def get_helper_detail(request, user_id):
     except WorkForce.DoesNotExist:
         return Response({'error': 'Helper not found'}, status=404)
 api_view(['POST'])
+
 def complete_helper_profile(request, id):
     try:
         helper = WorkForce.objects.select_related('UserId').get(pk=id)
