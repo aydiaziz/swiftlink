@@ -28,6 +28,7 @@ import { AdminHelperViewComponent } from './app/admin-helper-view/admin-helper-v
 import { HelperFormComponent } from './app/helper-form/helper-form.component';
 import { ConfirmationComponent } from './app/confirmation/confirmation.component';
 import { authGuard } from './app/auth.guard';
+import { UnauthorizedComponent } from './app/unauthorized/unauthorized.component';
 const routes: Routes = [
   { path: '', component: HomeComponent },  
   { path: 'services', component: ServicesComponent },
@@ -59,6 +60,7 @@ const routes: Routes = [
       canActivate: [authGuard] 
     },
   { path: 'admin/helper/:id', component: AdminHelperViewComponent },
+  { path: 'unauthorized', component: UnauthorizedComponent },
   { path: 'onborading/:id', component: HelperFormComponent },
   { path: 'confirmation', component: ConfirmationComponent },
   

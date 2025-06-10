@@ -69,7 +69,11 @@
     display: block;
     margin-bottom: 5px;
   }
-  
+  .display-inline {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
   .editable-field button {
     background: none;
     border: none;
