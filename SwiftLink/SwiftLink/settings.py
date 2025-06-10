@@ -168,9 +168,10 @@ EMAIL_USE_SSL = True  # ✅ car tu utilises le port 465 (SSL)
 EMAIL_USE_TLS = False  # ❌ Pas besoin de TLS si SSL est actif
 EMAIL_HOST_USER = 'application@swift-helpers.com'
 EMAIL_HOST_PASSWORD = 'Fort$2025'  # Le mot de passe de l’email
+import os
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = '/home/helpers/Swifthelpers/swiftlink/SwiftLink/media'
 # settings.py
 SECURE_PROXY_SSL_HEADER = None
 SECURE_SSL_REDIRECT = False  # Redirect HTTP to HTTPS
