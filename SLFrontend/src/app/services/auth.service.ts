@@ -138,4 +138,7 @@ export class AuthService {
   loginSuperAdmin(data: { email: string; password: string }): Observable<any> {
   return this.http.post(`${this.apiUrl}/login-superadmin/`, data);
 }
+updateUserProfile(data:FormData){
+  return this.http.patch(`${this.apiUrl}/updateuser/`, data)
+}
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, AbstractControl, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { environment } from '../../environments/environment';
@@ -14,44 +14,48 @@ import { environment } from '../../environments/environment';
 export class UserProfileComponent implements OnInit {
   form: FormGroup;
   user: any;
+  selectedImageFile: File | null = null;
   profilePreview: string | ArrayBuffer | null = null;
 
   editingEmail = false;
   editingAddress = false;
   successMessage: string = '';
-errorMessage: string = '';
+  errorMessage: string = '';
 
-constructor(private fb: FormBuilder, private authService: AuthService) {
-  this.form = this.fb.group({
-    email: ['', [Validators.required, Validators.email]],
-    address: ['', Validators.required],
-    oldPassword: [''],
-    newPassword: [''],
-    confirmPassword: [''],
-    profileImage: [null]
-  }, { validators: this.passwordMatchValidator });
-}
-BACKEND_URL = environment.apiUrl;
+  BACKEND_URL = environment.apiUrl;
 
-get profileImageUrl(): string {
-  return this.user?.profileImage
-    ? `${this.BACKEND_URL}${this.user.profileImage}`
-    : '/default-user.jpg';
-}
+  constructor(private fb: FormBuilder, private authService: AuthService) {
+    this.form = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      address: ['', Validators.required],
+      oldPassword: [''],
+      newPassword: [''],
+      confirmPassword: [''],
+    }, { validators: this.passwordMatchValidator });
+  }
+
+  get profileImageUrl(): string {
+    return this.profilePreview
+      ? this.profilePreview.toString()
+      : (this.user?.profileImage ? `${this.BACKEND_URL}${this.user.profileImage}` : '/default-user.jpg');
+  }
+
   ngOnInit(): void {
-  this.authService.getCurrentUser().subscribe(user => {
-    this.user = user;
-   
-    this.profilePreview = user.profileImage;
-    
-    
+    this.authService.getCurrentUser().subscribe(user => {
+      this.user = user;
 
-    this.form.patchValue({
-      email: user.email,
-      address: user.address || ''
+      this.profilePreview = user.profileImage ? `${this.BACKEND_URL}${user.profileImage}` : null;
+
+      this.form.patchValue({
+        email: user.email,
+        address: user.address || ''
+      });
+
+      // Désactive les champs non modifiables par défaut
+      this.form.get('email')?.disable();
+      this.form.get('address')?.disable();
     });
-  });
-}
+  }
 
   toggleEdit(field: 'email' | 'address'): void {
     if (field === 'email') {
@@ -69,46 +73,66 @@ get profileImageUrl(): string {
     return newPass && confirmPass && newPass !== confirmPass ? { passwordMismatch: true } : null;
   }
 
-  onFileChange(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    const file = input.files?.[0];
+  onFileChange(event: any): void {
+    const file = event.target.files[0];
     if (file) {
-      this.form.patchValue({ profileImage: file });
+      this.selectedImageFile = file;
 
+      // Prévisualisation immédiate
       const reader = new FileReader();
-      reader.onload = () => this.profilePreview = reader.result;
+      reader.onload = (e: any) => {
+        this.profilePreview = e.target.result;
+      };
       reader.readAsDataURL(file);
     }
   }
 
   onSubmit(): void {
     if (this.form.invalid) return;
-  
+
     const formData = new FormData();
-    formData.append('email', this.form.getRawValue().email);
-    formData.append('address', this.form.getRawValue().address);
-  
+
+    const email = this.form.getRawValue().email;
+    const address = this.form.getRawValue().address;
+
+    if (email) formData.append('email', email);
+    if (address) formData.append('address', address);
+
+    // Mots de passe (si modifiés)
     if (this.form.value.oldPassword && this.form.value.newPassword) {
       formData.append('oldPassword', this.form.value.oldPassword);
       formData.append('newPassword', this.form.value.newPassword);
     }
-  
-    if (this.form.value.profileImage) {
-      formData.append('profileImage', this.form.value.profileImage);
+
+    // Fichier image sélectionné
+    if (this.selectedImageFile) {
+      formData.append('profileImage', this.selectedImageFile);
     }
-  
-    this.authService.updateClientProfile(formData).subscribe({
+
+    this.authService.updateUserProfile(formData).subscribe({
       next: () => {
         this.successMessage = '✅ Profile updated successfully!';
         this.errorMessage = '';
-        setTimeout(() => this.successMessage = '', 4000); // Auto-dismiss
+        this.editingEmail = false;
+        this.editingAddress = false;
+
+        // Reset password fields
+        this.form.get('oldPassword')?.reset();
+        this.form.get('newPassword')?.reset();
+        this.form.get('confirmPassword')?.reset();
+
+        // Réinitialiser les champs modifiables
+        this.form.get('email')?.disable();
+        this.form.get('address')?.disable();
+
+        setTimeout(() => this.successMessage = '', 4000);
       },
-      error: () => {
+      error: (err) => {
         this.errorMessage = '❌ Failed to update profile.';
         this.successMessage = '';
+        console.error(err);
         setTimeout(() => this.errorMessage = '', 5000);
       }
     });
   }
-  
 }

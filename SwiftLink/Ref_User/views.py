@@ -150,3 +150,37 @@ def superadmin_login(request):
     if serializer.is_valid():
         return Response(serializer.validated_data)
     return Response(serializer.errors, status=400)
+
+
+@api_view(['PATCH'])
+def update_user_profile(request):
+    user = request.user  # Authenticated user
+    data = request.data
+
+    try:
+        # 1. Image de profil
+        if 'profileImage' in request.FILES:
+            user.profileImage = request.FILES['profileImage']
+
+        # 2. Mot de passe (optionnel)
+        if 'password' in data and data['password']:
+            user.password = make_password(data['password'])
+
+        user.save()
+
+        # 3. Mise à jour adresse selon type
+        address = data.get('address')
+        if address:
+            if user.role == 'Client':
+                client = Client.objects.get(UserId=user)
+                client.address = address
+                client.save()
+            elif user.role == '3rd Party':
+                workforce = WorkForce.objects.get(UserId=user)
+                workforce.address = address
+                workforce.save()
+
+        return Response({'message': 'Profile updated successfully'}, status=status.HTTP_200_OK)
+
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
