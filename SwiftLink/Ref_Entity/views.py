@@ -14,3 +14,9 @@ class AddEntityView(generics.GenericAPIView):
         
         entity, created = Ref_Entity.addEntity(label)
         return Response({"entity": entity.label, "created": created}, status=status.HTTP_201_CREATED if created else status.HTTP_200_OK)
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.http import JsonResponse
+
+@ensure_csrf_cookie
+def get_csrf_token(request):
+    return JsonResponse({'message': 'CSRF cookie set'})

@@ -29,6 +29,7 @@ import { HelperFormComponent } from './app/helper-form/helper-form.component';
 import { ConfirmationComponent } from './app/confirmation/confirmation.component';
 import { authGuard } from './app/auth.guard';
 import { UnauthorizedComponent } from './app/unauthorized/unauthorized.component';
+import { CsrfInterceptor } from './app/interceptors/csrf.service';
 const routes: Routes = [
   { path: '', component: HomeComponent },  
   { path: 'services', component: ServicesComponent },
@@ -74,6 +75,11 @@ bootstrapApplication(AppComponent, {
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: CsrfInterceptor,
       multi: true
     }
   ]
