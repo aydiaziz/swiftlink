@@ -11,6 +11,7 @@ export const authGuard: CanActivateFn = () => {
 
   return authService.getCurrentUser().pipe(
     map(user => {
+      console.log('User from API:', user);
       if (user && user.role === 'Super Admin') {
         return true;
       } else {
