@@ -1,49 +1,38 @@
-<nav class="navbar">
+<nav class="navbar" (document:click)="handleGlobalClick($event)">
   <div class="logo">
-    <img  src="\logo.png"
-    alt="Swift Helpers Logo"
-      fetchpriority="high"
-      decoding="async"
-      width="1276"
-      height="754"
-      sizes="(min-width: 0px) and (max-width: 480px) 480px, 
-             (min-width: 481px) and (max-width: 980px) 980px, 
-             (min-width: 981px) 1276px, 
-             100vw"
-      class="logo-img">
+    <img src="/logo.png" alt="Swift Helpers Logo" class="logo-img">
   </div>
+
   <ul class="nav-links">
     <li><a href="#">Home</a></li>
     <li><a href="/services">Services</a></li>
-    <!--<li><a href="#contact">Contact</a></li>-->
-  
-    <!-- Avant connexion -->
+
     <ng-container *ngIf="!isClientLoggedIn">
       <li><a routerLink="/signin">Clients</a></li>
       <li><a routerLink="/signinhelper">Helpers</a></li>
     </ng-container>
-  
-    <!-- Après connexion -->
+
     <ng-container *ngIf="isClientLoggedIn">
       <li>
         <button (click)="onLogout()" class="logout-button">Logout</button>
       </li>
-      <li class="messages-wrapper" (click)="toggleMessagesPopup()">
+
+      <li class="messages-wrapper" #messageWrapper (click)="toggleMessagesPopup($event)">
         <img src="/icons/message.png" class="message-icon" alt="Messages" />
         <div *ngIf="showMessagesPopup" class="messages-popup">
           <div *ngIf="conversations.length === 0">No messages</div>
           <ul *ngIf="conversations.length > 0">
-            <li *ngFor="let conv of conversations"  (click)="openChat(conv.id, conv.helper, conv.order)">
+            <li *ngFor="let conv of conversations" (click)="openChat(conv.id, conv.helper, conv.order)">
               Conversation with {{ getOtherUserName(conv) }}
             </li>
           </ul>
         </div>
       </li>
-      <li class="notification-wrapper" (click)="toggleNotificationPopup()">
+
+      <li class="notification-wrapper" #notificationWrapper (click)="toggleNotificationPopup($event)">
         <img src="/icons/notification.png" alt="Notifications" class="notification-icon">
         <span *ngIf="unreadCount > 0" class="notification-badge">{{ unreadCount }}</span>
-      
-        <!-- Popup notifications -->
+
         <div class="notification-popup" *ngIf="showPopup">
           <div *ngIf="notifications.length === 0" class="empty-msg">No notifications</div>
           <ul *ngIf="notifications.length > 0">
@@ -54,12 +43,12 @@
           </ul>
         </div>
       </li>
+
       <li class="profile-wrapper">
         <a routerLink="/userprofile">
           <img src="/icons/utilisateur.png" class="profile-icon" alt="Profile" />
         </a>
       </li>
-      
     </ng-container>
   </ul>
 </nav>
