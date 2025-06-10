@@ -60,9 +60,7 @@
   button:hover {
     background-color: #004080;
   }
-  .editable-field {
-    margin-bottom: 15px;
-  }
+ 
   
   .editable-field label {
     font-weight: bold;
@@ -102,39 +100,47 @@
     margin-bottom: 15px;
     text-align: center;
   }
-  .inline-edit {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: #fff;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  padding: 10px 12px;
-  width: 100%;
-  box-sizing: border-box;
+  .editable-field {
+    
+  margin-bottom: 30px;
 }
 
-  .edit-btn {
-    background: none;
-    border: none;
-    color: #ff5722;
-    cursor: pointer;
-    font-size: 16px;
-    padding: 0;
-  }
+.editable-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8px;
+}
 
-  .edit-btn:hover {
-    transform: scale(1.1);
-  }
+.editable-label label {
+  margin: 0;
+  font-weight: bold;
+  font-size: 15px;
+}
 
-  .editable-field input {
-    width: 100%;
-    padding: 10px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-    margin-top: 5px;
-  }
+.edit-icon {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #ff5722;
+  cursor: pointer;
+  padding: 0;
+}
+
+.edit-icon:hover {
+  transform: scale(1.1);
+}
+
+.edit-input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  box-sizing: border-box;
+}
 
   
   

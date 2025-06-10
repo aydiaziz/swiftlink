@@ -20,19 +20,16 @@
         <div *ngIf="form.get('email')?.invalid && form.get('email')?.touched" class="error">Invalid email</div>
       </div>
   
-      <!-- Adresse avec bouton d’édition -->
-        <div class="editable-field">
+      <div class="editable-field">
+        <div class="editable-label">
           <label>Address</label>
-
-          <!-- Affichage texte avec icône -->
-          <div *ngIf="!editingAddress" class="inline-edit">
-            <span>{{ form.get('address')?.value || 'No address' }}</span>
-            <button type="button" (click)="toggleEdit('address')" class="edit-btn">✏️</button>
-          </div>
-
-          <!-- Champ de saisie si en mode édition -->
-          <input *ngIf="editingAddress" type="text" formControlName="address" />
+          <button type="button" class="edit-icon" (click)="toggleEdit('address')">✏️</button>
         </div>
+
+        <!-- Affiche le champ seulement si editing -->
+        <input *ngIf="editingAddress" type="text" formControlName="address" class="edit-input" />
+      </div>
+
       <!--phone number-->
       <!-- Carte (à intégrer plus tard avec coords/map component) -->
       <!-- <app-map (addressSelected)="updateAddress($event)"></app-map> -->
