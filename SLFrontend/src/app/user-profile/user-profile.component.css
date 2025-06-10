@@ -69,11 +69,7 @@
     display: block;
     margin-bottom: 5px;
   }
-  .display-inline {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
+  
   .editable-field button {
     background: none;
     border: none;
@@ -106,30 +102,40 @@
     margin-bottom: 15px;
     text-align: center;
   }
-  .address-display {
-  display: flex;
+  .inline-edit {
+  display: inline-flex;
   align-items: center;
-  justify-content: space-between;
   gap: 8px;
+  background: #fff;
   border: 1px solid #ccc;
-  padding: 10px;
   border-radius: 6px;
-  background-color: #fff;
+  padding: 10px 12px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.address-text {
-  flex-grow: 1;
-  word-break: break-word;
-}
+  .edit-btn {
+    background: none;
+    border: none;
+    color: #ff5722;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 0;
+  }
 
-.edit-btn {
-  background: none;
-  border: none;
-  color: #ff5722;
-  cursor: pointer;
-  font-size: 18px;
-  padding: 0;
-}
+  .edit-btn:hover {
+    transform: scale(1.1);
+  }
 
+  .editable-field input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    margin-top: 5px;
+  }
+
+  
   
   
