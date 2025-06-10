@@ -1,29 +1,24 @@
-import { Injectable } from '@angular/core';
-import { CanActivate, Router } from '@angular/router';
+import { inject } from '@angular/core';
+import { CanActivateFn } from '@angular/router';
 import { AuthService } from './services/auth.service';
-import { Observable, of } from 'rxjs';
+import { Router } from '@angular/router';
+import { of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class AuthGuard implements CanActivate {
-  constructor(private authService: AuthService, private router: Router) {}
+export const authGuard: CanActivateFn = () => {
+  const authService = inject(AuthService);
+  const router = inject(Router);
 
-  canActivate(): Observable<boolean> {
-    return this.authService.getCurrentUser().pipe(
-      map(user => {
-        if (user && user.role === 'Super Admin') {
-          return true;
-        } else {
-          this.router.navigate(['/unauthorized']);
-          return false;
-        }
-      }),
-      catchError(() => {
-        this.router.navigate(['/unauthorized']);
-        return of(false);
-      })
-    );
-  }
-}
+  return authService.getCurrentUser().pipe(
+    map(user => {
+      if (user && user.role === 'Super Admin') {
+        return true;
+      } else {
+        return router.createUrlTree(['/unauthorized']);
+      }
+    }),
+    catchError(() => {
+      return of(router.createUrlTree(['/unauthorized']));
+    })
+  );
+};

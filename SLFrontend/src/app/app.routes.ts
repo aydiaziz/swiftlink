@@ -19,7 +19,7 @@ import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.compo
 import { AdminHelperViewComponent } from './admin-helper-view/admin-helper-view.component';
 import { HelperFormComponent } from './helper-form/helper-form.component';
 import { ConfirmationComponent } from './confirmation/confirmation.component';
-import { AuthGuard } from './auth.guard';
+import { authGuard } from './auth.guard';
 import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 
 export const routes: Routes = [
@@ -32,7 +32,7 @@ export const routes: Routes = [
     {
     path: 'admindashboard',
     component: AdminDashboardComponent,
-    canActivate: [AuthGuard]
+    canActivate: [authGuard] 
   },
     { path: 'signinhelper', component: SigninhelperComponent },
     { path: 'application', component: SignuphelperComponent },
