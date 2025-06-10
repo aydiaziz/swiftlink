@@ -26,6 +26,7 @@ services:
       - postgres-db
     volumes:
       - static_volume:/app/static
+      - /home/helpers/Swifthelpers/swiftlink/SwiftLink/media:/app/media
 
   frontend:
     image: angular-frontend
