@@ -106,6 +106,30 @@
     margin-bottom: 15px;
     text-align: center;
   }
-  
+  .address-display {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 6px;
+  background-color: #fff;
+}
+
+.address-text {
+  flex-grow: 1;
+  word-break: break-word;
+}
+
+.edit-btn {
+  background: none;
+  border: none;
+  color: #ff5722;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 0;
+}
+
   
   

@@ -21,14 +21,14 @@
       </div>
   
       <!-- Adresse avec bouton d’édition -->
-     <div class="editable-field">
-  <label>Address</label>
-  <div *ngIf="!editingAddress" class="display-inline">
-    <span>{{ form.get('address')?.value }}</span>
-    <button type="button" (click)="toggleEdit('address')">✏️</button>
-  </div>
-  <input *ngIf="editingAddress" type="text" formControlName="address" />
-</div>
+      <div class="editable-field">
+        <label>Address</label>
+        <div *ngIf="!editingAddress" class="address-display">
+          <span class="address-text">{{ form.get('address')?.value }}</span>
+          <button type="button" (click)="toggleEdit('address')" class="edit-btn">✏️</button>
+        </div>
+        <input *ngIf="editingAddress" type="text" formControlName="address" />
+      </div>
       <!--phone number-->
       <!-- Carte (à intégrer plus tard avec coords/map component) -->
       <!-- <app-map (addressSelected)="updateAddress($event)"></app-map> -->
