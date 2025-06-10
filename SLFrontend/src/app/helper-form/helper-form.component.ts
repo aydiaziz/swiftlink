@@ -88,7 +88,7 @@ calculateRates() {
     formData.append(fileKey, this.files[fileKey]);
   }
 
-  this.http.post(`${environment.apiUrl}/helper/profile-completion/${helperId}/`, formData).subscribe({
+  this.http.patch(`${environment.apiUrl}/helper/profile-completion/${helperId}/`, formData).subscribe({
     next: () => {
       alert("✅ Your profile has been completed successfully!");
       this.router.navigate(['/signinhelper']);
