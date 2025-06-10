@@ -6,6 +6,7 @@ import { of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 
 export const authGuard: CanActivateFn = () => {
+   console.log('Guard invoked');
   const authService = inject(AuthService);
   const router = inject(Router);
 

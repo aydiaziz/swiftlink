@@ -27,6 +27,7 @@ import { AdminDashboardComponent } from './app/admin-dashboard/admin-dashboard.c
 import { AdminHelperViewComponent } from './app/admin-helper-view/admin-helper-view.component';
 import { HelperFormComponent } from './app/helper-form/helper-form.component';
 import { ConfirmationComponent } from './app/confirmation/confirmation.component';
+import { authGuard } from './app/auth.guard';
 const routes: Routes = [
   { path: '', component: HomeComponent },  
   { path: 'services', component: ServicesComponent },
@@ -52,7 +53,11 @@ const routes: Routes = [
   { path: 'chat/:id', component: ChatComponent },
   { path: 'userprofile', component: UserProfileComponent },
   {path:'helper-profile/:id',component:HelperProfileComponent},
-  {path:'admindashboard',component:AdminDashboardComponent},
+   {
+      path: 'admindashboard',
+      component: AdminDashboardComponent,
+      canActivate: [authGuard] 
+    },
   { path: 'admin/helper/:id', component: AdminHelperViewComponent },
   { path: 'onborading/:id', component: HelperFormComponent },
   { path: 'confirmation', component: ConfirmationComponent },
