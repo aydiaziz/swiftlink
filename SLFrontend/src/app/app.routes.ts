@@ -19,6 +19,8 @@ import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.compo
 import { AdminHelperViewComponent } from './admin-helper-view/admin-helper-view.component';
 import { HelperFormComponent } from './helper-form/helper-form.component';
 import { ConfirmationComponent } from './confirmation/confirmation.component';
+import { AuthGuard } from './auth.guard';
+import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent },
@@ -27,12 +29,17 @@ export const routes: Routes = [
     { path: 'about', component: AboutComponent },
     { path: 'contact', component: ContactComponent },
     { path: 'notifications', component: NotificationsComponent },
-    { path: 'admindashboard', component: AdminDashboardComponent },
+    {
+    path: 'admindashboard',
+    component: AdminDashboardComponent,
+    canActivate: [AuthGuard]
+  },
     { path: 'signinhelper', component: SigninhelperComponent },
     { path: 'application', component: SignuphelperComponent },
     { path: 'admin/helper/:id', component: AdminHelperViewComponent },
     { path: 'onborading/:id', component: HelperFormComponent },
     { path: 'confirmation', component: ConfirmationComponent },
+    { path: 'unauthorized', component: UnauthorizedComponent },
    { path: 'helper-dashboard', 
     component: HelperDashboardComponent,
     children: [
