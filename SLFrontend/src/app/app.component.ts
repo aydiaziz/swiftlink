@@ -23,7 +23,7 @@ export class AppComponent implements OnInit {
   title = 'SLFrontend';
   popupData: { conversationId: number, helperId: number, orderId: number } | null = null;
   ngOnInit(): void {
-    this.http.get(`${this.apiUrl}/api/csrf/`, { withCredentials: true }).subscribe();
+    this.http.get(`${this.apiUrl}/csrf/`, { withCredentials: true }).subscribe();
   }
 constructor(private commService: CommunicationService,private http: HttpClient) {
   this.commService.chatPopup$.subscribe(data => {
