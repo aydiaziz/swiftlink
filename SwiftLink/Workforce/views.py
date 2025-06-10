@@ -149,8 +149,8 @@ def get_helper_detail(request, user_id):
 
     except WorkForce.DoesNotExist:
         return Response({'error': 'Helper not found'}, status=404)
-api_view(['POST'])
-
+@api_view(['PATCH'])
+@permission_classes([AllowAny])
 def complete_helper_profile(request, id):
     try:
         helper = WorkForce.objects.select_related('UserId').get(pk=id)
