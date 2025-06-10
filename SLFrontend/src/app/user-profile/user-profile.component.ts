@@ -22,7 +22,7 @@ export class UserProfileComponent implements OnInit {
   successMessage: string = '';
   errorMessage: string = '';
 
-  BACKEND_URL = environment.apiUrl;
+  BACKEND_URL = 'https://www.swift-helpers.com/';
 
   constructor(private fb: FormBuilder, private authService: AuthService) {
     this.form = this.fb.group({
