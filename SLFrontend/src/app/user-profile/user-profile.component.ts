@@ -51,11 +51,13 @@ ngOnInit(): void {
     // Si c’est un client
     if (user.role === 'Client' && user.client && user.client.address) {
       address = user.client.address;
+      console.log(address)
     }
 
     // Si c’est un helper (workforce)
     if (user.role === '3rd party' && user.workforce && user.workforce.address) {
       address = user.workforce.address;
+      console.log(address)
     }
 
     this.form.patchValue({
