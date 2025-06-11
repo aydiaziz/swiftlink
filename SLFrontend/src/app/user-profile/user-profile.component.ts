@@ -40,22 +40,34 @@ export class UserProfileComponent implements OnInit {
       : (this.user?.profileImage ? `${this.BACKEND_URL}${this.user.profileImage}` : '/default-user.jpg');
   }
 
-  ngOnInit(): void {
-    this.authService.getCurrentUser().subscribe(user => {
-      this.user = user;
+ngOnInit(): void {
+  this.authService.getCurrentUser().subscribe(user => {
+    this.user = user;
 
-      this.profilePreview = user.profileImage ? `${this.BACKEND_URL}${user.profileImage}` : null;
+    this.profilePreview = user.profileImage ? `${this.BACKEND_URL}${user.profileImage}` : null;
 
-      this.form.patchValue({
-        email: user.email,
-        address: user.address || ''
-      });
+    let address = '';
 
-      // Désactive les champs non modifiables par défaut
-      this.form.get('email')?.disable();
-      this.form.get('address')?.disable();
+    // Si c’est un client
+    if (user.role === 'Client' && user.client && user.client.address) {
+      address = user.client.address;
+    }
+
+    // Si c’est un helper (workforce)
+    if (user.role === '3rd party' && user.workforce && user.workforce.address) {
+      address = user.workforce.address;
+    }
+
+    this.form.patchValue({
+      email: user.email,
+      address: address
     });
-  }
+
+    this.form.get('email')?.disable();
+    this.form.get('address')?.disable();
+  });
+}
+
 
   toggleEdit(field: 'email' | 'address'): void {
     if (field === 'email') {

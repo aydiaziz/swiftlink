@@ -23,6 +23,9 @@
       <div class="editable-field">
         <div class="editable-label">
           <label>Address</label>
+          <div *ngIf="!editingAddress">
+  {{ form.get('address')?.value }}
+  </div>
           <button type="button" class="edit-icon" (click)="toggleEdit('address')">✏️</button>
         </div>
 
