@@ -36,7 +36,7 @@ export const routes: Routes = [
     component: AdminDashboardComponent,
     canActivate: [authGuard] 
   },
-    { path: 'signinhelper', component: SigninhelperComponent },
+    { path: 'helper-signin', component: SigninhelperComponent },
     { path: 'application', component: SignuphelperComponent },
     { path: 'admin/helper/:id', component: AdminHelperViewComponent,
       canActivate: [authGuard]  },

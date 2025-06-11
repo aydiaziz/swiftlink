@@ -52,7 +52,7 @@ const routes: Routes = [
         
       ]
     },
-  { path: 'signinhelper', component: SigninhelperComponent },
+  { path: 'helper-signin', component: SigninhelperComponent },
   { path: 'application', component: SignuphelperComponent },
   { path: 'chat/:id', component: ChatComponent },
   { path: 'userprofile', component: UserProfileComponent },
