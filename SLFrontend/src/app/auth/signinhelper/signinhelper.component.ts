@@ -38,7 +38,7 @@ export class SigninhelperComponent {
     next: (response) => {
       const role = response.role;
       const acces = response.acces || response.workforce?.acces;
-
+      console.log(acces)
       if (role === 'Client') {
         this.router.navigate(['/']);
       } else if (role === '3rd Party') {
