@@ -120,10 +120,14 @@ signin(credentials: { email: string; password: string }): Observable<any> {
 
   
   logout(): void {
-    localStorage.clear();
-    this.isClientLoggedInSubject.next(false);
-    this.getCurrentUser().subscribe();
-  }
+  localStorage.removeItem('access_token');
+  localStorage.removeItem('refresh_token');
+  localStorage.removeItem('role');
+  localStorage.removeItem('user_id');
+
+  this.currentUserSubject.next(null); // ❗ vider l'utilisateur
+  this.isClientLoggedInSubject.next(false);
+}
 
   getUserRole(): string | null {
     return localStorage.getItem('role');
