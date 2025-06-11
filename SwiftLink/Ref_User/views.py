@@ -15,6 +15,8 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib.auth.hashers import make_password
 from rest_framework.permissions import AllowAny
+import random
+import string
 
 # Signup pour Client
 class ClientSignupView(generics.CreateAPIView):
@@ -184,3 +186,31 @@ def update_user_profile(request):
 
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+def generate_random_password(length=10):
+    return ''.join(random.choices(string.ascii_letters + string.digits, k=length))
+
+@api_view(['POST'])
+def forgot_password(request):
+    email = request.data.get('email')
+
+    if not email:
+        return Response({'error': 'Email is required.'}, status=400)
+
+    try:
+        user = Ref_User.objects.get(email=email)
+    except Ref_User.DoesNotExist:
+        return Response({'error': 'User not found.'}, status=404)
+
+    new_password = generate_random_password()
+    user.password = make_password(new_password)
+    user.save()
+
+    send_mail(
+        subject="Your New Swift Helpers Password",
+        message=f"Hello {user.first_name},\n\nYour new password is: {new_password}\n\nPlease login and change it immediately.",
+        from_email="accounts@swift-helpers.com",
+        recipient_list=[email],
+        fail_silently=False
+    )
+
+    return Response({'success': True, 'message': 'A new password has been sent to your email.'})

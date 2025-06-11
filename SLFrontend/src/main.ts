@@ -32,6 +32,7 @@ import { UnauthorizedComponent } from './app/unauthorized/unauthorized.component
 import { CsrfInterceptor } from './app/interceptors/csrf.service';
 import { NotificationOnboardingComponent } from './app/notification-onboarding/notification-onboarding.component';
 import { NoticeComponent } from './app/notice/notice.component';
+import { ForgotPasswordComponent } from './app/forgot-password/forgot-password.component';
 const routes: Routes = [
   { path: '', component: HomeComponent },  
   { path: 'services', component: ServicesComponent },
@@ -57,6 +58,7 @@ const routes: Routes = [
   { path: 'chat/:id', component: ChatComponent },
   { path: 'userprofile', component: UserProfileComponent },
   {path:'helper-profile/:id',component:HelperProfileComponent},
+  { path: 'forgot-password', component: ForgotPasswordComponent },
    {
       path: 'admindashboard',
       component: AdminDashboardComponent,

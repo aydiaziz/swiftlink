@@ -23,6 +23,7 @@ import { authGuard } from './auth.guard';
 import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 import { NotificationOnboardingComponent } from './notification-onboarding/notification-onboarding.component';
 import { NoticeComponent } from './notice/notice.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent },
@@ -41,6 +42,7 @@ export const routes: Routes = [
     { path: 'admin/helper/:id', component: AdminHelperViewComponent,
       canActivate: [authGuard]  },
     { path: 'onborading/:id', component: HelperFormComponent },
+    { path: 'forgot-password', component: ForgotPasswordComponent },
     { path: 'confirmation', component: ConfirmationComponent },
     { path: 'unauthorized', component: UnauthorizedComponent },
     {path:'confirmationOnboarding',component:NotificationOnboardingComponent},
