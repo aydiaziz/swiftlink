@@ -22,6 +22,7 @@ import { ConfirmationComponent } from './confirmation/confirmation.component';
 import { authGuard } from './auth.guard';
 import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 import { NotificationOnboardingComponent } from './notification-onboarding/notification-onboarding.component';
+import { NoticeComponent } from './notice/notice.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent },
@@ -43,6 +44,7 @@ export const routes: Routes = [
     { path: 'confirmation', component: ConfirmationComponent },
     { path: 'unauthorized', component: UnauthorizedComponent },
     {path:'confirmationOnboarding',component:NotificationOnboardingComponent},
+    {path:'onboardingcompleted',component:NoticeComponent},
    { path: 'helper-dashboard', 
     component: HelperDashboardComponent,
     children: [

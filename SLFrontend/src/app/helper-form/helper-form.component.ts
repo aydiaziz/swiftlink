@@ -31,8 +31,13 @@ ngOnInit() {
 }
 loadHelperData(id: string): void {
   this.http.get(`${environment.apiUrl}/helpers/${id}/profile/`).subscribe({
-    next: (data) => {
+    next: (data: any) => {
       this.form = data;
+
+      // ✅ Redirection si l'e-mail professionnel est déjà rempli
+      if (data.professionnelemail) {
+        this.router.navigate(['/onboardingcompleted']); 
+      }
     },
     error: (err) => {
       console.error("Error loading helper profile:", err);
@@ -40,6 +45,7 @@ loadHelperData(id: string): void {
     }
   });
 }
+
   onFileChange(event: any, field: string) {
     const file = event.target.files[0];
     if (file) {
