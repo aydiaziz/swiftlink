@@ -21,6 +21,7 @@ import { HelperFormComponent } from './helper-form/helper-form.component';
 import { ConfirmationComponent } from './confirmation/confirmation.component';
 import { authGuard } from './auth.guard';
 import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
+import { NotificationOnboardingComponent } from './notification-onboarding/notification-onboarding.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent },
@@ -36,10 +37,12 @@ export const routes: Routes = [
   },
     { path: 'signinhelper', component: SigninhelperComponent },
     { path: 'application', component: SignuphelperComponent },
-    { path: 'admin/helper/:id', component: AdminHelperViewComponent },
+    { path: 'admin/helper/:id', component: AdminHelperViewComponent,
+      canActivate: [authGuard]  },
     { path: 'onborading/:id', component: HelperFormComponent },
     { path: 'confirmation', component: ConfirmationComponent },
     { path: 'unauthorized', component: UnauthorizedComponent },
+    {path:'confirmationOnboarding',component:NotificationOnboardingComponent},
    { path: 'helper-dashboard', 
     component: HelperDashboardComponent,
     children: [

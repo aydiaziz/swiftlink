@@ -30,6 +30,7 @@ import { ConfirmationComponent } from './app/confirmation/confirmation.component
 import { authGuard } from './app/auth.guard';
 import { UnauthorizedComponent } from './app/unauthorized/unauthorized.component';
 import { CsrfInterceptor } from './app/interceptors/csrf.service';
+import { NotificationOnboardingComponent } from './app/notification-onboarding/notification-onboarding.component';
 const routes: Routes = [
   { path: '', component: HomeComponent },  
   { path: 'services', component: ServicesComponent },
@@ -60,10 +61,12 @@ const routes: Routes = [
       component: AdminDashboardComponent,
       canActivate: [authGuard] 
     },
-  { path: 'admin/helper/:id', component: AdminHelperViewComponent },
+  { path: 'admin/helper/:id', component: AdminHelperViewComponent,
+      canActivate: [authGuard]  },
   { path: 'unauthorized', component: UnauthorizedComponent },
   { path: 'onborading/:id', component: HelperFormComponent },
   { path: 'confirmation', component: ConfirmationComponent },
+  {path:'confirmationOnboarding',component:NotificationOnboardingComponent}
   
 ];
 

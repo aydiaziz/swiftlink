@@ -91,7 +91,7 @@ calculateRates() {
   this.http.patch(`${environment.apiUrl}/helper/profile-completion/${helperId}/`, formData).subscribe({
     next: () => {
       alert("✅ Your profile has been completed successfully!");
-      this.router.navigate(['/signinhelper']);
+      this.router.navigate(['/confirmationOnboarding']);
     },
     error: err => {
       alert("❌ Error submitting profile.");

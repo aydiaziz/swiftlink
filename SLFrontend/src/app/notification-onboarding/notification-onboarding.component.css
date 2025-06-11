@@ -1,0 +1,88 @@
+.confirmation-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 70vh;
+  padding: 40px 20px;
+  background-color: #f9fafb;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.confirmation-card {
+  max-width: 700px;
+  width: 100%;
+  background-color: #ffffff;
+  padding: 40px 30px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  text-align: center;
+}
+
+.confirmation-success {
+  color: #16a34a; /* Green tone for success */
+  font-size: 1.6rem;
+  font-weight: bold;
+  margin-bottom: 24px;
+}
+
+.confirmation-card p {
+  font-size: 1rem;
+  color: #374151;
+  line-height: 1.7;
+  margin-bottom: 16px;
+}
+
+blockquote {
+  margin: 30px auto;
+  font-style: italic;
+  font-size: 1rem;
+  color: #4b5563;
+  line-height: 1.6;
+  border-left: 4px solid #3b82f6;
+  padding-left: 20px;
+}
+
+.highlighted-quote {
+  color: #1e3a8a;
+  font-weight: 500;
+  display: block;
+  margin-top: 5px;
+}
+
+.home-button {
+  display: inline-block;
+  margin-top: 30px;
+  background-color: #3b82f6;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.home-button:hover {
+  background-color: #2563eb;
+}
+
+/* Mobile Responsive */
+@media (max-width: 600px) {
+  .confirmation-card {
+    padding: 30px 20px;
+  }
+
+  .confirmation-success {
+    font-size: 1.3rem;
+  }
+
+  .confirmation-card p,
+  blockquote {
+    font-size: 0.95rem;
+  }
+
+  .home-button {
+    font-size: 0.95rem;
+    padding: 10px 20px;
+  }
+}
