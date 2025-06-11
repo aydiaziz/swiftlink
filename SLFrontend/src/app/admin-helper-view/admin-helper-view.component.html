@@ -2,6 +2,7 @@
   <h2><i class="fas fa-id-card"></i> Helper Profile Overview</h2>
 
   <div *ngIf="helper">
+    <!-- Affichage commun -->
     <p><strong>First Name:</strong> {{ helper.first_name }}</p>
     <p><strong>Last Name:</strong> {{ helper.last_name }}</p>
     <p><strong>Email:</strong> {{ helper.email }}</p>
@@ -23,17 +24,31 @@
     <p><strong>License Class:</strong> {{ helper.driverLicenceClass || '-' }}</p>
 
     <p><strong>Basic Tools:</strong>
-  <span *ngIf="getAvailableTools(helper.availability).length > 0">
-    {{ getAvailableTools(helper.availability).join(', ') }}
-  </span>
-  <span *ngIf="getAvailableTools(helper.availability).length === 0">
-    Not specified
-  </span>
-</p>
+      <span *ngIf="getAvailableTools(helper.availability).length > 0">
+        {{ getAvailableTools(helper.availability).join(', ') }}
+      </span>
+      <span *ngIf="getAvailableTools(helper.availability).length === 0">
+        Not specified
+      </span>
+    </p>
 
-    <p><strong>Experience:</strong> {{ helper.training || '-' }}</p>
+    <!-- Partie affichée uniquement si professionnelemail est rempli -->
+    <ng-container *ngIf="helper.professionnelemail">
+      <p><strong>Professional Email:</strong> {{ helper.professionnelemail }}</p>
+      <p><strong>Gender:</strong> {{ helper.gender || '-' }}</p>
+      <p><strong>Date of Birth:</strong> {{ helper.dateOfBirth || '-' }}</p>
+      <p><strong>Hourly Rate (You Receive):</strong> {{ helper.hourlyRatebyService || '-' }}</p>
+      <p><strong>Driver License Expiry:</strong> {{ helper.driverLicenceExpiry || '-' }}</p>
+      <p><strong>Training:</strong> {{ helper.training || '-' }}</p>
+      <p><strong>Career Expectations:</strong> {{ helper.careerExpectations || '-' }}</p>
+      <p><strong>City:</strong> {{ helper.city || '-' }}</p>
+      <p><strong>Province:</strong> {{ helper.province || '-' }}</p>
+      <p><strong>Referral Source:</strong> {{ helper.referralSource || '-' }}</p>
+    </ng-container>
+
+    <!-- Access + Actions -->
     <p><strong>Years Of Experience:</strong> {{ helper.yearsOfExperience || '-' }}</p>
-    <p><strong>City:</strong> {{ helper.address || '-' }}</p>
+    <p><strong>Address:</strong> {{ helper.address || '-' }}</p>
 
     <div class="actions">
       <button *ngIf="helper.acces === 0" (click)="acceptHelper()">✅ Approve</button>

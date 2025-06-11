@@ -46,12 +46,7 @@ class WorkForceDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = WorkForce
-        fields = [
-            'first_name', 'last_name', 'email', 'phone',
-            'services', 'resume', 'driverLicence',
-            'driverLicenceClass', 'availability',
-            'training', 'address', 'yearsOfExperience'
-        ]
+        fields = '__all__'  
 
 
 class WorkforceProfileCompletionSerializer(serializers.ModelSerializer):
