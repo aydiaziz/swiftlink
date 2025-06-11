@@ -122,6 +122,7 @@ signin(credentials: { email: string; password: string }): Observable<any> {
   logout(): void {
     localStorage.clear();
     this.isClientLoggedInSubject.next(false);
+    this.getCurrentUser().subscribe();
   }
 
   getUserRole(): string | null {
