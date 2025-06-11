@@ -43,7 +43,7 @@ export class UserProfileComponent implements OnInit {
 ngOnInit(): void {
   this.authService.getCurrentUser().subscribe(user => {
     this.user = user;
-
+    console.log(user.workforce.address)
     this.profilePreview = user.profileImage ? `${this.BACKEND_URL}${user.profileImage}` : null;
 
     let address = '';
@@ -55,7 +55,7 @@ ngOnInit(): void {
     }
 
     // Si c’est un helper (workforce)
-    if (user.role === '3rd party' && user.workforce && user.workforce.address) {
+    if (user.role === '3rd Party' && user.workforce && user.workforce.address) {
       address = user.workforce.address;
       console.log(address)
     }
