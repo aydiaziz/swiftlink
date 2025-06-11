@@ -43,7 +43,7 @@ export class SigninhelperComponent {
         this.router.navigate(['/']);
       } else if (role === '3rd Party') {
         if (acces !== 1) {
-          this.errorMessage = 'Your profile is pending activation. Please complete your onboarding.';
+          this.errorMessage = 'Your profile is pending activation.';
           return;
         }
         this.router.navigate(['/helper-dashboard']);

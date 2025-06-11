@@ -39,8 +39,6 @@ export class SigninComponent {
       const role = response.role;
       if (role === 'Client') {
         this.router.navigate(['/']);
-      } else if (role === '3rd Party') {
-        this.router.navigate(['/helper-dashboard']);
       } else if (role === 'Super Admin') {
         this.router.navigate(['/admindashboard']);
       }
