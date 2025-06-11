@@ -47,13 +47,13 @@
     <label>Upload Driver's License</label>
     <input type="file" (change)="onFileSelect($event, 'driverLicenceFile')" />
 
-    <!-- WCB -->
+    <!-- WCB 
     <label>WCB Number</label>
     <input type="text" name="wcbNumber" [(ngModel)]="form.wcbNumber" />
 
     <label>Upload WCB Clearance</label>
     <input type="file" (change)="onFileSelect($event, 'wcbFile')" />
-
+-->
         <!-- SSN -->
     <label>Social Security Number</label>
     <input type="text" name="socialSecurityNumber" [(ngModel)]="form.socialSecurityNumber" />
@@ -123,38 +123,40 @@
     
     <p>3. Hourly Rate Setup</p>
     <!-- Hourly rates -->
-    <div class="rate-group">
-      <div>
-        <label>Hourly rate (100% to you)</label>
-        <input type="number" [(ngModel)]="form.hourlyRatebyService" name="hourlyRatebyService"
-               (input)="calculateRates()" required />
-      </div>
-      <div>
-        <label>10% Income Security Fund (Client-Paid) </label>
-        <input type="text" [value]="form.securityFundRate" disabled />
-      </div>
-      <div>
-        <label>10% Shared Platform Sustainability (Client-Paid) </label>
-        <input type="text" [value]="form.platformFeeRate" disabled />
-      </div>
-      <div>
-        <label>
-          Total hourly rate charged to the client 
-          <span title="Swift Helpers ensures you receive 100% of your stated hourly rate. On top of that, the platform adds a 10% Income Security Contribution and a 10% Platform Sustainability Fee—both paid by the client and never deducted from your earnings.
+<div class="rate-group">
+  <div>
+    <label>Hourly rate (100% to you)</label>
+    <input type="number" [(ngModel)]="form.hourlyRatebyService" name="hourlyRatebyService"
+           (input)="calculateRates()" required />
+  </div>
+
+  <div>
+    <label>10% Income Security Fund (Client-Paid)</label>
+    <input type="text" [value]="form.securityFundRate" disabled />
+  </div>
+
+  <div>
+    <label>10% Shared Platform Sustainability (Client-Paid)</label>
+    <input type="text" [value]="form.platformFeeRate" disabled />
+  </div>
+
+  <div>
+    <label>Total hourly rate charged to the client</label>
+    <input type="text" [value]="form.clientChargeRate" disabled
+           placeholder="= Hourly Rate + 10% ISF + 10% Platform Fee" />
+  </div>
+
+  <!-- Explication finale -->
+  <p class="rate-info-note">
+    Swift Helpers ensures you receive 100% of your stated hourly rate. On top of that, the platform adds a 10% Income Security Contribution and a 10% Platform Sustainability Fee—both paid by the client and never deducted from your earnings.
 
 This additional 20% is invested entirely in your benefit:
 •	10% is deposited into your Income Security Fund account. This is your money, accessible at any time. It’s designed to help you build emergency savings, cover downtime, or take planned time off—providing stability on your self-employment journey.
 •	10% is allocated to sustain the platform that supports you: the job board, your work dashboard, client tools, and the infrastructure that powers your ongoing access to meaningful, flexible opportunities.
 In short, you keep 100% of your rate—and the additional 20% is fully committed to protecting, equipping, and growing your self-employment success.
-">❓</span>
-        </label>
-        <input type="text" [value]="form.clientChargeRate" disabled placeholder="= Hourly Rate + 10% ISF + 10% Platform Fee "/>
-      </div>
-      <div>
-        <label>Consumables Fee</label>
-        <input type="number" [(ngModel)]="form.consumablesFee" name="consumablesFee" />
-      </div>
-    </div>
+  </p>
+</div>
+
 
     
     

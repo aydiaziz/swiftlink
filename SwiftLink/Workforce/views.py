@@ -160,7 +160,7 @@ def complete_helper_profile(request, id):
         )
         if serializer.is_valid():
             serializer.save()
-            helper.acces = 1
+            
             helper.save()
 
             # Prepare and send welcome email

@@ -1,3 +1,4 @@
+
 .helper-profile-form {
   max-width: 800px;
   margin: 40px auto;
@@ -6,7 +7,14 @@
   border-radius: 12px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
   font-family: 'Segoe UI', sans-serif;
+.rate-info-note {
+  font-size: 13px;
+  color: #c62828; /* rouge doux */
+  margin-top: 10px;
+  line-height: 1.5;
 }
+}
+
 
 .helper-profile-form h2 {
   font-size: 26px;
@@ -48,17 +56,28 @@
 }
 
 .rate-group {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  flex-direction: column;
   gap: 20px;
   margin-top: 20px;
 }
 
-.radio-group {
-  display: flex;
-  gap: 20px;
-  margin-top: 10px;
+.rate-group label {
+  font-weight: 600;
+  margin-bottom: 4px;
+  display: inline-block;
+  color: #333;
 }
+
+.rate-group input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  width: 100%;
+  font-size: 14px;
+}
+
+
 
 button {
   margin-top: 30px;
