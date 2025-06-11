@@ -1,6 +1,6 @@
 // auth.service.ts
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject, throwError, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { Client, Workforce } from '../models/user.model';
@@ -13,7 +13,8 @@ export class AuthService {
   private apiUrl = environment.apiUrl;
   private isClientLoggedInSubject = new BehaviorSubject<boolean>(this.hasClientToken());
   isClientLoggedIn$ = this.isClientLoggedInSubject.asObservable();
-
+ private currentUserSubject = new BehaviorSubject<any>(null);
+  public currentUser$ = this.currentUserSubject.asObservable();
   constructor(private http: HttpClient) {}
 
   private hasClientToken(): boolean {
@@ -127,10 +128,14 @@ export class AuthService {
     if (!token) {
       return throwError(() => new Error('No access token found'));
     }
-  
-    return this.http.get(`${this.apiUrl}/me/`, {
-      headers: { Authorization: `Bearer ${token}` }
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
     });
+
+    return this.http.get(`${this.apiUrl}/me/`, { headers }).pipe(
+      tap(user => this.currentUserSubject.next(user))
+    );
   }
   updateClientProfile(data: FormData) {
     return this.http.patch(`${this.apiUrl}/client/profile/`, data);
