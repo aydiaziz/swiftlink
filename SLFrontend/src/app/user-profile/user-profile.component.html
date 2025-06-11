@@ -20,18 +20,21 @@
         <div *ngIf="form.get('email')?.invalid && form.get('email')?.touched" class="error">Invalid email</div>
       </div>
   
-      <div class="editable-field">
-        <div class="editable-label">
-          <label>Address</label>
-          <div *ngIf="!editingAddress">
-  {{ form.get('address')?.value }}
-  </div>
-          <button type="button" class="edit-icon" (click)="toggleEdit('address')">✏️</button>
-        </div>
+      <<div class="editable-field">
+  <label>Address</label>
+  
+  <div class="editable-label">
+    <!-- Affichage lecture -->
+    <div *ngIf="!editingAddress" class="address-display">
+      <span>{{ form.get('address')?.value }}</span>
+      <button type="button" class="edit-icon" (click)="toggleEdit('address')">✏️</button>
+    </div>
 
-        <!-- Affiche le champ seulement si editing -->
-        <input *ngIf="editingAddress" type="text" formControlName="address" class="edit-input" />
-      </div>
+    <!-- Affichage édition -->
+    <input *ngIf="editingAddress" type="text" formControlName="address" class="edit-input" />
+  </div>
+</div>
+
 
       <!--phone number-->
       <!-- Carte (à intégrer plus tard avec coords/map component) -->
