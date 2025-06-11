@@ -20,19 +20,20 @@
         <div *ngIf="form.get('email')?.invalid && form.get('email')?.touched" class="error">Invalid email</div>
       </div>
   
-      <div class="editable-field">
-  <label>Address</label>
-  
-  <div class="editable-label">
-    <!-- Affichage lecture -->
-    <div *ngIf="!editingAddress" class="address-display">
-      <span>{{ form.get('address')?.value }}</span>
-      <button type="button" class="edit-icon" (click)="toggleEdit('address')">✏️</button>
-    </div>
-
-    <!-- Affichage édition -->
-    <input *ngIf="editingAddress" type="text" formControlName="address" class="edit-input" />
+    <div class="editable-field">
+  <!-- Ligne : "Address" + ✏️ -->
+  <div class="label-with-icon">
+    <label>Address</label>
+    <button type="button" class="edit-icon" (click)="toggleEdit('address')">✏️</button>
   </div>
+
+  <!-- Ligne suivante : valeur -->
+  <div *ngIf="!editingAddress" class="address-text">
+    {{ form.get('address')?.value }}
+  </div>
+
+  <!-- Champ en édition -->
+  <input *ngIf="editingAddress" type="text" formControlName="address" class="edit-input" />
 </div>
 
 
