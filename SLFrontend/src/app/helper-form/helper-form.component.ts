@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms'
 import { HttpClient } from '@angular/common/http';
 import { NgIf } from '@angular/common';
 import { environment } from '../../environments/environment';
+import { LogarithmicScale } from 'chart.js';
 @Component({
   selector: 'app-helper-form',
   standalone: true,
@@ -34,7 +35,7 @@ loadHelperData(id: string): void {
     next: (data: any) => {
       this.form = data;
 
-      // ✅ Redirection si l'e-mail professionnel est déjà rempli
+      console.log(data)
       if (data.professionnelemail) {
         this.router.navigate(['/onboardingcompleted']); 
       }
