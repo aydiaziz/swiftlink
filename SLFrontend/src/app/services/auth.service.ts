@@ -93,26 +93,31 @@ export class AuthService {
 }
 
 
-  signin(credentials: { email: string; password: string }): Observable<any> {
-    return this.http.post(`${this.apiUrl}/signin/`, credentials).pipe(
-      tap((response: any) => {
-        if (response.access && response.refresh) {
-          localStorage.setItem('access_token', response.access);
-          localStorage.setItem('refresh_token', response.refresh);
-          localStorage.setItem('role', response.role);
-          localStorage.setItem('user_id', response.user_id);
-  
-          
-            this.isClientLoggedInSubject.next(true);
-          
-        }
-      }),
-      catchError(error => {
-        console.error("Signin Error:", error);
-        return throwError(() => new Error("Invalid credentials"));
-      })
-    );
-  }
+signin(credentials: { email: string; password: string }): Observable<any> {
+  return this.http.post(`${this.apiUrl}/signin/`, credentials).pipe(
+    tap((response: any) => {
+      if (response.access && response.refresh) {
+        localStorage.setItem('access_token', response.access);
+        localStorage.setItem('refresh_token', response.refresh);
+        localStorage.setItem('role', response.role);
+        localStorage.setItem('user_id', response.user_id);
+
+        // Marquer comme connecté
+        this.isClientLoggedInSubject.next(true);
+      }
+    }),
+    // Recharger les infos utilisateur après connexion
+    tap(() => {
+      this.getCurrentUser().subscribe();
+    }),
+    // Gérer les erreurs proprement
+    catchError(error => {
+      console.error("Signin Error:", error);
+      return throwError(() => new Error("Invalid credentials"));
+    })
+  );
+}
+
   
   logout(): void {
     localStorage.clear();
