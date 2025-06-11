@@ -28,24 +28,33 @@ export class SigninhelperComponent {
   }
 
   login() {
-    if (this.form.invalid) {
-      return;
-    }
-
-    const { email, password } = this.form.value;
-
-    this.authService.signin({ email, password }).subscribe({
-      next: (response) => {
-        const role = response.role;
-        if (role === 'Client') {
-          this.router.navigate(['/']);
-        } else if (role === '3rd Party') {
-          this.router.navigate(['/helper-dashboard']);
-        }
-      },
-      error: (err) => {
-        this.errorMessage = err?.error?.error || 'An error occurred, please try again.';
-      }
-    });
+  if (this.form.invalid) {
+    return;
   }
+
+  const { email, password } = this.form.value;
+
+  this.authService.signin({ email, password }).subscribe({
+    next: (response) => {
+      const role = response.role;
+      const acces = response.acces || response.workforce?.acces;
+
+      if (role === 'Client') {
+        this.router.navigate(['/']);
+      } else if (role === '3rd Party') {
+        if (acces !== 1) {
+          this.errorMessage = 'Your profile is pending activation. Please complete your onboarding.';
+          return;
+        }
+        this.router.navigate(['/helper-dashboard']);
+      } else {
+        this.errorMessage = 'Unauthorized role.';
+      }
+    },
+    error: (err) => {
+      this.errorMessage = err?.error?.error || 'An error occurred, please try again.';
+    }
+  });
+}
+
 }
