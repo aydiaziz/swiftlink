@@ -36,9 +36,9 @@ loadHelperData(id: string): void {
       this.form = data;
 
       console.log(data)
-      if (data.professionnelemail) {
-        this.router.navigate(['/onboardingcompleted']); 
-      }
+      if (data.hourlyRatebyService && data.hourlyRatebyService !== "0.00") {
+  this.router.navigate(['/onboardingcompleted']);
+    }
     },
     error: (err) => {
       console.error("Error loading helper profile:", err);
