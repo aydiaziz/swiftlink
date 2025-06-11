@@ -1,88 +1,71 @@
 .confirmation-container {
   display: flex;
-  align-items: center;
   justify-content: center;
-  min-height: 70vh;
-  padding: 40px 20px;
-  background-color: #f9fafb;
-  font-family: 'Segoe UI', sans-serif;
+  align-items: center;
+  min-height: 10vh;
+  background-color: #f5f8fa;
+  padding: 20px;
 }
 
 .confirmation-card {
-  max-width: 700px;
-  width: 100%;
-  background-color: #ffffff;
-  padding: 40px 30px;
+  background: white;
   border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+  max-width: 650px;
+  width: 100%;
+  font-family: 'Segoe UI', sans-serif;
   text-align: center;
 }
 
-.confirmation-success {
-  color: #16a34a; /* Green tone for success */
-  font-size: 1.6rem;
-  font-weight: bold;
-  margin-bottom: 24px;
+.confirmation-card h1 {
+  font-size: 1.5rem;
+  color: #002f5f;
+  margin-bottom: 20px;
 }
 
-.confirmation-card p {
-  font-size: 1rem;
-  color: #374151;
-  line-height: 1.7;
-  margin-bottom: 16px;
+.confirmation-card .thank-you {
+  font-size: 1.1rem;
+  margin-bottom: 15px;
 }
 
-blockquote {
-  margin: 30px auto;
-  font-style: italic;
+.confirmation-card .intro,
+.confirmation-card .info {
   font-size: 1rem;
-  color: #4b5563;
-  line-height: 1.6;
-  border-left: 4px solid #3b82f6;
+  color: #333;
+  margin-bottom: 12px;
+}
+
+.confirmation-card .benefits {
+  text-align: left;
+  margin: 20px auto;
   padding-left: 20px;
+  list-style-type: disc;
+  color: #002f5f;
 }
 
-.highlighted-quote {
-  color: #1e3a8a;
-  font-weight: 500;
-  display: block;
-  margin-top: 5px;
+.confirmation-card .benefits li {
+  margin-bottom: 10px;
+}
+
+.confirmation-card .closing {
+  font-style: italic;
+  color: #555;
+  margin-top: 20px;
+  font-size: 0.95rem;
 }
 
 .home-button {
   display: inline-block;
   margin-top: 30px;
-  background-color: #3b82f6;
+  background-color: #002f5f;
   color: white;
   padding: 12px 24px;
-  border-radius: 8px;
+  border-radius: 6px;
   text-decoration: none;
   font-weight: 600;
-  font-size: 1rem;
-  transition: background-color 0.3s ease;
 }
 
 .home-button:hover {
-  background-color: #2563eb;
-}
-
-/* Mobile Responsive */
-@media (max-width: 600px) {
-  .confirmation-card {
-    padding: 30px 20px;
-  }
-
-  .confirmation-success {
-    font-size: 1.3rem;
-  }
-
-  .confirmation-card p,
-  blockquote {
-    font-size: 0.95rem;
-  }
-
-  .home-button {
-    font-size: 0.95rem;
-    padding: 10px 20px;
-  }
+  background-color: #004080;
 }
