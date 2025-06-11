@@ -5,7 +5,9 @@
 
   <ul class="nav-links">
     <li><a href="#">Home</a></li>
-    <li><a href="/services">Services</a></li>
+      <li *ngIf="currentUser?.role !== '3rd Party'">
+    <a href="/services">Services</a>
+  </li>
 
     <ng-container *ngIf="!isClientLoggedIn">
       <li><a routerLink="/signin">Clients</a></li>
