@@ -46,6 +46,7 @@ export class NavbarComponent implements OnInit {
     this.authService.getCurrentUser().subscribe(user => {
       this.currentUser = user;
     });
+    this.authService.getCurrentUser().subscribe();
   }
 
   loadUnreadCount() {
