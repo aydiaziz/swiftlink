@@ -44,7 +44,6 @@ const routes: Routes = [
   { path: 'signin', component: SigninComponent },
    { path: 'helper-dashboard', 
       component: HelperDashboardComponent,
-      canActivate: [authGuard], 
       children: [
         { path: 'profile', component: ProfileComponent },
         { path: 'agenda', component: AgendaComponent },
