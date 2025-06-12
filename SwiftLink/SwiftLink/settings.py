@@ -171,7 +171,7 @@ EMAIL_HOST_PASSWORD = 'Fort$2025'  # Le mot de passe de l’email
 import os
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = '/home/helpers/Swifthelpers/swiftlink/SwiftLink/media'
+MEDIA_ROOT = '/app/media'
 # settings.py
 SECURE_PROXY_SSL_HEADER = None
 SECURE_SSL_REDIRECT = False  # Redirect HTTP to HTTPS
