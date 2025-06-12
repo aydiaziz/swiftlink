@@ -49,6 +49,7 @@ export const routes: Routes = [
     {path:'onboardingcompleted',component:NoticeComponent},
    { path: 'helper-dashboard', 
     component: HelperDashboardComponent,
+    canActivate: [authGuard],
     children: [
       { path: 'profile', component: ProfileComponent },
       { path: 'agenda', component: AgendaComponent },
