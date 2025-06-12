@@ -28,6 +28,7 @@ import { AdminHelperViewComponent } from './app/admin-helper-view/admin-helper-v
 import { HelperFormComponent } from './app/helper-form/helper-form.component';
 import { ConfirmationComponent } from './app/confirmation/confirmation.component';
 import { authGuard } from './app/auth.guard';
+import { helperAuthGuard } from './app/helper-auth.guard';
 import { UnauthorizedComponent } from './app/unauthorized/unauthorized.component';
 import { CsrfInterceptor } from './app/interceptors/csrf.service';
 import { NotificationOnboardingComponent } from './app/notification-onboarding/notification-onboarding.component';
@@ -42,8 +43,9 @@ const routes: Routes = [
   { path: 'signuphelper', component: SignuphelperComponent },
   { path: 'notifications', component: NotificationsComponent },
   { path: 'signin', component: SigninComponent },
-   { path: 'helper-dashboard', 
+   { path: 'helper-dashboard',
       component: HelperDashboardComponent,
+      canActivate: [helperAuthGuard],
       children: [
         { path: 'profile', component: ProfileComponent },
         { path: 'agenda', component: AgendaComponent },
