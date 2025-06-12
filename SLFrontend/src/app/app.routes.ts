@@ -20,6 +20,7 @@ import { AdminHelperViewComponent } from './admin-helper-view/admin-helper-view.
 import { HelperFormComponent } from './helper-form/helper-form.component';
 import { ConfirmationComponent } from './confirmation/confirmation.component';
 import { authGuard } from './auth.guard';
+import { helperAuthGuard } from './helper-auth.guard';
 import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 import { NotificationOnboardingComponent } from './notification-onboarding/notification-onboarding.component';
 import { NoticeComponent } from './notice/notice.component';
@@ -47,10 +48,11 @@ export const routes: Routes = [
     { path: 'unauthorized', component: UnauthorizedComponent },
     {path:'confirmationOnboarding',component:NotificationOnboardingComponent},
     {path:'onboardingcompleted',component:NoticeComponent},
-   { path: 'helper-dashboard', 
-    component: HelperDashboardComponent,
-    
-    children: [
+ { path: 'helper-dashboard',
+  component: HelperDashboardComponent,
+  canActivate: [helperAuthGuard],
+
+  children: [
       { path: 'profile', component: ProfileComponent },
       { path: 'agenda', component: AgendaComponent },
       { path: 'dashboard', component: DashboardComponent },
