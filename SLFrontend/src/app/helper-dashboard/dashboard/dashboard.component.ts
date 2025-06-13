@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { NgChartsModule } from 'ng2-charts';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
+import { FormsModule } from '@angular/forms';
 
 import { OrderService } from '../../services/order.service';
 import { AuthService } from '../../services/auth.service';
@@ -19,7 +20,8 @@ import { DashboardStats, Job, DashboardResponse } from '../../models/dashboard.m
     CommonModule,
     NgChartsModule,
     MatProgressSpinnerModule,
-    MatIconModule
+    MatIconModule,
+    FormsModule
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
@@ -40,6 +42,17 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   orders: any[] = [];
   monthlyIncomeMap: { [key: string]: number } = {};
   chartInstance: Chart | null = null;
+  baseRate = 0;
+  selectedFilter: 'today' | 'all' | 'range' = 'today';
+  fromDate = '';
+  toDate = '';
+  summary = {
+    totalWorkOrders: 0,
+    confirmedHours: 0,
+    basePayouts: 0,
+    isf: 0,
+    workExpenses: 0
+  };
   private readonly monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
   constructor(
@@ -85,6 +98,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   loadHelperServiceTypes(): void {
     this.authService.getCurrentUser().subscribe({
       next: (user) => {
+        this.baseRate = user.workforce?.hourlyRatebyService || 0;
         if (user.role === 'Workforce' && user.workCategory?.length > 0) {
           this.helperServiceTypes = user.workCategory.map((category: any) => category.name);
           this.loadOrders();
@@ -103,6 +117,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.orderService.getAllOrders().subscribe({
       next: (data) => {
         this.orders = data;
+        this.calculateSummary();
       },
       error: (err) => {
         console.error('Error loading orders:', err);
@@ -198,5 +213,52 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       labels.push(`${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, '0')}`);
     }
     return labels;
+  }
+
+  applyFilter(): void {
+    this.calculateSummary();
+  }
+
+  get filteredOrders(): any[] {
+    let filtered = this.orders.filter(o => Array.isArray(o.assignedTo) ? o.assignedTo.includes(localStorage.getItem('user_id')) : true);
+    if (this.selectedFilter === 'today') {
+      const today = new Date().toISOString().split('T')[0];
+      filtered = filtered.filter(o => o.executionDate && o.executionDate.startsWith(today));
+    } else if (this.selectedFilter === 'range' && this.fromDate && this.toDate) {
+      const from = new Date(this.fromDate);
+      const to = new Date(this.toDate);
+      filtered = filtered.filter(o => {
+        if (!o.executionDate) return false;
+        const d = new Date(o.executionDate);
+        return d >= from && d <= to;
+      });
+    }
+    return filtered;
+  }
+
+  calculateSummary(): void {
+    const orders = this.filteredOrders;
+    this.summary.totalWorkOrders = orders.length;
+    let totalHours = 0;
+    orders.forEach(o => {
+      if (o.orderDuration) {
+        totalHours += this.parseDuration(o.orderDuration);
+      }
+    });
+    this.summary.confirmedHours = totalHours;
+    this.summary.basePayouts = this.baseRate * totalHours;
+    this.summary.isf = this.summary.basePayouts * 0.10;
+    this.summary.workExpenses = 0; // requires invoice data
+  }
+
+  parseDuration(duration: string): number {
+    const parts = duration.split(':');
+    if (parts.length >= 2) {
+      const h = parseInt(parts[0], 10) || 0;
+      const m = parseInt(parts[1], 10) || 0;
+      const s = parseInt(parts[2] || '0', 10) || 0;
+      return h + m / 60 + s / 3600;
+    }
+    return 0;
   }
 }
