@@ -197,7 +197,18 @@
       <input type="checkbox" [(ngModel)]="form.contractAccepted" name="contractAccepted" required />
       I agree to the Self-employment Contract Terms*
     </label>
-    <p><a routerLink="/self-employment-contract" target="_blank">Read the contract terms</a></p>
+    <button type="button" class="link-button" (click)="toggleContract()">Read Contract Terms</button>
+     <div class="overlay" *ngIf="showContract">
+    <div class="popup">
+      <h2>Contract Terms</h2>
+      <p>
+        This is a sample contract provided for demonstration purposes. It
+        outlines the responsibilities of helpers when using the Swift Helpers
+        platform. Please read carefully before accepting.
+      </p>
+      <button (click)="toggleContract()">Close</button>
+    </div>
+  </div>
 
     <!-- Submit -->
     <button type="submit">Submit</button>

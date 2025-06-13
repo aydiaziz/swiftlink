@@ -14,6 +14,7 @@ import { LogarithmicScale } from 'chart.js';
 })
 export class HelperFormComponent implements OnInit {
   errorMessage: string = '';
+   showContract = false;
 form: any = {
   country: 'Canada'  // valeur par défaut
 };
@@ -30,6 +31,9 @@ ngOnInit() {
     this.loadHelperData(helperId);
   }
 }
+toggleContract() {
+    this.showContract = !this.showContract;
+  }
 loadHelperData(id: string): void {
   this.http.get(`${environment.apiUrl}/helpers/${id}/profile/`).subscribe({
     next: (data: any) => {
