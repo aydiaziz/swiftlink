@@ -173,16 +173,41 @@
 
 /* My Work section */
 .my-work {
-  background: white;
-  padding: 1rem;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  font-family: 'Segoe UI', sans-serif;
+  margin-bottom: 2rem;
+}
+
+.my-work h3 {
+  font-size: 1.6rem;
+  color: #002f5f;
+  margin-bottom: 1.5rem;
 }
 
 .period-filters {
   display: flex;
+  flex-wrap: wrap;
   gap: 1rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  align-items: center;
+  font-size: 0.95rem;
+}
+
+.period-filters input[type="date"] {
+  padding: 5px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
 }
 
 .orders-log {
@@ -193,12 +218,25 @@
 
 .orders-log th,
 .orders-log td {
-  border: 1px solid #ccc;
-  padding: 0.5rem;
+  border: 1px solid #ddd;
+  padding: 0.75rem;
   text-align: left;
+  font-size: 0.95rem;
 }
 
 .orders-log th {
-  background-color: #f3f4f6;
+  background-color: #f0f4f8;
+  color: #333;
+  font-weight: 600;
 }
+
+.orders-log tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.orders-log tr:hover {
+  background-color: #f1f7ff;
+  transition: background-color 0.3s ease;
+}
+
 

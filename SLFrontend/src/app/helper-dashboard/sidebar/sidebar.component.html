@@ -1,6 +1,6 @@
 <nav class="cyber-sidebar">
   <div class="brand-glow">
-    <h2 class="app-title">HELPER<span class="pulse">_</span></h2>
+    
   </div>
   
   <ul class="nav-grid">
@@ -8,30 +8,30 @@
         [class.active]="isActive('/helper-dashboard/orders')"
         (click)="router.navigate(['/helper-dashboard/orders'])">
       <div class="nav-glitch"></div>
-      <i class="nav-icon material-icons">orders</i>
-      <span class="nav-label">orders</span>
+      <i class="nav-icon material-icons"></i>
+      <span class="nav-label">Work Board</span>
     </li>
     <li class="nav-item" 
         [class.active]="isActive('/helper-dashboard/dashboard')"
         (click)="router.navigate(['/helper-dashboard/dashboard'])">
       <div class="nav-glitch"></div>
-      <i class="nav-icon material-icons">dashboard</i>
-      <span class="nav-label">dashboard</span>
+      <i class="nav-icon material-icons"></i>
+      <span class="nav-label">My Worl</span>
     </li>
-    <li class="nav-item" 
+    <!--<li class="nav-item" 
         [class.active]="isActive('/helper-dashboard/profile')"
         (click)="router.navigate(['/helper-dashboard/profile'])">
       <div class="nav-glitch"></div>
       <i class="nav-icon material-icons">person</i>
       <span class="nav-label">Profil</span>
-    </li>
+    </li>-->
 
     <li class="nav-item" 
         [class.active]="isActive('/helper-dashboard/agenda')"
         (click)="router.navigate(['/helper-dashboard/agenda'])">
       <div class="nav-glitch"></div>
-      <i class="nav-icon material-icons">schedule</i>
-      <span class="nav-label">Agenda</span>
+      <i class="nav-icon material-icons"></i>
+      <span class="nav-label">Work Schedule</span>
     </li>
   </ul>
 

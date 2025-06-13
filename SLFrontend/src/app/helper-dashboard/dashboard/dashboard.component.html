@@ -26,46 +26,52 @@
 
           </div>-->
           <div class="my-work">
-            <h3>My Work</h3>
-            <div class="period-filters">
-              <label><input type="radio" name="period" value="today" [(ngModel)]="selectedFilter" (change)="applyFilter()"> Today</label>
-              <label><input type="radio" name="period" value="all" [(ngModel)]="selectedFilter" (change)="applyFilter()"> All</label>
-              <label>From <input type="date" [(ngModel)]="fromDate" (change)="selectedFilter='range';applyFilter()"></label>
-              <label>To <input type="date" [(ngModel)]="toDate" (change)="selectedFilter='range';applyFilter()"></label>
-            </div>
+  <h3>My Work</h3>
 
-            <div class="summary">
-              <p><strong>Base Rate:</strong> {{ baseRate | currency:'CAD':'symbol':'1.2-2' }}</p>
-              <p><strong>Total Work Orders:</strong> {{ summary.totalWorkOrders }}</p>
-              <p><strong>Confirmed Hours:</strong> {{ summary.confirmedHours | number:'1.2-2' }}</p>
-              <p><strong>Base Payouts:</strong> {{ summary.basePayouts | currency:'CAD':'symbol':'1.2-2' }}</p>
-              <p><strong>ISF:</strong> {{ summary.isf | currency:'CAD':'symbol':'1.2-2' }}</p>
-              <p><strong>Work Expenses:</strong> {{ summary.workExpenses | currency:'CAD':'symbol':'1.2-2' }}</p>
-            </div>
+  <div class="period-filters">
+    <label><input type="radio" name="period" value="today" [(ngModel)]="selectedFilter" (change)="applyFilter()"> Today</label>
+    <label><input type="radio" name="period" value="all" [(ngModel)]="selectedFilter" (change)="applyFilter()"> All</label>
+    <label>
+      From <input type="date" [(ngModel)]="fromDate" (change)="selectedFilter='range';applyFilter()">
+    </label>
+    <label>
+      To <input type="date" [(ngModel)]="toDate" (change)="selectedFilter='range';applyFilter()">
+    </label>
+  </div>
 
-            <table class="orders-log" >
-              <thead>
-                <tr>
-                  <th>Date</th>
-                  <th>Adresse</th>
-                  <th>Confirmed Hours</th>
-                  <th>Base Payouts</th>
-                  <th>ISF</th>
-                  <th>Work Expenses</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let o of filteredOrders">
-                  <td>{{ o.executionDate | date:'shortDate' }}</td>
-                  <td>{{ o.jobAddress }}</td>
-                  <td>{{ parseDuration(o.orderDuration) | number:'1.2-2' }}</td>
-                  <td>{{ baseRate * parseDuration(o.orderDuration) | currency:'CAD':'symbol':'1.2-2' }}</td>
-                  <td>{{ baseRate * parseDuration(o.orderDuration) * 0.10 | currency:'CAD':'symbol':'1.2-2' }}</td>
-                  <td>{{ 0 | currency:'CAD':'symbol':'1.2-2' }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+  <div class="summary">
+    <div><strong>Base Rate:</strong> {{ baseRate | currency:'CAD':'symbol':'1.2-2' }}</div>
+    <div><strong>Total Work Orders:</strong> {{ summary.totalWorkOrders }}</div>
+    <div><strong>Confirmed Hours:</strong> {{ summary.confirmedHours | number:'1.2-2' }}</div>
+    <div><strong>Base Payouts:</strong> {{ summary.basePayouts | currency:'CAD':'symbol':'1.2-2' }}</div>
+    <div><strong>ISF:</strong> {{ summary.isf | currency:'CAD':'symbol':'1.2-2' }}</div>
+    <div><strong>Work Expenses:</strong> {{ summary.workExpenses | currency:'CAD':'symbol':'1.2-2' }}</div>
+  </div>
+
+  <table class="orders-log">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Address</th>
+        <th>Confirmed Hours</th>
+        <th>Base Payouts</th>
+        <th>ISF</th>
+        <th>Work Expenses</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let o of filteredOrders">
+        <td>{{ o.executionDate | date:'shortDate' }}</td>
+        <td>{{ o.jobAddress }}</td>
+        <td>{{ parseDuration(o.orderDuration) | number:'1.2-2' }}</td>
+        <td>{{ baseRate * parseDuration(o.orderDuration) | currency:'CAD':'symbol':'1.2-2' }}</td>
+        <td>{{ baseRate * parseDuration(o.orderDuration) * 0.10 | currency:'CAD':'symbol':'1.2-2' }}</td>
+        <td>{{ 0 | currency:'CAD':'symbol':'1.2-2' }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
 
         </div>
       </ng-container>
