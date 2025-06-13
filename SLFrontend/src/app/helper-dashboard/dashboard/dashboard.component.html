@@ -7,7 +7,7 @@
     <main class="main-content">
       <ng-container *ngIf="!loading; else loader">
         <!-- Stats Cards -->
-        <div class="stats-grid">
+        <!--<div class="stats-grid">
           <div class="stat-card" *ngFor="let stat of statsCards">
             <h3>{{ stat.title }}</h3>
             <p class="stat-value" [ngSwitch]="stat.type">
@@ -15,16 +15,16 @@
               <span *ngSwitchDefault>{{ stat.value }}</span>
             </p>
           </div>
-        </div>
+        </div>-->
         
         <!-- Graphique et Calendrier -->
         <div class="content-grid">
           <!-- Graphique -->
-          <div class="chart-container">
+          <!--<div class="chart-container">
             <h3>income</h3>
             <canvas #incomeChart style="height: 300px; width: 100%;"></canvas>
 
-          </div>
+          </div>-->
           <div class="my-work">
             <h3>My Work</h3>
             <div class="period-filters">

@@ -22,7 +22,7 @@ class ClientSerializer(serializers.ModelSerializer):
 class WorkForceSerializer(serializers.ModelSerializer):
     class Meta:
         model = WorkForce
-        fields = ['address', 'phone', 'acces', 'workForceType', 'rating']
+        fields = '__all__'
 
 class UserSerializer(serializers.ModelSerializer):
     profileImage = serializers.ImageField(read_only=True)
