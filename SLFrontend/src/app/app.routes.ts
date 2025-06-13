@@ -55,8 +55,8 @@ export const routes: Routes = [
   children: [
       { path: 'profile', component: ProfileComponent },
       { path: 'agenda', component: AgendaComponent },
-      { path: 'dashboard', component: DashboardComponent },
-      { path: 'orders', component: OrdersComponent },
+      { path: 'my-work', component: DashboardComponent },
+      { path: 'work-board', component: OrdersComponent },
       { path: 'invoice/:orderId', component: InvoiceComponent },
       
     ]
