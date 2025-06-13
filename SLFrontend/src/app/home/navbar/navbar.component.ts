@@ -129,4 +129,15 @@ export class NavbarComponent implements OnInit {
     this.authService.logout();
     this.router.navigate(['/signin']);
   }
+
+  redirectByRole() {
+    const role = this.currentUser?.role || this.authService.getUserRole();
+    if (role === '3rd Party') {
+      this.router.navigate(['/helper-dashboard/my-work']);
+    } else if (role === 'Super Admin') {
+      this.router.navigate(['/admindashboard']);
+    } else {
+      this.router.navigate(['/']);
+    }
+  }
 }
