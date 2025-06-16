@@ -48,12 +48,13 @@ export class WorkOrdersComponent implements OnInit {
     this.adminService.getAllHelpers().subscribe({
     next: (helpers) => {
       this.contractors = helpers;
+      console.log(this.contractors)
     },
     error: (err) => {
       console.error('Failed to load helpers:', err);
     }
   });
-  console.log(this.contractors)
+  
   }
 
   private loadData(): void {
@@ -85,32 +86,55 @@ export class WorkOrdersComponent implements OnInit {
   }
 
   calculateSummaries(): void {
-    const allRates = Array.from(new Set(this.workOrders.map(o => o.workforce.hourlyRatebyService || 0)));
-    allRates.sort((a, b) => a - b);
-    const totalRates = allRates.reduce((a, b) => a + b, 0);
-    this.rateSummary.average = allRates.length ? totalRates / allRates.length : 0;
-    this.rateSummary.max = allRates.length ? allRates[allRates.length - 1] : 0;
-    this.rateSummary.min = allRates.length ? allRates[0] : 0;
-    this.rateSummary.median = allRates.length ? (allRates.length % 2 === 1 ? allRates[Math.floor(allRates.length / 2)] : (allRates[allRates.length / 2 - 1] + allRates[allRates.length / 2]) / 2) : 0;
+  this.adminService.getAllHelpers().subscribe({
+    next: (helpers) => {
+      const hourlyRates = helpers
+        .map(h => Number(h.hourlyRatebyService))
+        .filter(rate => !isNaN(rate));
 
-    const completed = this.filteredOrders.filter(o => o.order.jobStatus === JobStatus.COMPLETED);
-    const pending = this.filteredOrders.filter(o => o.order.jobStatus === JobStatus.PENDING);
-    const canceled = this.filteredOrders.filter(o => o.order.jobStatus === JobStatus.CANCELED);
+      hourlyRates.sort((a, b) => a - b);
 
-    this.activitySummary.total = completed.length;
-    this.activitySummary.scheduled = pending.length;
-    this.activitySummary.canceled = canceled.length;
-    this.activitySummary.confirmedHours = completed.reduce((sum, o) => sum + (Number(o.order.orderDuration) || 0), 0);
+      const totalRates = hourlyRates.reduce((a, b) => a + b, 0);
+      const len = hourlyRates.length;
 
-    const totalSales = this.filteredOrders.reduce((sum, o) => sum + o.invoice.totalAmount, 0);
-    const pendingPayments = pending.length * this.rateSummary.average;
+      this.rateSummary.average = len ? totalRates / len : 0;
+      this.rateSummary.min = len ? hourlyRates[0] : 0;
+      this.rateSummary.max = len ? hourlyRates[len - 1] : 0;
+      this.rateSummary.median = len
+        ? (len % 2 === 1
+            ? hourlyRates[Math.floor(len / 2)]
+            : (hourlyRates[len / 2 - 1] + hourlyRates[len / 2]) / 2)
+        : 0;
 
-    this.salesSummary.totalSales = totalSales;
-    this.salesSummary.collectedIsf = totalSales * 0.10;
-    this.salesSummary.pendingPayments = pendingPayments;
-    this.salesSummary.pendingIsf = pendingPayments * 0.10;
+      // Job Status summaries
+      const completed = this.filteredOrders.filter(o => o.order.jobStatus === JobStatus.COMPLETED);
+      const pending = this.filteredOrders.filter(o => o.order.jobStatus === JobStatus.PENDING);
+      const canceled = this.filteredOrders.filter(o => o.order.jobStatus === JobStatus.CANCELED);
 
-  }
+      this.activitySummary.total = completed.length;
+      this.activitySummary.scheduled = pending.length;
+      this.activitySummary.canceled = canceled.length;
+      this.activitySummary.confirmedHours = completed.reduce(
+        (sum, o) => sum + (Number(o.order.orderDuration) || 0), 0
+      );
+
+      // Sales summary
+      const totalSales = this.filteredOrders.reduce(
+        (sum, o) => sum + (o.invoice?.totalAmount || 0), 0
+      );
+      const pendingPayments = pending.length * this.rateSummary.average;
+
+      this.salesSummary.totalSales = totalSales;
+      this.salesSummary.collectedIsf = totalSales * 0.10;
+      this.salesSummary.pendingPayments = pendingPayments;
+      this.salesSummary.pendingIsf = pendingPayments * 0.10;
+    },
+    error: (err) => {
+      console.error('Failed to fetch helpers for rate summary:', err);
+    }
+  });
+}
+
 
   extrasTotal(extras: Invoice["extras"]): number {
     return extras.reduce((sum, e) => sum + e.price, 0);
