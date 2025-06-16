@@ -5,6 +5,7 @@ import { Order, JobStatus } from '../../models/order.model';
 import { Workforce, Client } from '../../models/user.model';
 import { Invoice } from '../../models/invoice.model';
 import { OrderService } from '../../services/order.service';
+import { AdminService } from '../../services/admin.service';
 
 interface WorkOrderRecord {
   order: Order & {
@@ -40,16 +41,24 @@ export class WorkOrdersComponent implements OnInit {
   activitySummary = { total: 0, scheduled: 0, canceled: 0, confirmedHours: 0 };
   salesSummary = { totalSales: 0, collectedIsf: 0, pendingPayments: 0, pendingIsf: 0 };
 
-  constructor(private orderService: OrderService) {}
+  constructor(private orderService: OrderService,private adminService: AdminService) {}
 
   ngOnInit(): void {
     this.loadData();
+    this.adminService.getAllHelpers().subscribe({
+    next: (helpers) => {
+      this.contractors = helpers;
+    },
+    error: (err) => {
+      console.error('Failed to load helpers:', err);
+    }
+  });
   }
 
   private loadData(): void {
     this.orderService.getWorkOrdersDashboard().subscribe(data => {
       this.workOrders = data as WorkOrderRecord[];
-      this.contractors = Array.from(new Set(this.workOrders.map(o => o.workforce.lastName)));
+      
       this.filteredOrders = [...this.workOrders];
       this.applyFilters();
     });
