@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Order, JobStatus } from '../../models/order.model';
-import { Workforce, Client, User } from '../../models/user.model';
+import { Workforce, Client } from '../../models/user.model';
 import { Invoice } from '../../models/invoice.model';
 import { OrderService } from '../../services/order.service';
 import { AdminService } from '../../services/admin.service';
@@ -28,7 +28,7 @@ interface WorkOrderRecord {
 export class WorkOrdersComponent implements OnInit {
   workOrders: WorkOrderRecord[] = [];
 
-  contractors: User[] = [];
+  contractors: Workforce[] = [];
 
   filteredOrders: WorkOrderRecord[] = [];
 
