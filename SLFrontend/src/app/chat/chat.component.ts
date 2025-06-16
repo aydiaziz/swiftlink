@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, OnDestroy, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ChatService } from '../services/chat.service';
@@ -14,7 +14,7 @@ import { OrderService } from '../services/order.service';
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.css'
 })
-export class ChatComponent implements OnInit {
+export class ChatComponent implements OnInit, OnDestroy {
   messages: any[] = [];
   messageText = '';
 
@@ -27,17 +27,18 @@ export class ChatComponent implements OnInit {
   orderConfirmed: boolean = false;
   defaultProfileImage: string = '/default-user.jpg';
   currentUser: any;
+  private pollInterval: any;
   
 
-  constructor(private router: Router,private chatService: ChatService,private authService: AuthService,private orderService: OrderService) 
+  constructor(private router: Router,private chatService: ChatService,private authService: AuthService,private orderService: OrderService)
   {}
 
   ngOnInit() {
     if (this.conversationId) {
       this.chatService.getConversation(this.conversationId).subscribe(data => {
         this.messages = data.messages;
-        
-        
+        // start polling for new messages
+        this.startPolling();
       });
     } else {
       console.error('❌ conversationId not provided to ChatComponent');
@@ -45,9 +46,23 @@ export class ChatComponent implements OnInit {
     this.authService.getCurrentUser().subscribe(user => {
       this.currentUser = user;
       this.currentUserId = user.user_id;
-      this.isClient = user.role === 'Client'; 
+      this.isClient = user.role === 'Client';
     });
-    
+
+  }
+
+  startPolling() {
+    this.pollInterval = setInterval(() => {
+      this.chatService.getConversation(this.conversationId).subscribe(data => {
+        this.messages = data.messages;
+      });
+    }, 5000);
+  }
+
+  ngOnDestroy(): void {
+    if (this.pollInterval) {
+      clearInterval(this.pollInterval);
+    }
   }
   confirmOrder() {
     if (!this.conversationId) return;
