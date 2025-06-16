@@ -15,7 +15,7 @@ export class OrderService {
     const token = localStorage.getItem('access_token');  // 🔥 Récupère le token
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-    return this.http.get<any>(this.apiUrl, { headers });
+    return this.http.get<Order[]>(this.apiUrl, { headers });
   }
 
   // ✅ Récupérer les ordres liés au `serviceType`

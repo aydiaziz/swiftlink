@@ -1,1 +1,19 @@
-<p>work-schedules works!</p>
+<div class="agenda-container">
+    <div class="calendar-wrapper">
+      <h2>🗓️ My Job Calendar</h2>
+      <full-calendar [options]="calendarOptions"></full-calendar>
+    </div>
+  
+    <div class="jobs-today">
+      <h3>Today's Jobs</h3>
+    
+      <div class="job-card" *ngFor="let job of todayJobs">
+        <p><strong>{{ job.jobTitle }}</strong></p>
+        <p>⏰ {{ job.executionDate | date:'shortTime' }}</p>
+    
+      
+       
+    </div>
+    
+  </div>
+  
