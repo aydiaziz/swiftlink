@@ -71,7 +71,7 @@ export const routes: Routes = [
         component: OfficeDashboardComponent,
         canActivate: [authGuard],
         children: [
-          { path: 'live-work-baord', component: LiveWorkBoardComponent },
+          { path: 'live-work-board', component: LiveWorkBoardComponent },
           { path: 'work-orders', component: WorkOrdersComponent },
           { path: 'work-schedules', component:WorkSchedulesComponent  },
           { path: 'accounts', component: AccountsComponent },
