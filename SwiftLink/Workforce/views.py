@@ -91,7 +91,7 @@ def get_helper_profile(request, user_id):
 @permission_classes([IsAuthenticated])
 def list_helpers(request):
     helpers = WorkForce.objects.all().select_related('UserId')
-    serializer = WorkForceListSerializer(helpers, many=True)
+    serializer = WorkForceDetailSerializer(helpers, many=True)
     return Response(serializer.data)
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
