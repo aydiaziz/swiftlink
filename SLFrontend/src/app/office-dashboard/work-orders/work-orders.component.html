@@ -11,7 +11,7 @@
   </div>
   <div class="contractor-select">
     <select [(ngModel)]="selectedContractor" (change)="applyFilters()">
-      <option [ngValue]="null">All workforce</option>
+      <option [ngValue]="null">Contractors</option>
       <option *ngFor="let c of contractors" [ngValue]="c">{{c.email}}</option>
     </select>
   </div>
@@ -60,26 +60,26 @@
   <div class="summary-card">
     <h4>Total Sales</h4>
     <p class="value">{{salesSummary.totalSales | currency:'USD':'symbol':'1.2-2'}}</p>
-    <small class="note">Collected payments ONLY</small>
+    
   </div>
   <div class="summary-card">
     <h4>Collected ISF</h4>
     <p class="value">{{salesSummary.collectedIsf | currency:'USD':'symbol':'1.2-2'}}</p>
-    <small class="note">Collected payments ONLY</small>
+    
   </div>
   <div class="summary-card">
     <h4>Pending Payments</h4>
     <p class="value">{{salesSummary.pendingPayments | currency:'USD':'symbol':'1.2-2'}}</p>
-    <small class="note">Collected payments ONLY</small>
+    
   </div>
   <div class="summary-card">
     <h4>Pending ISF</h4>
     <p class="value">{{salesSummary.pendingIsf | currency:'USD':'symbol':'1.2-2'}}</p>
-    <small class="note">Collected payments ONLY</small>
+    
   </div>
 </div>
 
-<table class="orders-table" *ngIf="filteredOrders.length; else empty">
+<table class="orders-table" >
   <thead>
     <tr>
       <th>Date</th>
