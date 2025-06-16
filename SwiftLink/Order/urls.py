@@ -10,6 +10,7 @@ urlpatterns = [
      path('order/confirm-assignment/',views.confirm_order_assignment),
      path('orders/agenda/',views.helper_agenda),
      path('orders/<int:order_id>/update-duration/', views.update_order_duration),
-     path('orders/today/', views.orders_today),
-     path('dashboard/helper/', views.helper_dashboard),
+    path('orders/today/', views.orders_today),
+    path('dashboard/helper/', views.helper_dashboard),
+    path('dashboard/work-orders/', views.work_orders_dashboard),
 ]

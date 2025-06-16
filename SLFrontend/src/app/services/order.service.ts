@@ -71,4 +71,8 @@ export class OrderService {
   getJobsToday() {
     return this.http.get<any[]>(`${this.apiUrl}today/`);
   }
+
+  getWorkOrdersDashboard() {
+    return this.http.get<any>(`${environment.apiUrl}/dashboard/work-orders/`);
+  }
 }
