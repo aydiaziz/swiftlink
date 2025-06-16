@@ -5,7 +5,7 @@
 
   <ul class="nav-links">
     <li><a (click)="redirectByRole()">Home</a></li>
-       <li *ngIf="currentUser?.role !== '3rd Party'">
+       <li *ngIf="currentUser?.role !== '3rd Party' || currentUser?.role === 'Super Admin'">
     <a routerLink="/services">Services</a>
   </li>
 

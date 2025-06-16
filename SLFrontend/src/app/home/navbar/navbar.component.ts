@@ -135,7 +135,7 @@ export class NavbarComponent implements OnInit {
     if (role === '3rd Party') {
       this.router.navigate(['/helper-dashboard/my-work']);
     } else if (role === 'Super Admin') {
-      this.router.navigate(['/admindashboard']);
+      this.router.navigate(['/office-dashboard']);
     } else {
       this.router.navigate(['/']);
     }
