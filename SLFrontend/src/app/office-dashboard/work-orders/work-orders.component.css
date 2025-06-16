@@ -54,6 +54,16 @@
   gap: 1rem;
   margin-bottom: 1.5rem;
 }
+.section-title {
+  grid-column: 1 / -1; /* makes the h2 span full width of the grid */
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #002f5f;
+  margin: 1rem 0 0.5rem;
+  border-bottom: 2px solid #e0e0e0;
+  padding-bottom: 6px;
+}
+
 
 .summary-card {
   background: #ffffff;
