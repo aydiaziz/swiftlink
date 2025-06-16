@@ -48,7 +48,7 @@ export class WorkOrdersComponent implements OnInit {
     this.adminService.getAllHelpers().subscribe({
     next: (helpers) => {
       this.contractors = helpers;
-      console.log(this.contractors)
+      
     },
     error: (err) => {
       console.error('Failed to load helpers:', err);
