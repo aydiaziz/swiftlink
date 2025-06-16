@@ -41,6 +41,7 @@ import { WorkOrdersComponent } from './app/office-dashboard/work-orders/work-ord
 import { WorkSchedulesComponent } from './app/office-dashboard/work-schedules/work-schedules.component';
 import { AccountsComponent } from './app/office-dashboard/accounts/accounts.component';
 import { IntakeComponent } from './app/office-dashboard/intake/intake.component';
+import { WelcomeComponent } from './app/office-dashboard/welcome/welcome.component';
 const routes: Routes = [
   { path: '', component: HomeComponent },  
   { path: 'services', component: ServicesComponent },
@@ -66,6 +67,7 @@ const routes: Routes = [
       component: OfficeDashboardComponent,
       canActivate: [authGuard],
       children: [
+        { path: '', component: WelcomeComponent },
         { path: 'live-work-board', component: LiveWorkBoardComponent },
         { path: 'work-orders', component: WorkOrdersComponent },
         { path: 'work-schedules', component:WorkSchedulesComponent  },

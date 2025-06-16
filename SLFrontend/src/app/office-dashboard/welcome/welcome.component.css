@@ -1,0 +1,22 @@
+.welcome-container {
+  background: linear-gradient(to right, #f3f4f6, #e0f2fe);
+  padding: 40px;
+  margin: 40px auto;
+  max-width: 800px;
+  text-align: left;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 47, 95, 0.1);
+}
+
+.welcome-container h1 {
+  font-size: 2.5rem;
+  color: #002f5f;
+  margin-bottom: 16px;
+}
+
+.welcome-container .welcome-message {
+  font-size: 1.2rem;
+  color: #333;
+  line-height: 1.6;
+  max-width: 600px;
+}
