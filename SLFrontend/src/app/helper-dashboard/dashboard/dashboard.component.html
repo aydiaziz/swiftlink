@@ -44,7 +44,7 @@
     <div><strong>Total Work Orders:</strong> {{ summary.totalWorkOrders }}</div>
     <div><strong>Confirmed Hours:</strong> {{ summary.confirmedHours | number:'1.2-2' }}</div>
     <div><strong>Base Payouts:</strong> {{ summary.basePayouts | currency:'CAD':'symbol':'1.2-2' }}</div>
-    <div><strong>ISF:</strong> {{ summary.isf | currency:'CAD':'symbol':'1.2-2' }}</div>
+    <div><strong>My Client-Funded ISF Savings:</strong> {{ summary.isf | currency:'CAD':'symbol':'1.2-2' }}</div>
     <div><strong>Work Expenses:</strong> {{ summary.workExpenses | currency:'CAD':'symbol':'1.2-2' }}</div>
   </div>
 
@@ -55,7 +55,7 @@
         <th>Address</th>
         <th>Confirmed Hours</th>
         <th>Base Payouts</th>
-        <th>ISF</th>
+        <th>ISF <small>(Applied on base rate only)</small></th>
         <th>Work Expenses</th>
       </tr>
     </thead>
