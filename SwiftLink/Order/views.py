@@ -9,6 +9,9 @@ from Workforce.models import WorkForce
 from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from .Serializers import OrderSerializer
+from invoice.serializers import InvoiceSerializer
+from invoice.models import Invoice
+from Client.models import Client
 from rest_framework import generics
 from django.contrib.auth import get_user_model
 from rest_framework.decorators import api_view, permission_classes
@@ -243,3 +246,35 @@ def helper_dashboard(request):
         },
         'upcoming_jobs': job_list
     })
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def work_orders_dashboard(request):
+    orders = Order.objects.all().select_related('clientID__UserId').prefetch_related('invoice__helper__UserId')
+    data = []
+    for order in orders:
+        client = order.clientID
+        invoice = getattr(order, 'invoice', None)
+        helper = invoice.helper if invoice else None
+
+        order_data = OrderSerializer(order).data
+        invoice_data = InvoiceSerializer(invoice).data if invoice else None
+        workforce_data = {
+            'firstName': helper.UserId.first_name,
+            'lastName': helper.UserId.last_name,
+            'hourlyRatebyService': helper.hourlyRatebyService,
+        } if helper else None
+        client_data = {
+            'firstName': client.UserId.first_name,
+            'lastName': client.UserId.last_name,
+            'address': client.address,
+        }
+        data.append({
+            'order': order_data,
+            'client': client_data,
+            'workforce': workforce_data,
+            'invoice': invoice_data
+        })
+    return Response(data)
+

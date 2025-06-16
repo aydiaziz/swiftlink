@@ -1,0 +1,60 @@
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  align-items: center;
+}
+
+.date-options button {
+  margin-right: 0.5rem;
+}
+
+.badge {
+  background: #002f5f;
+  color: #fff;
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.875rem;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.summary-card {
+  background: #fff;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.summary-card .value {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+.summary-card .note {
+  color: #c00;
+}
+
+.orders-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.orders-table th,
+.orders-table td {
+  border: 1px solid #ddd;
+  padding: 0.5rem;
+}
+.orders-table th {
+  background: #f3f3f3;
+  text-align: left;
+}
+@media (max-width: 768px) {
+  .orders-table th,
+  .orders-table td {
+    font-size: 0.75rem;
+  }
+}
