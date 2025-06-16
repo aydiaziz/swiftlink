@@ -60,6 +60,7 @@ export const routes: Routes = [
   canActivate: [helperAuthGuard],
 
   children: [
+      { path: '', component: WelcomeComponent },
       { path: 'profile', component: ProfileComponent },
       { path: 'agenda', component: AgendaComponent },
       { path: 'my-work', component: DashboardComponent },
