@@ -28,14 +28,14 @@ interface WorkOrderRecord {
 export class WorkOrdersComponent implements OnInit {
   workOrders: WorkOrderRecord[] = [];
 
-  contractors: string[] = [];
+  contractors: Workforce[] = [];
 
   filteredOrders: WorkOrderRecord[] = [];
 
   dateFilter: 'today' | 'all' | 'range' = 'today';
   fromDate = '';
   toDate = '';
-  selectedContractor = '';
+  selectedContractor: Workforce | null = null;
 
   rateSummary = { median: 0, average: 0, max: 0, min: 0 };
   activitySummary = { total: 0, scheduled: 0, canceled: 0, confirmedHours: 0 };
@@ -69,7 +69,7 @@ export class WorkOrdersComponent implements OnInit {
     this.filteredOrders = this.workOrders.filter(o => {
       const contractorName = o.workforce.lastName;
       const orderDate = new Date(o.order.executionDate || o.order.creationDate);
-      const matchContractor = this.selectedContractor ? contractorName === this.selectedContractor : true;
+      const matchContractor = this.selectedContractor ? contractorName === this.selectedContractor.lastName : true;
       const matchDate = this.dateFilter === 'all'
         ? true
         : this.dateFilter === 'today'
