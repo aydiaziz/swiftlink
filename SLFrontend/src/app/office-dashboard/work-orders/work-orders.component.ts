@@ -53,6 +53,7 @@ export class WorkOrdersComponent implements OnInit {
       console.error('Failed to load helpers:', err);
     }
   });
+  console.log(this.contractors)
   }
 
   private loadData(): void {
