@@ -133,7 +133,7 @@ export class NavbarComponent implements OnInit {
   redirectByRole() {
     const role = this.currentUser?.role || this.authService.getUserRole();
     if (role === '3rd Party') {
-      this.router.navigate(['/helper-dashboard/my-work']);
+      this.router.navigate(['/helper-dashboard']);
     } else if (role === 'Super Admin') {
       this.router.navigate(['/office-dashboard']);
     } else {
