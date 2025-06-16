@@ -1,3 +1,39 @@
+.summary-cards {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 20px;
+}
+
+.summary-box {
+  flex: 1;
+  background: #f1f5f9;
+  border-left: 6px solid #0078d4;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.summary-box.apps {
+  border-color: #ffc107;
+}
+
+.summary-box.active {
+  border-color: #28a745;
+}
+
+.summary-box h4 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.summary-box p {
+  margin: 4px 0 0;
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #002f5f;
+}
+
 .helper-table {
   width: 100%;
   border-collapse: collapse;

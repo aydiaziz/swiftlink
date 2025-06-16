@@ -1,4 +1,15 @@
-<h2>Admin - Helpers' management</h2>
+<div class="summary-cards">
+  <div class="summary-box apps">
+    <h4>Applications</h4>
+    <p>{{ applicationCount }}</p>
+  </div>
+  <div class="summary-box active">
+    <h4>Active Contractors</h4>
+    <p>{{ activeCount }}</p>
+  </div>
+</div>
+
+<h2>Helpers intake management</h2>
 
 <div *ngIf="loading">loading...</div>
 <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>

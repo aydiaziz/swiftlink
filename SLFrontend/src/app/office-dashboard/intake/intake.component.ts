@@ -15,7 +15,8 @@ export class IntakeComponent implements OnInit{
   helpers: any[] = [];
   loading = false;
   errorMessage = '';
-
+  applicationCount = 0;
+  activeCount = 0;
   constructor(private adminService: AdminService) {}
 
   ngOnInit() {
@@ -23,18 +24,20 @@ export class IntakeComponent implements OnInit{
   }
 
   loadHelpers() {
-    this.loading = true;
-    this.adminService.getAllHelpers().subscribe({
-      next: (data) => {
-        this.helpers = data;
-        this.loading = false;
-      },
-      error: (err) => {
-        this.errorMessage = 'Erreur lors du chargement des helpers.';
-        this.loading = false;
-      }
-    });
-  }
+  this.loading = true;
+  this.adminService.getAllHelpers().subscribe({
+    next: (data) => {
+      this.helpers = data;
+      this.applicationCount = this.helpers.filter(h => h.acces === 0).length;
+      this.activeCount = this.helpers.filter(h => h.acces === 1).length;
+      this.loading = false;
+    },
+    error: (err) => {
+      this.errorMessage = 'Erreur lors du chargement des helpers.';
+      this.loading = false;
+    }
+  });
+}
 
   acceptHelper(helperId: number) {
     if (!confirm('Are you sure you want to accept this helper?')) return;
