@@ -25,6 +25,12 @@ import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 import { NotificationOnboardingComponent } from './notification-onboarding/notification-onboarding.component';
 import { NoticeComponent } from './notice/notice.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { OfficeDashboardComponent } from './office-dashboard/office-dashboard.component';
+import { LiveWorkBoardComponent } from './office-dashboard/live-work-board/live-work-board.component';
+import { WorkOrdersComponent } from './office-dashboard/work-orders/work-orders.component';
+import { WorkSchedulesComponent } from './office-dashboard/work-schedules/work-schedules.component';
+import { AccountsComponent } from './office-dashboard/accounts/accounts.component';
+import { IntakeComponent } from './office-dashboard/intake/intake.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent },
@@ -61,6 +67,18 @@ export const routes: Routes = [
       
     ]
   },
+  { path: 'office-dashboard',
+        component: OfficeDashboardComponent,
+        canActivate: [authGuard],
+        children: [
+          { path: 'live-work-baord', component: LiveWorkBoardComponent },
+          { path: 'work-orders', component: WorkOrdersComponent },
+          { path: 'work-schedules', component:WorkSchedulesComponent  },
+          { path: 'accounts', component: AccountsComponent },
+          { path: 'intake', component: IntakeComponent },
+          
+        ]
+      },
   
   
 

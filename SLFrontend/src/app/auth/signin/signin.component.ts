@@ -40,7 +40,7 @@ export class SigninComponent {
       if (role === 'Client') {
         this.router.navigate(['/']);
       } else if (role === 'Super Admin') {
-        this.router.navigate(['/admindashboard']);
+        this.router.navigate(['/office-dashboard']);
       }
     },
     error: (err) => {

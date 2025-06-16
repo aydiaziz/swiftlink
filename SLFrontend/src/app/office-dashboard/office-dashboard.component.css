@@ -1,0 +1,143 @@
+/* dashboard.component.scss */
+.dashboard-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f5f7fa;
+}
+
+.sidebar {
+  width: 250px;
+  flex-shrink: 0;
+}
+
+.main-content {
+  flex-grow: 1;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: white;
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  
+  h3 {
+    color: #6b7280;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .stat-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #002f5f;
+  }
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  
+  @media (max-width: 1200px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  background: white;
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  
+  h3 {
+    color: #002f5f;
+    margin-bottom: 1.5rem;
+    font-size: 1.2rem;
+  }
+}
+
+.job-item {
+  padding: 1rem 0;
+  border-bottom: 1px solid #eee;
+  
+  &:last-child {
+    border-bottom: none;
+  }
+  
+  .job-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+  }
+  
+  .job-date {
+    color: #e65c50;
+    font-weight: 500;
+  }
+  
+  .job-priority {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    
+    &.priority-High {
+      background: #fee2e2;
+      color: #dc2626;
+    }
+    &.priority-Medium {
+      background: #fef3c7;
+      color: #d97706;
+    }
+    &.priority-Low {
+      background: #ecfdf5;
+      color: #059669;
+    }
+  }
+  
+  .job-title {
+    font-weight: 600;
+    margin: 0.5rem 0;
+  }
+  
+  .job-address {
+    color: #6b7280;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+  }
+}
+
+.no-jobs {
+  color: #9ca3af;
+  text-align: center;
+  padding: 2rem;
+}
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.8);
+  z-index: 1000;
+  
+  p {
+    margin-top: 1rem;
+    color: #002f5f;
+  }
+}

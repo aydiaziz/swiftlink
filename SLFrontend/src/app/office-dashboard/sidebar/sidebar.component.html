@@ -1,0 +1,55 @@
+<nav class="cyber-sidebar">
+  <div class="brand-glow">
+    
+  </div>
+  
+  <ul class="nav-grid">
+    <li class="nav-item" 
+        [class.active]="isActive('/office-dashboard/live-work-board')"
+        (click)="router.navigate(['/office-dashboard/live-work-board'])">
+      <div class="nav-glitch"></div>
+      <i class="nav-icon material-icons"></i>
+      <span class="nav-label">Live Work Board</span>
+    </li>
+    <li class="nav-item" 
+        [class.active]="isActive('/office-dashboard/work-orders')"
+        (click)="router.navigate(['/office-dashboard/work-orders'])">
+      <div class="nav-glitch"></div>
+      <i class="nav-icon material-icons"></i>
+      <span class="nav-label">Work Orders</span>
+    </li>
+
+
+    <li class="nav-item" 
+        [class.active]="isActive('/office-dashboard/work-schedules')"
+        (click)="router.navigate(['/office-dashboard/work-schedules'])">
+      <div class="nav-glitch"></div>
+      <i class="nav-icon material-icons"></i>
+      <span class="nav-label">Work Schedules</span>
+    </li>
+
+     <li class="nav-item" 
+        [class.active]="isActive('/office-dashboard/accounts')"
+        (click)="router.navigate(['/office-dashboard/accounts'])">
+      <div class="nav-glitch"></div>
+      <i class="nav-icon material-icons"></i>
+      <span class="nav-label">Accounts</span>
+    </li>
+
+     <li class="nav-item" 
+        [class.active]="isActive('/office-dashboard/intake')"
+        (click)="router.navigate(['/office-dashboard/intake'])">
+      <div class="nav-glitch"></div>
+      <i class="nav-icon material-icons"></i>
+      <span class="nav-label">Intake</span>
+    </li>
+  </ul>
+  
+
+  <div class="status-box">
+    <div class="user-holo">
+      <div class="avatar-pulse"></div>
+      <span class="user-role">{{ userRole }}</span>
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,49 @@
+<h2>Admin - Helpers' management</h2>
+
+<div *ngIf="loading">loading...</div>
+<div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+
+<table *ngIf="!loading" class="helper-table">
+  <thead>
+    <tr>
+      <th>Application Date</th>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Actions</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let h of helpers">
+      <td data-label="Application Date">{{ h.createdAt | date: 'yyyy-MM-dd' }}</td>
+      <td data-label="Name">{{ h.first_name }} {{ h.last_name }}</td>
+      <td data-label="Email">{{ h.email }}</td>
+      <td data-label="Actions">
+        <button [routerLink]="['/admin/helper', h.UserId]">View</button>
+
+        <button (click)="requestInterview(h.UserId)" *ngIf="h.acces === 0">Interview</button>
+
+        <button (click)="acceptHelper(h.UserId)" *ngIf="h.acces === 0 || h.acces === 2">Onboard</button>
+
+        <button (click)="activateHelper(h.UserId)" *ngIf="h.acces === 3">Activate</button>
+      </td>
+      <td data-label="Status">
+        <span 
+          [ngClass]="{
+            'pending': h.acces === 0,
+            'interviewing': h.acces === 2,
+            'onboarded': h.acces === 3,
+            'confirmed': h.acces === 1
+          }"
+        >
+          {{
+            h.acces === 0 ? 'Application' :
+            h.acces === 2 ? 'Interview' :
+            h.acces === 3 ? 'Onboarded' :
+            'Active'
+          }}
+        </span>
+      </td>
+    </tr>
+  </tbody>
+</table>

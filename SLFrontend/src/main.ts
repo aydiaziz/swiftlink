@@ -34,6 +34,13 @@ import { CsrfInterceptor } from './app/interceptors/csrf.service';
 import { NotificationOnboardingComponent } from './app/notification-onboarding/notification-onboarding.component';
 import { NoticeComponent } from './app/notice/notice.component';
 import { ForgotPasswordComponent } from './app/forgot-password/forgot-password.component';
+import { OfficeDashboardComponent } from './app/office-dashboard/office-dashboard.component';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { LiveWorkBoardComponent } from './app/office-dashboard/live-work-board/live-work-board.component';
+import { WorkOrdersComponent } from './app/office-dashboard/work-orders/work-orders.component';
+import { WorkSchedulesComponent } from './app/office-dashboard/work-schedules/work-schedules.component';
+import { AccountsComponent } from './app/office-dashboard/accounts/accounts.component';
+import { IntakeComponent } from './app/office-dashboard/intake/intake.component';
 const routes: Routes = [
   { path: '', component: HomeComponent },  
   { path: 'services', component: ServicesComponent },
@@ -52,6 +59,18 @@ const routes: Routes = [
         { path: 'my-work', component: DashboardComponent },
         { path: 'work-board', component: OrdersComponent },
         { path: 'invoice/:orderId', component: InvoiceComponent },
+        
+      ]
+    },
+    { path: 'office-dashboard',
+      component: OfficeDashboardComponent,
+      canActivate: [authGuard],
+      children: [
+        { path: 'live-work-baord', component: LiveWorkBoardComponent },
+        { path: 'work-orders', component: WorkOrdersComponent },
+        { path: 'work-schedules', component:WorkSchedulesComponent  },
+        { path: 'accounts', component: AccountsComponent },
+        { path: 'intake', component: IntakeComponent },
         
       ]
     },
