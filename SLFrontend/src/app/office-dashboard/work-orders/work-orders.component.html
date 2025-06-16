@@ -11,8 +11,8 @@
   </div>
   <div class="contractor-select">
     <select [(ngModel)]="selectedContractor" (change)="applyFilters()">
-      <option value="">All workforce</option>
-      <option *ngFor="let c of contractors" [value]="c">{{c.first_name}}</option>
+      <option [ngValue]="null">All workforce</option>
+      <option *ngFor="let c of contractors" [ngValue]="c">{{c.first_name}}</option>
     </select>
   </div>
   <div class="badge">Work orders: {{filteredOrders.length}}</div>
