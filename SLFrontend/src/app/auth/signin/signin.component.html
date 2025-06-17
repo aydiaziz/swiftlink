@@ -1,23 +1,41 @@
 <div class="signin-container">
   <div class="info-section">
-    <h1>Welcome to Swift Helpers</h1>
-    <div class="auth-links">
-      <span>Sign In</span> |
-      <a (click)="redirectSignup()" class="signup-link">Sign Up</a>
+    <h1>Welcome To Swift Helpers</h1>
+
+    <div class="auth-buttons">
+      <button class="btn-secondary">Sign In</button>
+      <button class="btn-primary" (click)="redirectSignup()">Sign Up</button>
     </div>
+
     <p class="welcome-text">
-      with our subscription and pay-per-use model, your service payment goes directly to the contractor,
+      With our subscription and pay-per-use model, your service payment goes directly to the contractor,
       including contributions that support their income security. Swift Helpers is a commission-free,
       reliable, and affordable solution for clients.
     </p>
-    <input type="text" [(ngModel)]="promotionCode" placeholder="Enter Promotion CODE here" />
+
+    <input class="promo-input" type="text" [(ngModel)]="promotionCode" placeholder="Enter Promotion CODE here" />
+
     <h3>Choose a Pricing Plan</h3>
-    <div class="membership-options">
-      <label *ngFor="let m of memberships">
+
+    <div class="pricing-options">
+      <label class="pricing-card" *ngFor="let m of memberships">
         <input type="radio" name="membership" [value]="m.membershipType" [(ngModel)]="selectedMembership" />
-        {{ m.membershipType }} - ${{ m.cost }}
+        <div class="plan-title">
+          <span class="plan-name">{{ m.membershipType }}</span>
+          <span class="plan-price">${{ m.cost }}</span>
+        </div>
+        <div class="plan-desc">
+          <ng-container [ngSwitch]="m.membershipType">
+            <span *ngSwitchCase="'Pay-per-use'">No monthly commitment — pay only when you book.</span>
+            <span *ngSwitchCase="'Preferred'">Unlimited bookings. No per-job fee.</span>
+            <span *ngSwitchCase="'Ultimate'">Professional account. Unlimited bookings, no per job fee, multiple properties.</span>
+          </ng-container>
+        </div>
       </label>
     </div>
+  </div>
+</div>
+
   <!--
     <div class="info-details">
       <h2>Don’t have an account?</h2>
@@ -33,7 +51,7 @@
       </p>
     </div>
   </div>
--->
+--><!--
   <form (ngSubmit)="login()" [formGroup]="form">
     <input type="email" formControlName="email" placeholder="Email" />
     <input type="password" formControlName="password" placeholder="Password" />
@@ -49,4 +67,5 @@
       Don't have an account? <a (click)="redirectSignup()">Create an account</a>
     </div>
   </form>
-</div>
+  -->
+
