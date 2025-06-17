@@ -12,6 +12,7 @@ urlpatterns = [
     path('api/', include('Order.urls',)),
     path('api/', include('notification.urls',)),
     path('api/', include('Workforce.urls',)),
+    path('api/', include('Client.urls',)),
     path('api/chat/', include('chat.urls')),
     path('api/', include('invoice.urls')),
 ]
