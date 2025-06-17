@@ -1,3 +1,6 @@
+<div *ngIf="membershipType" class="membership-banner">
+  <h2>Sign-up with {{ membershipType }} membership</h2>
+</div>
 <form *ngIf="userType === 'client'" (ngSubmit)="onSignup()" class="form">
   <div class="form-grid">
     <input type="text" name="firstName" [(ngModel)]="clientForm.firstName" placeholder="First Name *" required>

@@ -1,8 +1,9 @@
 from rest_framework import serializers
 from django.contrib.auth.hashers import make_password
 from .models import Ref_User
-from Client.models import Client
+from Client.models import Client, Membership, ClientMembership
 from Workforce.models import WorkForce
+import datetime
 from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.settings import api_settings
@@ -56,10 +57,11 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class ClientSerializer(serializers.ModelSerializer):
-    UserId = UserSerializer()  
+    UserId = UserSerializer()
+    membershipType = serializers.CharField(write_only=True, required=False)
     class Meta:
         model = Client
-        fields = ['UserId', 'clientType', 'phone', 'address', 'city', 'province', 'postalCode', 'preferredService', 'preferredPaymentMethod']
+        fields = ['UserId', 'clientType', 'phone', 'address', 'city', 'province', 'postalCode', 'preferredService', 'preferredPaymentMethod', 'membershipType']
 
     def create(self, validated_data):
         """Créer d'abord l'utilisateur, puis le client"""
@@ -80,6 +82,19 @@ class ClientSerializer(serializers.ModelSerializer):
 
         # 🔹 Créer le client en associant l'utilisateur
         client = Client.objects.create(UserId=user, **validated_data)
+
+        membership_type = validated_data.pop('membershipType', None)
+        if membership_type:
+            try:
+                membership = Membership.objects.get(membershipType=membership_type)
+                ClientMembership.objects.create(
+                    client=client,
+                    membership=membership,
+                    status=ClientMembership.Status.PENDING,
+                    startDate=datetime.date.today()
+                )
+            except Membership.DoesNotExist:
+                raise serializers.ValidationError({'membershipType': 'Invalid membership type'})
         return client
 
 

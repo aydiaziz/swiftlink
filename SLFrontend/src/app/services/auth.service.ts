@@ -36,7 +36,8 @@ export class AuthService {
       city: clientData.city || '',
       province: clientData.province || '',
       postalCode: clientData.postalCode || '',
-      phone: clientData.phone || ''
+      phone: clientData.phone || '',
+      membershipType: clientData.membershipType
     };
   
     return this.http.post(`${this.apiUrl}/signup/client/`, formattedData).pipe(

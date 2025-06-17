@@ -33,6 +33,22 @@
   margin-bottom: 18px;
 }
 
+.auth-links {
+  margin-bottom: 10px;
+}
+
+.signup-link {
+  cursor: pointer;
+  color: #f56a1d;
+}
+
+.membership-options {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 20px;
+}
+
 .info-details h2 {
   font-size: 1.25rem;
   color: #062a44;
