@@ -16,6 +16,14 @@ class Invoice(models.Model):
     extras = models.JSONField(default=list, blank=True)  # [{'label': 'Extra cleaning', 'price': 50.00}, ...]
 
     totalAmount = models.DecimalField(max_digits=10, decimal_places=2)
+    class InvoiceStatus(models.TextChoices):
+        PAID_E_TRANSFER = 'paid by E-transfer', 'Paid by E-transfer'
+        PAID_CASH = 'paid by cash', 'Paid by cash'
+        FUTURE_PAYMENT = 'Future Payment', 'Future Payment'
+        IN_DISPUTE = 'In Dispute', 'In Dispute'
+
+    status = models.CharField(max_length=50, choices=InvoiceStatus.choices, default=InvoiceStatus.FUTURE_PAYMENT)
+    description = models.TextField(blank=True, null=True)
     createdAt = models.DateTimeField(auto_now_add=True)
     sentToClient = models.BooleanField(default=False)
 

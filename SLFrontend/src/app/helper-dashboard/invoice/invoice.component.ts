@@ -16,6 +16,12 @@ export class InvoiceComponent implements OnInit {
   newExtra = { label: '', price: 0 };
   totalAmount: number = 0;
   isSending: boolean = false;
+  statuses = [
+    'paid by E-transfer',
+    'paid by cash',
+    'Future Payment',
+    'In Dispute'
+  ];
 
   constructor(
     private route: ActivatedRoute,
