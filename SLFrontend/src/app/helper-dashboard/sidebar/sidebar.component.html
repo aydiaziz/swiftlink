@@ -33,6 +33,13 @@
       <i class="nav-icon material-icons"></i>
       <span class="nav-label">Work Schedule</span>
     </li>
+        <li class="nav-item" 
+        [class.active]="isActive('/helper-dashboard/invoices')"
+        (click)="router.navigate(['/helper-dashboard/invoices'])">
+      <div class="nav-glitch"></div>
+      <i class="nav-icon material-icons"></i>
+      <span class="nav-label">Invoices</span>
+    </li>
   </ul>
 
   <div class="status-box">
