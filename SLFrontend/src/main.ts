@@ -43,6 +43,8 @@ import { AccountsComponent } from './app/office-dashboard/accounts/accounts.comp
 import { IntakeComponent } from './app/office-dashboard/intake/intake.component';
 import { WelcomeComponent } from './app/office-dashboard/welcome/welcome.component';
 import { SigninclientComponent } from './app/auth/signinclient/signinclient.component';
+import { ClientInvoicesComponent } from './app/client-invoices/client-invoices.component';
+import { InvoiceDetailComponent } from './app/invoice-detail/invoice-detail.component';
 const routes: Routes = [
   { path: '', component: HomeComponent },  
   { path: 'services', component: ServicesComponent },
@@ -79,6 +81,8 @@ const routes: Routes = [
         
       ]
     },
+  { path: 'invoices', component: ClientInvoicesComponent },
+  { path: 'invoices/:id', component: InvoiceDetailComponent },
   { path: 'helper-signin', component: SigninhelperComponent },
   { path: 'application', component: SignuphelperComponent },
   { path: 'chat/:id', component: ChatComponent },
