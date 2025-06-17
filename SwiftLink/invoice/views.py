@@ -12,7 +12,7 @@ from django.template.loader import render_to_string
 from xhtml2pdf import pisa
 from io import BytesIO
 from django.core.mail import EmailMessage
-from Client.models import ClientMembership
+from Client.models import ClientMembership, Client
 from django.utils import timezone
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -72,6 +72,34 @@ def init_invoice(request, order_id):
         return Response(data)
     except (Order.DoesNotExist, WorkForce.DoesNotExist):
         return Response({'error': 'Order or helper not found'}, status=404)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def client_invoices(request):
+    try:
+        client = Client.objects.get(UserId=request.user)
+    except Client.DoesNotExist:
+        return Response({'error': 'Client not found'}, status=404)
+
+    invoices = Invoice.objects.filter(order__clientID=client)
+    serializer = InvoiceSerializer(invoices, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def invoice_detail(request, invoice_id):
+    try:
+        invoice = Invoice.objects.get(pk=invoice_id)
+    except Invoice.DoesNotExist:
+        return Response({'error': 'Invoice not found'}, status=404)
+
+    if invoice.order.clientID.UserId != request.user:
+        return Response({'error': 'Unauthorized'}, status=403)
+
+    serializer = InvoiceSerializer(invoice)
+    return Response(serializer.data)
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def submit_invoice(request, order_id):

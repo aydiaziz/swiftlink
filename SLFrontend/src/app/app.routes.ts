@@ -33,6 +33,8 @@ import { AccountsComponent } from './office-dashboard/accounts/accounts.componen
 import { IntakeComponent } from './office-dashboard/intake/intake.component';
 import { WelcomeComponent } from './office-dashboard/welcome/welcome.component';
 import { SigninclientComponent } from './auth/signinclient/signinclient.component';
+import { ClientInvoicesComponent } from './client-invoices/client-invoices.component';
+import { InvoiceDetailComponent } from './invoice-detail/invoice-detail.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent },
@@ -68,9 +70,11 @@ export const routes: Routes = [
       { path: 'my-work', component: DashboardComponent },
       { path: 'work-board', component: OrdersComponent },
       { path: 'invoice/:orderId', component: InvoiceComponent },
-      
+
     ]
   },
+  { path: 'invoices', component: ClientInvoicesComponent },
+  { path: 'invoices/:id', component: InvoiceDetailComponent },
   { path: 'office-dashboard',
         component: OfficeDashboardComponent,
         canActivate: [authGuard],

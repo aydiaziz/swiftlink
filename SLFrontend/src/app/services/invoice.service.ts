@@ -20,4 +20,12 @@ export class InvoiceService {
   submitInvoice(orderId: string, data: any) {
     return this.http.post(`${this.apiUrl}${orderId}/submit/`, data, { responseType: 'blob' });
   }
+
+  getClientInvoices(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}client/`);
+  }
+
+  getInvoice(id: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}${id}/`);
+  }
 }
