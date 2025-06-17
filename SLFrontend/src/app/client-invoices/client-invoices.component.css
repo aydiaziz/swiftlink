@@ -1,0 +1,16 @@
+.invoice-list {
+  max-width: 600px;
+  margin: 20px auto;
+}
+.invoice-list ul {
+  list-style: none;
+  padding: 0;
+}
+.invoice-list li {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  cursor: pointer;
+}
+.invoice-list li:hover {
+  background-color: #f0f0f0;
+}

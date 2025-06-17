@@ -1,0 +1,22 @@
+<div *ngIf="invoice" class="invoice-detail">
+  <h2>Invoice #{{ invoice.invoiceID }}</h2>
+  <p>Status: {{ invoice.status }}</p>
+  <p>Service: {{ invoice.serviceType }}</p>
+  <p>Duration: {{ invoice.duration }}</p>
+  <p>Unit Price: {{ invoice.unitPrice }} $ CAD</p>
+  <p>Base Amount: {{ invoice.baseAmount }} $ CAD</p>
+
+  <div *ngIf="invoice.extras && invoice.extras.length">
+    <h3>Extras</h3>
+    <ul>
+      <li *ngFor="let extra of invoice.extras">{{ extra.label }} - {{ extra.price }} $ CAD</li>
+    </ul>
+  </div>
+
+  <p>Total: {{ invoice.totalAmount }} $ CAD</p>
+
+  <div class="payment-box">
+    please send an Interac e-Transfer to {{ invoice.helper_professional_email }}.<br />
+    Include the invoice number in the e-Transfer message.
+  </div>
+</div>

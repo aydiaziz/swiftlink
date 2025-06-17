@@ -1,0 +1,8 @@
+<div class="invoice-list">
+  <h2>Your Invoices</h2>
+  <ul>
+    <li *ngFor="let inv of invoices" (click)="viewInvoice(inv.invoiceID)">
+      Invoice #{{ inv.invoiceID }} - {{ inv.serviceType }}
+    </li>
+  </ul>
+</div>

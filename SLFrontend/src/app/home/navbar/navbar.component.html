@@ -15,6 +15,7 @@
     </ng-container>
 
     <ng-container *ngIf="isClientLoggedIn">
+      <li *ngIf="currentUser?.role === 'Client'"><a routerLink="/invoices">Invoices</a></li>
       <li>
         <button (click)="onLogout()" class="logout-button">Logout</button>
       </li>
