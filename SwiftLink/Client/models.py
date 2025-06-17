@@ -26,3 +26,23 @@ class Client(models.Model):
 
     def __str__(self):
         return f"{self.firstname} {self.lastname}"
+class Membership(models.Model):
+    class MembershipType(models.TextChoices):
+        PAY_PER_USE = 'pay-per-use', 'Pay-Per-Use'
+        PREFERRED = 'preferred', 'Preferred'
+        ULTIMATE = 'ultimate', 'Ultimate'
+
+    class Status(models.TextChoices):
+        ACTIVE = 'active', 'Active'
+        NON_ACTIVE = 'non active', 'Non Active'
+
+    membershipID = models.AutoField(primary_key=True)
+    client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='memberships')
+    membershipType = models.CharField(max_length=20, choices=MembershipType.choices)
+    cost = models.DecimalField(max_digits=10, decimal_places=2)
+    status = models.CharField(max_length=20, choices=Status.choices)
+    startDate = models.DateField()
+    promotionCode = models.CharField(max_length=100, blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.client_id} - {self.membershipType}"
