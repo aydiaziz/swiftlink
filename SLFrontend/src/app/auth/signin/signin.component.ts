@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgIf } from '@angular/common';
+import { MembershipService, Membership } from '../../services/membership.service';
 
 @Component({
   selector: 'app-signin',
@@ -11,19 +12,32 @@ import { NgIf } from '@angular/common';
   templateUrl: './signin.component.html',
   styleUrls: ['./signin.component.css']
 })
-export class SigninComponent {
+export class SigninComponent implements OnInit {
   form: FormGroup;
   errorMessage = '';
+  memberships: Membership[] = [];
+  selectedMembership = '';
+  promotionCode = '';
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private membershipService: MembershipService
   ) {
     // Création du formulaire avec validation
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
+    });
+  }
+
+  ngOnInit(): void {
+    this.membershipService.getMemberships().subscribe(data => {
+      this.memberships = data;
+      if (data.length) {
+        this.selectedMembership = data[0].membershipType;
+      }
     });
   }
 
@@ -48,5 +62,11 @@ export class SigninComponent {
     }
   });
 }
+
+  redirectSignup() {
+    this.router.navigate(['/signup'], {
+      queryParams: { membership: this.selectedMembership }
+    });
+  }
 
 }

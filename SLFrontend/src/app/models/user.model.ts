@@ -17,6 +17,12 @@ export enum Gender {
   OTHER = 'Other'
 }
 
+export enum MembershipType {
+  PAY_PER_USE = 'pay-per-use',
+  PREFERRED = 'preferred',
+  ULTIMATE = 'ultimate'
+}
+
 export interface User {
   email: string;
   firstName: string;
@@ -32,6 +38,7 @@ export interface Client extends User {
   province: string;
   postalCode: string;
   phone: string;
+  membershipType?: MembershipType;
 }
 
 export interface Workforce extends User {
