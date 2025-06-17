@@ -32,17 +32,27 @@ class Membership(models.Model):
         PREFERRED = 'preferred', 'Preferred'
         ULTIMATE = 'ultimate', 'Ultimate'
 
-    class Status(models.TextChoices):
-        ACTIVE = 'active', 'Active'
-        NON_ACTIVE = 'non active', 'Non Active'
-
     membershipID = models.AutoField(primary_key=True)
-    client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='memberships')
-    membershipType = models.CharField(max_length=20, choices=MembershipType.choices)
+    membershipType = models.CharField(max_length=20, choices=MembershipType.choices, unique=True)
     cost = models.DecimalField(max_digits=10, decimal_places=2)
-    status = models.CharField(max_length=20, choices=Status.choices)
-    startDate = models.DateField()
     promotionCode = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
-        return f"{self.client_id} - {self.membershipType}"
+        return f"{self.membershipType}"
+
+
+class ClientMembership(models.Model):
+    class Status(models.TextChoices):
+        ACTIVE = 'active', 'Active'
+        NON_ACTIVE = 'non active', 'Non Active'
+        PENDING = 'pending', 'Pending'
+
+    clientMembershipID = models.AutoField(primary_key=True)
+    client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='client_memberships')
+    membership = models.ForeignKey(Membership, on_delete=models.CASCADE, related_name='client_memberships')
+    status = models.CharField(max_length=20, choices=Status.choices)
+    startDate = models.DateField()
+    
+
+    def __str__(self):
+        return f"{self.client_id} - {self.membership.membershipType}"
