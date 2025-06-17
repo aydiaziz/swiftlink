@@ -32,6 +32,7 @@ import { WorkSchedulesComponent } from './office-dashboard/work-schedules/work-s
 import { AccountsComponent } from './office-dashboard/accounts/accounts.component';
 import { IntakeComponent } from './office-dashboard/intake/intake.component';
 import { WelcomeComponent } from './office-dashboard/welcome/welcome.component';
+import { SigninclientComponent } from './auth/signinclient/signinclient.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent },
@@ -55,6 +56,7 @@ export const routes: Routes = [
     { path: 'unauthorized', component: UnauthorizedComponent },
     {path:'confirmationOnboarding',component:NotificationOnboardingComponent},
     {path:'onboardingcompleted',component:NoticeComponent},
+    {path:'signin-client',component:SigninclientComponent},
  { path: 'helper-dashboard',
   component: HelperDashboardComponent,
   canActivate: [helperAuthGuard],

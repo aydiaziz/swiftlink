@@ -1,0 +1,15 @@
+ <form (ngSubmit)="login()" [formGroup]="form">
+    <input type="email" formControlName="email" placeholder="Email" />
+    <input type="password" formControlName="password" placeholder="Password" />
+    <button type="submit" class="signin-button">Sign In</button>
+
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+<div class="forgot-link">
+  <a routerLink="/forgot-password">Forgot your password?</a>
+</div>
+    <div class="switch-auth">
+      Don't have an account? <a (click)="redirectSignup()">Create an account</a>
+    </div>
+  </form>

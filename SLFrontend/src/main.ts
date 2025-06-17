@@ -42,6 +42,7 @@ import { WorkSchedulesComponent } from './app/office-dashboard/work-schedules/wo
 import { AccountsComponent } from './app/office-dashboard/accounts/accounts.component';
 import { IntakeComponent } from './app/office-dashboard/intake/intake.component';
 import { WelcomeComponent } from './app/office-dashboard/welcome/welcome.component';
+import { SigninclientComponent } from './app/auth/signinclient/signinclient.component';
 const routes: Routes = [
   { path: '', component: HomeComponent },  
   { path: 'services', component: ServicesComponent },
@@ -51,6 +52,7 @@ const routes: Routes = [
   { path: 'signuphelper', component: SignuphelperComponent },
   { path: 'notifications', component: NotificationsComponent },
   { path: 'signin', component: SigninComponent },
+  {path:'signin-client',component:SigninclientComponent},
    { path: 'helper-dashboard',
       component: HelperDashboardComponent,
       canActivate: [helperAuthGuard],
