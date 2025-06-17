@@ -1,0 +1,14 @@
+<div *ngIf="invoice && (invoice.status === 'paid by E-transfer' || invoice.status === 'paid by cash')" class="invoice-detail">
+  <h2>Invoice #{{ invoice.invoiceID }}</h2>
+  <p>ISF contribution (10%): {{ isf | number:'1.2-2' }} $ CAD</p>
+  <p>Platform fee (10%): {{ platformFee | number:'1.2-2' }} $ CAD</p>
+  <p *ngIf="payPerUse">Pay-per-use fee: {{ payPerUse }} $ CAD</p>
+  <p>Total due: {{ totalDue | number:'1.2-2' }} $ CAD</p>
+  <div class="payment-box">
+    send e-Transfer to : platform.fee@swift-link.ca<br />
+    include invoice # in the message
+  </div>
+  <div class="note-box">
+    the 10% ISF and 10% Platform fee are not deducted from your rate. They are paid on top by the client .
+  </div>
+</div>

@@ -25,6 +25,14 @@ export class InvoiceService {
     return this.http.get<any[]>(`${this.apiUrl}client/`);
   }
 
+  getHelperInvoices(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}helper/`);
+  }
+
+  updateInvoiceStatus(id: number, status: string) {
+    return this.http.patch(`${this.apiUrl}${id}/status/`, { status });
+  }
+
   getInvoice(id: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}${id}/`);
   }
