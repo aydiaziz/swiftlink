@@ -80,10 +80,12 @@ class ClientSerializer(serializers.ModelSerializer):
         # 🔥 Assigner l'entityID du user au client
         validated_data['entityID'] = user.entityId  
 
+        # Retirer la membership avant de créer le client afin d'éviter de
+        # passer ce champ non défini au modèle Client
+        membership_type = validated_data.pop('membershipType', None)
+
         # 🔹 Créer le client en associant l'utilisateur
         client = Client.objects.create(UserId=user, **validated_data)
-
-        membership_type = validated_data.pop('membershipType', None)
         if membership_type:
             try:
                 membership = Membership.objects.get(membershipType=membership_type)
