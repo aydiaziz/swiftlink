@@ -1,16 +1,19 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from rest_framework.decorators import api_view, permission_classes
-from .models import Order
+from Order.models import Order
 from rest_framework.permissions import IsAuthenticated
 from Workforce.models import WorkForce
 from rest_framework.response import Response
 from .models import Invoice
+from .serializers import InvoiceSerializer
 from decimal import Decimal
 from django.template.loader import render_to_string
 from xhtml2pdf import pisa
 from io import BytesIO
 from django.core.mail import EmailMessage
+from Client.models import ClientMembership
+from django.utils import timezone
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def init_invoice(request, order_id):
@@ -18,21 +21,54 @@ def init_invoice(request, order_id):
         order = Order.objects.get(orderID=order_id)
         helper = WorkForce.objects.get(UserId=request.user)
 
-        # Trouver le prix du service
+        invoice = Invoice.objects.filter(order=order).first()
+
+        # Prix du service
         unit_price = helper.hourlyRatebyService or 0
         duration_in_hours = Decimal(order.orderDuration.total_seconds()) / Decimal(3600) if order.orderDuration else Decimal(0)
 
         base_amount = unit_price * duration_in_hours
+        extras = []
+        total = base_amount
 
-        data = {
-            'orderID': order.orderID,
-            'serviceType': order.serviceType,
-            'duration': order.orderDuration,
-            'unitPrice': unit_price,
-            'baseAmount': base_amount,
-            'extras': [],
-            'totalAmount': base_amount,
-        }
+        # Membership handling
+        membership = ClientMembership.objects.filter(client=order.clientID).first()
+        if membership:
+            m_type = membership.membership.membershipType
+            label = ''
+            price = Decimal('0')
+            if m_type == 'pay-per-use':
+                label = 'Pay-per-use Fee'
+                price = membership.membership.cost
+            elif m_type in ['preferred', 'ultimate']:
+                label = f"{m_type.capitalize()} Member- Unlimited bookings"
+                if membership.status == 'pending':
+                    price = membership.membership.cost
+                    membership.status = 'active'
+                    membership.startDate = timezone.now().date()
+                    membership.save()
+            if label:
+                extras.append({'label': label, 'price': float(price)})
+                total += price
+
+        if invoice:
+            serializer = InvoiceSerializer(invoice)
+            data = serializer.data
+            data['extras'] += extras
+            data['totalAmount'] = float(Decimal(data['totalAmount']) + sum(Decimal(str(e['price'])) for e in extras))
+        else:
+            data = {
+                'invoiceID': None,
+                'orderID': order.orderID,
+                'serviceType': order.serviceType,
+                'duration': order.orderDuration,
+                'unitPrice': unit_price,
+                'baseAmount': base_amount,
+                'extras': extras,
+                'totalAmount': float(total),
+                'status': Invoice.InvoiceStatus.FUTURE_PAYMENT,
+                'description': ''
+            }
         return Response(data)
     except (Order.DoesNotExist, WorkForce.DoesNotExist):
         return Response({'error': 'Order or helper not found'}, status=404)
@@ -63,6 +99,8 @@ def submit_invoice(request, order_id):
         invoice.baseAmount = data.get('baseAmount')
         invoice.extras = data.get('extras', [])
         invoice.totalAmount = data.get('totalAmount')
+        invoice.status = data.get('status', Invoice.InvoiceStatus.FUTURE_PAYMENT)
+        invoice.description = data.get('description', '')
         invoice.sentToClient = True
         invoice.save()
 

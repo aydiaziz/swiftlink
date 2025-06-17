@@ -1,10 +1,18 @@
 <div class="invoice-container">
-    <h2>Invoice for {{ invoice?.serviceType}}</h2>
+    <h2>Invoice #{{ invoice?.invoiceID || 'New' }} for {{ invoice?.serviceType}}</h2>
   
     <p>Duration: {{ invoice?.duration }}</p>
     <p>Unit Price: {{ invoice?.unitPrice }} $ CAD </p>
     <p>Base Amount: {{ invoice?.baseAmount | number: '1.2-2' }} $ CAD </p>
   
+    <p>Status:
+        <select [(ngModel)]="invoice.status">
+            <option *ngFor="let s of statuses" [value]="s">{{s}}</option>
+        </select>
+    </p>
+    <p>Description:</p>
+    <textarea [(ngModel)]="invoice.description"></textarea>
+
     <h3>Extras</h3>
     <div *ngFor="let extra of invoice?.extras; let i = index">
       {{ extra.label }} - {{ extra.price }} $ CAD 
@@ -26,4 +34,3 @@
         </span>
       </button>
   </div>
-  
