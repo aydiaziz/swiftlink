@@ -1,0 +1,11 @@
+.invoice-detail {
+  padding: 1rem;
+}
+.payment-box {
+  margin-top: 1rem;
+  font-weight: bold;
+}
+.note-box {
+  margin-top: 0.5rem;
+  font-style: italic;
+}

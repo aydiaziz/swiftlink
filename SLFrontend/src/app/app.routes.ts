@@ -15,6 +15,8 @@ import { AgendaComponent } from './helper-dashboard/agenda/agenda.component';
 import { DashboardComponent } from './helper-dashboard/dashboard/dashboard.component';
 import { OrdersComponent } from './helper-dashboard/orders/orders.component';
 import { InvoiceComponent } from './helper-dashboard/invoice/invoice.component';
+import { InvoicesComponent } from './helper-dashboard/invoices/invoices.component';
+import { InvoiceDetailsComponent } from './helper-dashboard/invoice-details/invoice-details.component';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 import { AdminHelperViewComponent } from './admin-helper-view/admin-helper-view.component';
 import { HelperFormComponent } from './helper-form/helper-form.component';
@@ -70,6 +72,8 @@ export const routes: Routes = [
       { path: 'my-work', component: DashboardComponent },
       { path: 'work-board', component: OrdersComponent },
       { path: 'invoice/:orderId', component: InvoiceComponent },
+      { path: 'invoices', component: InvoicesComponent },
+      { path: 'invoices/:id', component: InvoiceDetailsComponent },
 
     ]
   },

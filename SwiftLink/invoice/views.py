@@ -89,6 +89,19 @@ def client_invoices(request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
+def helper_invoices(request):
+    try:
+        helper = WorkForce.objects.get(UserId=request.user)
+    except WorkForce.DoesNotExist:
+        return Response({'error': 'Helper not found'}, status=404)
+
+    invoices = Invoice.objects.filter(helper=helper)
+    serializer = InvoiceSerializer(invoices, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def invoice_detail(request, invoice_id):
     try:
         invoice = Invoice.objects.get(pk=invoice_id)
@@ -98,6 +111,24 @@ def invoice_detail(request, invoice_id):
     if invoice.order.clientID.UserId != request.user:
         return Response({'error': 'Unauthorized'}, status=403)
 
+    serializer = InvoiceSerializer(invoice)
+    return Response(serializer.data)
+
+
+@api_view(['PATCH'])
+@permission_classes([IsAuthenticated])
+def update_invoice_status(request, invoice_id):
+    try:
+        invoice = Invoice.objects.get(pk=invoice_id, helper__UserId=request.user)
+    except Invoice.DoesNotExist:
+        return Response({'error': 'Invoice not found'}, status=404)
+
+    status_value = request.data.get('status')
+    if status_value not in dict(Invoice.InvoiceStatus.choices):
+        return Response({'error': 'Invalid status'}, status=400)
+
+    invoice.status = status_value
+    invoice.save()
     serializer = InvoiceSerializer(invoice)
     return Response(serializer.data)
 @api_view(['POST'])

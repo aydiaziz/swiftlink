@@ -21,6 +21,8 @@ import { withInterceptorsFromDi } from '@angular/common/http';
 import { AuthInterceptor } from './auth.interceptor';
 import { ChatComponent } from './app/chat/chat.component';
 import { InvoiceComponent } from './app/helper-dashboard/invoice/invoice.component';
+import { InvoicesComponent } from './app/helper-dashboard/invoices/invoices.component';
+import { InvoiceDetailsComponent } from './app/helper-dashboard/invoice-details/invoice-details.component';
 import { UserProfileComponent } from './app/user-profile/user-profile.component';
 import { HelperProfileComponent } from './app/helper-profile/helper-profile.component';
 import { AdminDashboardComponent } from './app/admin-dashboard/admin-dashboard.component';
@@ -65,7 +67,9 @@ const routes: Routes = [
         { path: 'my-work', component: DashboardComponent },
         { path: 'work-board', component: OrdersComponent },
         { path: 'invoice/:orderId', component: InvoiceComponent },
-        
+        { path: 'invoices', component: InvoicesComponent },
+        { path: 'invoices/:id', component: InvoiceDetailsComponent },
+
       ]
     },
     { path: 'office-dashboard',
