@@ -4,6 +4,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from django.conf import settings
+from django.utils import timezone
 import openai
 import json
 
@@ -11,6 +12,7 @@ import json
 from Order.models import Order
 from Ref_Entity.models import Ref_Entity
 from Client.models import Client
+from ServiceType.models import ServiceType
 from .models import models
 from .models import Conversation, Message, Ref_User
 from .serializers import ConversationSerializer, MessageSerializer
@@ -116,17 +118,38 @@ def gpt_message(request):
 
     Message.objects.create(conversation=conversation, sender=request.user, content=message)
 
+    services = ServiceType.objects.filter(isActive=True)
+    service_details = ", ".join([
+        f"{s.serviceName} (helpers {s.manpower})" for s in services
+    ])
+    today = timezone.now().date()
+
+    system_prompt = (
+        "You are the Swift Helpers assistant. Your goal is to help clients "
+        "create clear job requests for the Swift Link work board. "
+        "Ask clarifying questions if instructions are vague and offer helpful "
+        "suggestions about describing the task, required tools, location type, "
+        "and timing. Be polite and concise. Confirm when the job summary is ready "
+        "to post. Avoid assigning helpers or assuming a job is accepted. Never give "
+        "legal or safety advice. Supported services are: " + service_details + ". "
+        "If a client requests something outside this list, politely explain that it "
+        "is not currently supported and note their request. Base informal estimates on "
+        "typical duration using median hourly rates. Today's date is " + str(today) + ". "
+        "Extract jobTitle, jobAddress, serviceType, executionDate, priorityLevel, "
+        "expirationDate, manpower, and jobResources from the conversation. Infer "
+        "missing details when possible: deduce executionDate from relative expressions "
+        "(e.g., 'next Sunday'), set expirationDate to tomorrow if urgent otherwise "
+        "three days later, and infer manpower from the service type (moving usually "
+        "needs 2 helpers, cleaning 1). Deduce typical jobResources from the service "
+        "type. Return a JSON object with fields 'reply', 'order', and 'confirm'. "
+        "When the client confirms everything, set 'confirm' to true. Respond in the "
+        "user's language."
+    )
+
     chat_history = [
         {
             'role': 'system',
-            'content': (
-                'You are a helpful assistant tasked with collecting order details. '
-                'Extract jobAddress, serviceType, executionDate, jobTitle, '
-                'priorityLevel, expirationDate, manpower, and jobResources from the client. '
-                'Return a JSON object with fields "reply", "order", and "confirm". '
-                'When everything is gathered and the client approves, set "confirm" to true. '
-                'Respond in the same language as the user.'
-            )
+            'content': system_prompt,
         }
     ]
 
