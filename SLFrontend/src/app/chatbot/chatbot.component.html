@@ -1,18 +1,7 @@
 <div class="chat-container">
   <div class="container">
     <div class="chat-box">
-      <!-- Centered Info Message -->
-      <div class="centered-message">
-        <p>
-          Hi there! We're onboarding and<br />
-          vetting trusted helpers in Fort McMurray.<br /><br />
-          Access to the Swift Helpers work<br />
-          board will open soon—stay tuned!
-        </p>
-      </div>
-
-      <!-- Messages area remains but hidden or not used for now -->
-      <div class="messages-area" *ngIf="false">
+      <div class="messages-area">
         <div *ngFor="let msg of messages" class="message" [ngClass]="msg.sender">
           <div class="avatar" [ngClass]="msg.sender">{{ msg.sender === 'user' ? 'U' : 'A' }}</div>
           <div class="message-bubble">
@@ -21,18 +10,15 @@
           </div>
         </div>
       </div>
-
-      <!-- Disabled Input Form -->
-      <form class="input-form">
+      <form class="input-form" (ngSubmit)="sendMessage()">
         <input
           type="text"
           [(ngModel)]="userMessage"
           name="userMessage"
           placeholder="how can I help you?"
           class="input-field"
-          disabled
         />
-        <button type="submit" class="send-button" disabled>Send</button>
+        <button type="submit" class="send-button">Send</button>
       </form>
     </div>
 
