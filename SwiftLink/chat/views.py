@@ -15,7 +15,7 @@ from Order.models import Order
 from Ref_Entity.models import Ref_Entity
 from Client.models import Client
 from ServiceType.models import ServiceType
-from .models import models
+from django.db import models
 from .models import Conversation, Message, Ref_User
 from .serializers import ConversationSerializer, MessageSerializer
 logger = logging.getLogger(__name__)
@@ -96,6 +96,20 @@ def get_user_conversations(request):
     return Response(serializer.data)
 
 
+def extract_json(text: str):
+    """Extract and parse the first JSON object found in the given text."""
+    if not text:
+        raise ValueError("Empty assistant reply")
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError:
+        start = text.find('{')
+        end = text.rfind('}')
+        if start != -1 and end != -1 and end > start:
+            return json.loads(text[start:end + 1])
+        raise
+
+
 @api_view(['POST'])
 @permission_classes([IsAuthenticatedWithMessage])
 def gpt_message(request):
@@ -165,7 +179,7 @@ def gpt_message(request):
         return Response({'error': str(e)}, status=500)
 
     try:
-        data = json.loads(assistant_reply)
+        data = extract_json(assistant_reply)
         reply_text = data.get('reply', '')
         order_data = data.get('order')
         confirm = data.get('confirm', False)
