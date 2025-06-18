@@ -15,21 +15,49 @@ from .models import models
 from .models import Conversation, Message, Ref_User
 from .serializers import ConversationSerializer, MessageSerializer
 
+
+def get_default_helper():
+    """Return the bot user used for conversations, creating it if necessary."""
+    helper = Ref_User.objects.filter(username="chatbot").first()
+    if not helper:
+        entity = Ref_Entity.objects.first()
+        helper = Ref_User.objects.create(
+            username="chatbot",
+            first_name="Chat",
+            last_name="Bot",
+            email="chatbot@example.com",
+            password="",
+            role="Employee",
+            status="Active",
+            entityId=entity,
+        )
+    return helper
+
+
+class IsAuthenticatedWithMessage(IsAuthenticated):
+    message = "You have to log in to help you"
+
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticatedWithMessage])
 def start_conversation(request):
     helper_id = request.data.get('helper_id')
-    client_id = request.user.user_id  # ✅ l'utilisateur connecté est le client
+    client_id = request.user.user_id
     order_id = request.data.get('order_id')
-    if not helper_id:
-        return Response({'error': 'helper_id is required'}, status=400)
 
     try:
         client = Ref_User.objects.get(user_id=client_id)
-        helper = Ref_User.objects.get(user_id=helper_id)
-        order =  Order.objects.get(orderID=order_id)
     except Ref_User.DoesNotExist:
-        return Response({'error': 'Client or Helper not found'}, status=404)
+        return Response({'error': 'Client not found'}, status=404)
+
+    if helper_id:
+        try:
+            helper = Ref_User.objects.get(user_id=helper_id)
+        except Ref_User.DoesNotExist:
+            return Response({'error': 'Helper not found'}, status=404)
+    else:
+        helper = get_default_helper()
+
+    order = Order.objects.filter(orderID=order_id).first() if order_id else None
 
     conversation, created = Conversation.objects.get_or_create(
         client=client,
@@ -46,7 +74,7 @@ def get_conversation(request, conversation_id):
     return Response(serializer.data)
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticatedWithMessage])
 def send_message(request):
     serializer = MessageSerializer(data=request.data)
     if serializer.is_valid():
@@ -54,7 +82,7 @@ def send_message(request):
         return Response(serializer.data)
     return Response(serializer.errors, status=400)
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticatedWithMessage])
 def get_user_conversations(request):
     user = request.user
     conversations = Conversation.objects.filter(
@@ -65,7 +93,7 @@ def get_user_conversations(request):
 
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticatedWithMessage])
 def gpt_message(request):
     """Handle a chat message using OpenAI GPT."""
     conversation_id = request.data.get('conversation_id')
@@ -79,7 +107,7 @@ def gpt_message(request):
         except Conversation.DoesNotExist:
             return Response({'error': 'Conversation not found'}, status=404)
     else:
-        default_helper = Ref_User.objects.filter(role='Employee').first()
+        default_helper = get_default_helper()
         conversation, _ = Conversation.objects.get_or_create(
             client=request.user,
             helper=default_helper,
