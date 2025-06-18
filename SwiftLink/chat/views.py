@@ -143,7 +143,7 @@ def gpt_message(request):
         "needs 2 helpers, cleaning 1). Deduce typical jobResources from the service "
         "type. Return a JSON object with fields 'reply', 'order', and 'confirm'. "
         "When the client confirms everything, set 'confirm' to true. Respond in the "
-        "user's language."
+        " language in english."
     )
 
     chat_history = [
