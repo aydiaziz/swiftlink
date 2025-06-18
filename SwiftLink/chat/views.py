@@ -8,6 +8,7 @@ from django.utils import timezone
 from django.utils.dateparse import parse_datetime, parse_date
 import openai
 import json
+import logging
 
 
 from Order.models import Order
@@ -17,7 +18,7 @@ from ServiceType.models import ServiceType
 from .models import models
 from .models import Conversation, Message, Ref_User
 from .serializers import ConversationSerializer, MessageSerializer
-
+logger = logging.getLogger(__name__)
 
 def get_default_helper():
     """Return the bot user used for conversations, creating it if necessary."""
@@ -160,6 +161,7 @@ def gpt_message(request):
         completion = client.chat.completions.create(model='gpt-4o', messages=chat_history)
         assistant_reply = completion.choices[0].message.content
     except Exception as e:
+        logger.exception("GPT request failed")
         return Response({'error': str(e)}, status=500)
 
     try:
@@ -167,7 +169,9 @@ def gpt_message(request):
         reply_text = data.get('reply', '')
         order_data = data.get('order')
         confirm = data.get('confirm', False)
+        logger.debug("Parsed data: %s", data)
     except Exception:
+        logger.exception("Failed to parse GPT reply")
         reply_text = assistant_reply
         order_data = None
         confirm = False
@@ -175,6 +179,7 @@ def gpt_message(request):
     if order_data:
         conversation.pending_order_data = order_data
         conversation.save()
+        logger.debug("Saved pending order data: %s", order_data)
 
     if confirm and conversation.pending_order_data:
         try:
@@ -208,8 +213,10 @@ def gpt_message(request):
             conversation.order = order
             conversation.pending_order_data = None
             conversation.save()
+            logger.debug("Created order %s for conversation %s", order.orderID, conversation.id)
             reply_text = "Your order has been posted."
-        except Exception:
+        except Exception as e:
+            logger.exception("Order creation failed")
             reply_text = "The order has not been created; I didn't find it in the database."
 
     Message.objects.create(conversation=conversation, sender=conversation.helper, content=reply_text)
