@@ -151,6 +151,7 @@ def gpt_message(request):
     ])
     today = timezone.now().date()
 
+    # Prompt système corrigé avec instructions JSON plus strictes
     system_prompt = (
         "You are the Swift Helpers assistant. Your goal is to help clients create clear job requests "
         "for the Swift Link work board. Ask clarifying questions if instructions are vague and keep each "
@@ -158,14 +159,15 @@ def gpt_message(request):
         "serviceType and executionDate in separate messages. Only once these are provided, request the "
         "priorityLevel. Do not ask for jobTitle, expirationDate or jobResources. Automatically set "
         "expirationDate to three days after executionDate. When all details are gathered, summarise the job "
-        "and ask for confirmation. Return your assistant reply strictly as JSON with the fields 'reply', "
-        "'order', and 'confirm'. Set 'confirm' to true only after the client explicitly confirms the summary. "
-        "Never mention this JSON format to the client. Avoid assigning helpers or assuming a job is accepted. "
+        "and ask for confirmation. "
+        "CRITICAL: You must return your response as a valid JSON object with exactly these fields: "
+        "'reply', 'order', and 'confirm'. Set 'confirm' to true only after the client explicitly confirms. "
+        "Example format: {\"reply\": \"your message\", \"order\": null, \"confirm\": false} "
+        "Do not include any text outside the JSON object. Do not use markdown formatting. "
         "Supported services are: " + service_details + ". Today's date is " + str(today) + ". "
-        "Infer missing details when possible: deduce executionDate from relative expressions (e.g., 'next Sunday'), "
+        "Infer missing details when possible: deduce executionDate from relative expressions, "
         "and infer manpower from the service type (moving usually needs 2 helpers, cleaning 1). "
-        "Deduce typical jobResources from the service type."'Return your entire response ONLY as JSON with fields: reply, order, confirm. Do not explain or add extra text outside the JSON object.'
-
+        "Deduce typical jobResources from the service type."
     )
 
     chat_history = [
@@ -184,30 +186,65 @@ def gpt_message(request):
 
     try:
         client = openai.OpenAI(api_key=settings.OPENAI_API_KEY)
-        completion = client.chat.completions.create(model='gpt-4o', messages=chat_history)
+        completion = client.chat.completions.create(
+            model='gpt-4o', 
+            messages=chat_history,
+            temperature=0.1,  # Réduire la température pour plus de cohérence
+            response_format={"type": "json_object"}  # Forcer le format JSON
+        )
         assistant_reply = completion.choices[0].message.content
+        logger.debug(f"Raw GPT response: {assistant_reply}")
     except Exception as e:
         logger.exception("GPT request failed")
         return Response({'error': str(e)}, status=500)
 
+    # Parsing JSON amélioré avec gestion d'erreur
     try:
-        data = extract_json(assistant_reply)
+        # Nettoyer la réponse au cas où il y aurait des caractères indésirables
+        cleaned_reply = assistant_reply.strip()
+        
+        # Vérifier si la réponse commence et finit par des accolades
+        if not (cleaned_reply.startswith('{') and cleaned_reply.endswith('}')):
+            logger.error(f"Response doesn't look like JSON: {cleaned_reply}")
+            raise ValueError("Response is not a valid JSON object")
+        
+        # Parser le JSON
+        import json
+        data = json.loads(cleaned_reply)
+        
+        # Valider la structure
+        if not isinstance(data, dict):
+            raise ValueError("Response is not a JSON object")
+        
         reply_text = data.get('reply', '')
         order_data = data.get('order')
         confirm = data.get('confirm', False)
-        logger.debug("Parsed data: %s", data)
+        
+        logger.debug("Successfully parsed data: %s", data)
+        
+    except json.JSONDecodeError as e:
+        logger.error(f"❌ JSON decode error: {e}")
+        logger.error(f"Raw response: {assistant_reply}")
+        # Fallback: utiliser la réponse brute comme texte
+        reply_text = assistant_reply
+        order_data = None
+        confirm = False
+        
     except Exception as e:
         logger.error(f"❌ Failed to parse GPT reply: {e}")
+        logger.error(f"Raw response: {assistant_reply}")
+        # Fallback: utiliser la réponse brute comme texte
         reply_text = assistant_reply
         order_data = None
         confirm = False
 
-
+    # Sauvegarder les données de commande en attente
     if order_data:
         conversation.pending_order_data = order_data
         conversation.save()
         logger.debug("Saved pending order data: %s", order_data)
 
+    # Créer la commande si confirmée
     if confirm and conversation.pending_order_data:
         try:
             client_obj = Client.objects.get(UserId=conversation.client)
@@ -216,14 +253,20 @@ def gpt_message(request):
             execution_dt = pending.get('executionDate')
             expiration_dt = pending.get('expirationDate')
 
+            # Calculer la date d'expiration si non fournie
             if execution_dt and not expiration_dt:
                 try:
+                    from django.utils.dateparse import parse_datetime, parse_date
                     exec_date = parse_datetime(execution_dt) or parse_date(execution_dt)
                     if exec_date:
+                        if hasattr(exec_date, 'date'):  # datetime object
+                            exec_date = exec_date.date()
                         expiration_dt = (exec_date + timezone.timedelta(days=3)).isoformat()
-                except Exception:
+                except Exception as e:
+                    logger.warning(f"Failed to calculate expiration date: {e}")
                     expiration_dt = None
 
+            # Créer la commande
             order = Order.objects.create(
                 entityID=entity,
                 clientID=client_obj,
@@ -237,15 +280,24 @@ def gpt_message(request):
                 manpower=pending.get('manpower'),
                 jobResources=pending.get('jobResources'),
             )
+            
+            # Mettre à jour la conversation
             conversation.order = order
             conversation.pending_order_data = None
             conversation.save()
-            logger.debug("Created order %s for conversation %s", order.orderID, conversation.id)
-            reply_text = "Your order has been posted."
+            
+            logger.info("✅ Successfully created order %s for conversation %s", order.orderID, conversation.id)
+            reply_text = "Your order has been successfully posted to the work board!"
+            
         except Exception as e:
-            logger.exception("Order creation failed")
-            reply_text = "The order has not been created; I didn't find it in the database."
+            logger.exception("❌ Order creation failed")
+            reply_text = "I apologize, but there was an error creating your order. Please try again or contact support."
 
+    # Sauvegarder la réponse de l'assistant
     Message.objects.create(conversation=conversation, sender=conversation.helper, content=reply_text)
 
-    return Response({'reply': reply_text, 'conversation_id': conversation.id, 'order_confirmed': confirm})
+    return Response({
+        'reply': reply_text, 
+        'conversation_id': conversation.id, 
+        'order_confirmed': confirm
+    })
