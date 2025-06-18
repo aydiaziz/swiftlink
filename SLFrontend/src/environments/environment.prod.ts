@@ -3,5 +3,5 @@
 export const environment = {
   production: true,
   apiUrl: 'https://www.swift-helpers.com/api',
-  chatUrl: ''
+  chatUrl: 'https://www.swift-helpers.com/api/chat/gpt/'
 };

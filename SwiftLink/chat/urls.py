@@ -7,4 +7,5 @@ urlpatterns = [
     path('<int:conversation_id>/', views.get_conversation),
     path('send/', views.send_message),
     path('conversations/', views.get_user_conversations),
+    path('gpt/', views.gpt_message),
 ]

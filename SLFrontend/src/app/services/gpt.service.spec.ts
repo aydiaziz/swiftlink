@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { RasaService } from './rasa.service';
+import { GptService } from './gpt.service';
 
-describe('RasaService', () => {
-  let service: RasaService;
+describe('GptService', () => {
+  let service: GptService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(RasaService);
+    service = TestBed.inject(GptService);
   });
 
   it('should be created', () => {

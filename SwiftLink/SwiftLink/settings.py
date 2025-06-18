@@ -179,3 +179,6 @@ SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
 CSRF_COOKIE_NAME = 'csrftoken'
 CSRF_COOKIE_HTTPONLY = False  # allow frontend to read it
+
+# OpenAI configuration
+OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY', '')
