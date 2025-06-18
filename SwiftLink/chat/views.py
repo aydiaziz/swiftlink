@@ -3,11 +3,16 @@ from urllib import request
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from django.conf import settings
+import openai
+import json
 
 
-from Order.models import Order 
+from Order.models import Order
+from Ref_Entity.models import Ref_Entity
+from Client.models import Client
 from .models import models
-from .models import Conversation, Message,Ref_User
+from .models import Conversation, Message, Ref_User
 from .serializers import ConversationSerializer, MessageSerializer
 
 @api_view(['POST'])
@@ -57,3 +62,94 @@ def get_user_conversations(request):
     ).order_by('-created_at')
     serializer = ConversationSerializer(conversations, context={'request': request}, many=True)
     return Response(serializer.data)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def gpt_message(request):
+    """Handle a chat message using OpenAI GPT."""
+    conversation_id = request.data.get('conversation_id')
+    message = request.data.get('message')
+    if not message:
+        return Response({'error': 'message is required'}, status=400)
+
+    if conversation_id:
+        try:
+            conversation = Conversation.objects.get(id=conversation_id)
+        except Conversation.DoesNotExist:
+            return Response({'error': 'Conversation not found'}, status=404)
+    else:
+        default_helper = Ref_User.objects.filter(role='Employee').first()
+        conversation, _ = Conversation.objects.get_or_create(
+            client=request.user,
+            helper=default_helper,
+            order=None,
+        )
+
+    Message.objects.create(conversation=conversation, sender=request.user, content=message)
+
+    chat_history = [
+        {
+            'role': 'system',
+            'content': (
+                'You are a helpful assistant tasked with collecting order details. '
+                'Extract jobAddress, serviceType, executionDate, jobTitle, '
+                'priorityLevel, expirationDate, manpower, and jobResources from the client. '
+                'Return a JSON object with fields "reply", "order", and "confirm". '
+                'When everything is gathered and the client approves, set "confirm" to true. '
+                'Respond in the same language as the user.'
+            )
+        }
+    ]
+
+    for msg in conversation.messages.order_by('timestamp'):
+        role = 'assistant' if msg.sender != request.user else 'user'
+        chat_history.append({'role': role, 'content': msg.content})
+
+    try:
+        openai.api_key = settings.OPENAI_API_KEY
+        completion = openai.ChatCompletion.create(model='gpt-4o', messages=chat_history)
+        assistant_reply = completion.choices[0].message['content']
+    except Exception as e:
+        return Response({'error': str(e)}, status=500)
+
+    try:
+        data = json.loads(assistant_reply)
+        reply_text = data.get('reply', '')
+        order_data = data.get('order')
+        confirm = data.get('confirm', False)
+    except Exception:
+        reply_text = assistant_reply
+        order_data = None
+        confirm = False
+
+    if order_data:
+        conversation.pending_order_data = order_data
+        conversation.save()
+
+    if confirm and conversation.pending_order_data:
+        try:
+            client_obj = Client.objects.get(UserId=conversation.client)
+            entity = Ref_Entity.objects.get(pk=1)
+            order = Order.objects.create(
+                entityID=entity,
+                clientID=client_obj,
+                division='Helper',
+                jobTitle=conversation.pending_order_data.get('jobTitle'),
+                jobAddress=conversation.pending_order_data.get('jobAddress'),
+                serviceType=conversation.pending_order_data.get('serviceType'),
+                executionDate=conversation.pending_order_data.get('executionDate'),
+                priorityLevel=conversation.pending_order_data.get('priorityLevel', 'Low'),
+                expirationTime=conversation.pending_order_data.get('expirationDate'),
+                manpower=conversation.pending_order_data.get('manpower'),
+                jobResources=conversation.pending_order_data.get('jobResources'),
+            )
+            conversation.order = order
+            conversation.pending_order_data = None
+            conversation.save()
+        except Exception:
+            pass
+
+    Message.objects.create(conversation=conversation, sender=conversation.helper, content=reply_text)
+
+    return Response({'reply': reply_text, 'conversation_id': conversation.id, 'order_confirmed': confirm})

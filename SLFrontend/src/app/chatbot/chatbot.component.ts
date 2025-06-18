@@ -1,4 +1,4 @@
-import { RasaService } from '../services/rasa.service'; 
+import { GptService } from '../services/gpt.service';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -13,9 +13,9 @@ import { CommonModule } from '@angular/common';
 export class ChatbotComponent {
   userMessage = '';
   messages: { sender: 'user' | 'assistant', text: string, time: string }[] = [];
-  clientId: string = '12345';  
+  conversationId?: number;
 
-  constructor(private rasaService: RasaService) {}
+  constructor(private gptService: GptService) {}
 
   sendMessage() {
     const message = this.userMessage.trim();
@@ -30,12 +30,15 @@ export class ChatbotComponent {
 
     this.userMessage = '';
 
-    // Send to Rasa with clientId
-    this.rasaService.sendMessageToRasa(message, this.clientId).subscribe((responses) => {
-      for (let res of responses) {
+    this.gptService.sendMessage(message, this.conversationId).subscribe(res => {
+      if (res.conversation_id) {
+        this.conversationId = res.conversation_id;
+      }
+      const reply = res.reply ?? '';
+      if (reply) {
         this.messages.push({
           sender: 'assistant',
-          text: res.text,
+          text: reply,
           time: this.getCurrentTime()
         });
       }
