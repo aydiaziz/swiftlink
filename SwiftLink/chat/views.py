@@ -134,6 +134,9 @@ def gpt_message(request):
         role = 'assistant' if msg.sender != request.user else 'user'
         chat_history.append({'role': role, 'content': msg.content})
 
+    if not settings.OPENAI_API_KEY:
+        return Response({'error': 'OpenAI API key not configured'}, status=500)
+
     try:
         client = openai.OpenAI(api_key=settings.OPENAI_API_KEY)
         completion = client.chat.completions.create(model='gpt-4o', messages=chat_history)
