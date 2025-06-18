@@ -42,6 +42,13 @@ export class ChatbotComponent {
           time: this.getCurrentTime()
         });
       }
+      if (res.order_confirmed) {
+        this.messages.push({
+          sender: 'assistant',
+          text: 'Your order has been created.',
+          time: this.getCurrentTime()
+        });
+      }
     });
   }
 
