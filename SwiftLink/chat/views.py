@@ -9,6 +9,7 @@ from django.utils.dateparse import parse_datetime, parse_date
 import openai
 import json
 import logging
+import re
 
 
 from Order.models import Order
@@ -100,14 +101,24 @@ def extract_json(text: str):
     """Extract and parse the first JSON object found in the given text."""
     if not text:
         raise ValueError("Empty assistant reply")
+
     try:
         return json.loads(text)
     except json.JSONDecodeError:
-        start = text.find('{')
-        end = text.rfind('}')
-        if start != -1 and end != -1 and end > start:
-            return json.loads(text[start:end + 1])
-        raise
+        pass
+
+    for match in re.finditer(r"\{.*?\}", text, re.DOTALL):
+        snippet = match.group(0)
+        try:
+            return json.loads(snippet)
+        except json.JSONDecodeError:
+            continue
+
+    start = text.find("{")
+    end = text.rfind("}")
+    if start != -1 and end != -1 and end > start:
+        return json.loads(text[start:end + 1])
+    raise
 
 
 @api_view(['POST'])
