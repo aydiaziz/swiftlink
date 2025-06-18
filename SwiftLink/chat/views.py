@@ -98,14 +98,27 @@ def get_user_conversations(request):
 
 
 def extract_json(response: str) -> dict:
-    try:
-        # Attempt to locate and parse JSON from response
-        match = re.search(r'\{.*\}', response, re.DOTALL)
-        if match:
-            return json.loads(match.group())
-        raise ValueError("No valid JSON object found in response.")
-    except Exception as e:
-        raise ValueError(f"Failed to parse JSON from GPT response: {e}")
+    """Extract and parse the first JSON object found in the GPT response."""
+    if not response:
+        raise ValueError("Empty assistant reply")
+
+    # Check for a fenced code block
+    code_block = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", response, re.DOTALL)
+    if code_block:
+        try:
+            return json.loads(code_block.group(1))
+        except Exception as e:
+            raise ValueError(f"Failed to decode JSON code block: {e}")
+
+    # Fallback: first balanced set of braces
+    match = re.search(r"\{.*?\}", response, re.DOTALL)
+    if match:
+        try:
+            return json.loads(match.group(0))
+        except Exception as e:
+            raise ValueError(f"Failed to decode JSON snippet: {e}")
+
+    raise ValueError("No valid JSON object found in response.")
 
 
 @api_view(['POST'])
