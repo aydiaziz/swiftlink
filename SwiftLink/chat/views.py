@@ -5,6 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from django.conf import settings
 from django.utils import timezone
+from django.utils.dateparse import parse_datetime, parse_date
 import openai
 import json
 
@@ -129,8 +130,11 @@ def gpt_message(request):
         "create clear job requests for the Swift Link work board. "
         "Ask clarifying questions if instructions are vague and offer helpful "
         "suggestions about describing the task, required tools, location type, "
-        "and timing. Be polite and concise. Confirm when the job summary is ready "
-        "to post. Avoid assigning helpers or assuming a job is accepted. Never give "
+        "and timing. Be polite and concise. Do not ask for job title, priority level, "
+        "expiration date or job resources. Ask about the remaining fields one by one. "
+        "Set expirationDate automatically to three days after executionDate. "
+        "Confirm when the job summary is ready to post but do not show the JSON to the client. "
+        "Avoid assigning helpers or assuming a job is accepted. Never give "
         "legal or safety advice. Supported services are: " + service_details + ". "
         "If a client requests something outside this list, politely explain that it "
         "is not currently supported and note their request. Base informal estimates on "
@@ -138,12 +142,10 @@ def gpt_message(request):
         "Extract jobTitle, jobAddress, serviceType, executionDate, priorityLevel, "
         "expirationDate, manpower, and jobResources from the conversation. Infer "
         "missing details when possible: deduce executionDate from relative expressions "
-        "(e.g., 'next Sunday'), set expirationDate to tomorrow if urgent otherwise "
-        "three days later, and infer manpower from the service type (moving usually "
-        "needs 2 helpers, cleaning 1). Deduce typical jobResources from the service "
+        "(e.g., 'next Sunday'), set expirationDate three days later, and infer manpower from the service type "
+        "(moving usually needs 2 helpers, cleaning 1). Deduce typical jobResources from the service "
         "type. Return a JSON object with fields 'reply', 'order', and 'confirm'. "
-        "When the client confirms everything, set 'confirm' to true. Respond in the "
-        " language in english."
+        "When the client confirms everything, set 'confirm' to true. Respond in english."
     )
 
     chat_history = [
@@ -185,24 +187,37 @@ def gpt_message(request):
         try:
             client_obj = Client.objects.get(UserId=conversation.client)
             entity = Ref_Entity.objects.get(pk=1)
+            pending = conversation.pending_order_data
+            execution_dt = pending.get('executionDate')
+            expiration_dt = pending.get('expirationDate')
+
+            if execution_dt and not expiration_dt:
+                try:
+                    exec_date = parse_datetime(execution_dt) or parse_date(execution_dt)
+                    if exec_date:
+                        expiration_dt = (exec_date + timezone.timedelta(days=3)).isoformat()
+                except Exception:
+                    expiration_dt = None
+
             order = Order.objects.create(
                 entityID=entity,
                 clientID=client_obj,
                 division='Helper',
-                jobTitle=conversation.pending_order_data.get('jobTitle'),
-                jobAddress=conversation.pending_order_data.get('jobAddress'),
-                serviceType=conversation.pending_order_data.get('serviceType'),
-                executionDate=conversation.pending_order_data.get('executionDate'),
-                priorityLevel=conversation.pending_order_data.get('priorityLevel', 'Low'),
-                expirationTime=conversation.pending_order_data.get('expirationDate'),
-                manpower=conversation.pending_order_data.get('manpower'),
-                jobResources=conversation.pending_order_data.get('jobResources'),
+                jobTitle=pending.get('jobTitle') or pending.get('serviceType'),
+                jobAddress=pending.get('jobAddress'),
+                serviceType=pending.get('serviceType'),
+                executionDate=execution_dt,
+                priorityLevel=pending.get('priorityLevel', 'Low'),
+                expirationTime=expiration_dt,
+                manpower=pending.get('manpower'),
+                jobResources=pending.get('jobResources'),
             )
             conversation.order = order
             conversation.pending_order_data = None
             conversation.save()
+            reply_text = "Your order has been posted."
         except Exception:
-            pass
+            reply_text = "The order has not been created; I didn't find it in the database."
 
     Message.objects.create(conversation=conversation, sender=conversation.helper, content=reply_text)
 
