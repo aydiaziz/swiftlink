@@ -97,28 +97,15 @@ def get_user_conversations(request):
     return Response(serializer.data)
 
 
-def extract_json(text: str):
-    """Extract and parse the first JSON object found in the given text."""
-    if not text:
-        raise ValueError("Empty assistant reply")
-
+def extract_json(response: str) -> dict:
     try:
-        return json.loads(text)
-    except json.JSONDecodeError:
-        pass
-
-    for match in re.finditer(r"\{.*?\}", text, re.DOTALL):
-        snippet = match.group(0)
-        try:
-            return json.loads(snippet)
-        except json.JSONDecodeError:
-            continue
-
-    start = text.find("{")
-    end = text.rfind("}")
-    if start != -1 and end != -1 and end > start:
-        return json.loads(text[start:end + 1])
-    raise ValueError("No JSON object found in assistant reply")
+        # Attempt to locate and parse JSON from response
+        match = re.search(r'\{.*\}', response, re.DOTALL)
+        if match:
+            return json.loads(match.group())
+        raise ValueError("No valid JSON object found in response.")
+    except Exception as e:
+        raise ValueError(f"Failed to parse JSON from GPT response: {e}")
 
 
 @api_view(['POST'])
@@ -164,7 +151,8 @@ def gpt_message(request):
         "Supported services are: " + service_details + ". Today's date is " + str(today) + ". "
         "Infer missing details when possible: deduce executionDate from relative expressions (e.g., 'next Sunday'), "
         "and infer manpower from the service type (moving usually needs 2 helpers, cleaning 1). "
-        "Deduce typical jobResources from the service type."
+        "Deduce typical jobResources from the service type."'Return your entire response ONLY as JSON with fields: reply, order, confirm. Do not explain or add extra text outside the JSON object.'
+
     )
 
     chat_history = [
@@ -195,11 +183,12 @@ def gpt_message(request):
         order_data = data.get('order')
         confirm = data.get('confirm', False)
         logger.debug("Parsed data: %s", data)
-    except Exception:
-        logger.exception("Failed to parse GPT reply")
+    except Exception as e:
+        logger.error(f"❌ Failed to parse GPT reply: {e}")
         reply_text = assistant_reply
         order_data = None
         confirm = False
+
 
     if order_data:
         conversation.pending_order_data = order_data
