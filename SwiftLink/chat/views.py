@@ -135,9 +135,9 @@ def gpt_message(request):
         chat_history.append({'role': role, 'content': msg.content})
 
     try:
-        openai.api_key = settings.OPENAI_API_KEY
-        completion = openai.ChatCompletion.create(model='gpt-4o', messages=chat_history)
-        assistant_reply = completion.choices[0].message['content']
+        client = openai.OpenAI(api_key=settings.OPENAI_API_KEY)
+        completion = client.chat.completions.create(model='gpt-4o', messages=chat_history)
+        assistant_reply = completion.choices[0].message.content
     except Exception as e:
         return Response({'error': str(e)}, status=500)
 
