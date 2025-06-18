@@ -118,7 +118,7 @@ def extract_json(text: str):
     end = text.rfind("}")
     if start != -1 and end != -1 and end > start:
         return json.loads(text[start:end + 1])
-    raise
+    raise ValueError("No JSON object found in assistant reply")
 
 
 @api_view(['POST'])
