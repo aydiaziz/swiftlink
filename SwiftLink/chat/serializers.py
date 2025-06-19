@@ -17,7 +17,15 @@ class ConversationSerializer(serializers.ModelSerializer):
     messages = MessageSerializer(many=True, read_only=True)
     client = UserSerializer(read_only=True)
     helper = UserSerializer(read_only=True)
-    order= serializers.IntegerField(source='order.orderID', read_only=True) 
+    order= serializers.IntegerField(source='order.orderID', read_only=True)
+    unread_count = serializers.SerializerMethodField()
     class Meta:
         model = Conversation
-        fields = ['id', 'client', 'helper', 'created_at', 'messages','order']
+        fields = ['id', 'client', 'helper', 'created_at', 'messages','order','unread_count']
+
+    def get_unread_count(self, obj):
+        request = self.context.get('request')
+        if request:
+            user = request.user
+            return obj.messages.exclude(sender=user).filter(is_read=False).count()
+        return 0

@@ -23,6 +23,7 @@ import { RouterModule } from '@angular/router';
 export class NavbarComponent implements OnInit, OnDestroy {
   isClientLoggedIn = false;
   unreadCount = 0;
+  messageUnreadCount = 0;
   notifications: any[] = [];
   showPopup = false;
   showMessagesPopup = false;
@@ -47,6 +48,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loadUnreadCount();
+    this.loadUnreadMessages();
     this.loadNotifications();
     this.loadConversations();
     this.startPolling();
@@ -68,6 +70,12 @@ export class NavbarComponent implements OnInit, OnDestroy {
     });
   }
 
+  loadUnreadMessages() {
+    this.chatService.getUnreadCount().subscribe(data => {
+      this.messageUnreadCount = data.count;
+    });
+  }
+
   loadNotifications() {
     this.notifService.getNotifications().subscribe(data => {
       this.notifications = data;
@@ -83,6 +91,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   startPolling() {
     this.pollInterval = setInterval(() => {
       this.loadUnreadCount();
+      this.loadUnreadMessages();
       this.loadNotifications();
       this.loadConversations();
     }, 5000);
@@ -108,6 +117,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     if (this.showMessagesPopup) {
       this.chatService.getUserConversations().subscribe(data => {
         this.conversations = data;
+        this.loadUnreadMessages();
       });
     }
   }
@@ -143,6 +153,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   openChat(conversationId: number, helperId: number, orderId: number) {
     this.showMessagesPopup = false;
     this.communicationService.openChatPopup({ conversationId, helperId, orderId });
+    this.loadUnreadMessages();
   }
 
   getOtherUserName(conv: any): string {

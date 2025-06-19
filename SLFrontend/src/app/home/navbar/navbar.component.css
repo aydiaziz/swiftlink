@@ -147,6 +147,10 @@
   filter: invert(1);
 }
 
+.messages-wrapper {
+  position: relative;
+}
+
 .messages-popup {
   position: absolute;
   top: 40px;
@@ -176,6 +180,12 @@
 
 .messages-popup li:hover {
   background-color: #f5f5f5;
+}
+
+.unread-label {
+  color: red;
+  margin-left: 5px;
+  font-size: 12px;
 }
 .profile-wrapper {
   display: flex;

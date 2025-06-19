@@ -28,4 +28,8 @@ export class ChatService {
   getUserConversations(): Observable<any> {
     return this.http.get(`${this.baseUrl}/conversations/`);
   }
+
+  getUnreadCount(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/unread_count/`);
+  }
 }
