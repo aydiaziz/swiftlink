@@ -22,11 +22,13 @@
 
       <li class="messages-wrapper" #messageWrapper (click)="toggleMessagesPopup($event)">
         <img src="/icons/message.png" class="message-icon" alt="Messages" />
+        <span *ngIf="messageUnreadCount > 0" class="notification-badge">{{ messageUnreadCount }}</span>
         <div *ngIf="showMessagesPopup" class="messages-popup">
           <div *ngIf="conversations.length === 0">No messages</div>
           <ul *ngIf="conversations.length > 0">
             <li *ngFor="let conv of conversations" (click)="openChat(conv.id, conv.helper, conv.order)">
               You have a discussion with {{ getOtherUserName(conv) }}
+              <span *ngIf="conv.unread_count > 0" class="unread-label">Unread message</span>
             </li>
           </ul>
         </div>

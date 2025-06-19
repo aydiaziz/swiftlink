@@ -75,6 +75,8 @@ def start_conversation(request):
 @api_view(['GET'])
 def get_conversation(request, conversation_id):
     conversation = Conversation.objects.get(id=conversation_id)
+    # mark unread messages from the other user as read
+    conversation.messages.exclude(sender=request.user).filter(is_read=False).update(is_read=True)
     serializer = ConversationSerializer(conversation, context={'request': request})
     return Response(serializer.data)
 
@@ -95,6 +97,19 @@ def get_user_conversations(request):
     ).order_by('-created_at')
     serializer = ConversationSerializer(conversations, context={'request': request}, many=True)
     return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticatedWithMessage])
+def unread_message_count(request):
+    user = request.user
+    count = Message.objects.filter(
+        conversation__client=user,
+        is_read=False
+    ).exclude(sender=user).count() + Message.objects.filter(
+        conversation__helper=user,
+        is_read=False
+    ).exclude(sender=user).count()
+    return Response({'count': count})
 
 
 def extract_json(response: str) -> dict:
