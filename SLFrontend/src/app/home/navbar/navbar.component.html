@@ -26,7 +26,7 @@
           <div *ngIf="conversations.length === 0">No messages</div>
           <ul *ngIf="conversations.length > 0">
             <li *ngFor="let conv of conversations" (click)="openChat(conv.id, conv.helper, conv.order)">
-              Conversation with {{ getOtherUserName(conv) }}
+              You have a discussion with {{ getOtherUserName(conv) }}
             </li>
           </ul>
         </div>

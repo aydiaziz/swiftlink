@@ -1,5 +1,9 @@
 import {
-  Component, ElementRef, ViewChild, OnInit
+  Component,
+  ElementRef,
+  ViewChild,
+  OnInit,
+  OnDestroy,
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -16,7 +20,7 @@ import { RouterModule } from '@angular/router';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, OnDestroy {
   isClientLoggedIn = false;
   unreadCount = 0;
   notifications: any[] = [];
@@ -24,6 +28,7 @@ export class NavbarComponent implements OnInit {
   showMessagesPopup = false;
   conversations: any[] = [];
   currentUser: any;
+  private pollInterval: any;
 
   @ViewChild('notificationWrapper') notificationWrapper!: ElementRef;
   @ViewChild('messageWrapper') messageWrapper!: ElementRef;
@@ -43,10 +48,18 @@ export class NavbarComponent implements OnInit {
   ngOnInit() {
     this.loadUnreadCount();
     this.loadNotifications();
+    this.loadConversations();
+    this.startPolling();
    this.authService.currentUser$.subscribe(user => {
     this.currentUser = user;
     });
     this.authService.getCurrentUser().subscribe();
+  }
+
+  ngOnDestroy(): void {
+    if (this.pollInterval) {
+      clearInterval(this.pollInterval);
+    }
   }
 
   loadUnreadCount() {
@@ -59,6 +72,20 @@ export class NavbarComponent implements OnInit {
     this.notifService.getNotifications().subscribe(data => {
       this.notifications = data;
     });
+  }
+
+  loadConversations() {
+    this.chatService.getUserConversations().subscribe(data => {
+      this.conversations = data;
+    });
+  }
+
+  startPolling() {
+    this.pollInterval = setInterval(() => {
+      this.loadUnreadCount();
+      this.loadNotifications();
+      this.loadConversations();
+    }, 5000);
   }
 
   toggleNotificationPopup(event: MouseEvent) {
@@ -120,9 +147,12 @@ export class NavbarComponent implements OnInit {
 
   getOtherUserName(conv: any): string {
     if (!this.currentUser || !conv.client || !conv.helper) return 'Unknown';
-    return conv.client.id === this.currentUser.user_id
-      ? conv.helper.first_name
-      : conv.client.first_name;
+
+    const clientId = conv.client.user_id ?? conv.client.id;
+    const helperName = conv.helper.first_name || 'Unknown';
+    const clientName = conv.client.first_name || 'Unknown';
+
+    return clientId === this.currentUser.user_id ? helperName : clientName;
   }
 
   onLogout() {
