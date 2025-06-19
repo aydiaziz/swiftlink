@@ -40,28 +40,36 @@ export class NavbarComponent implements OnInit, OnDestroy {
     private router: Router,
     private notifService: NotificationService,
     private chatService: ChatService
-  ) {
-    this.authService.isClientLoggedIn$.subscribe(status => {
-      this.isClientLoggedIn = status;
-    });
-  }
+  ) {}
 
   ngOnInit() {
-    this.loadUnreadCount();
-    this.loadUnreadMessages();
-    this.loadNotifications();
-    this.loadConversations();
-    this.startPolling();
-   this.authService.currentUser$.subscribe(user => {
-    this.currentUser = user;
+    this.authService.isClientLoggedIn$.subscribe(status => {
+      this.isClientLoggedIn = status;
+      if (status) {
+        this.loadUnreadCount();
+        this.loadUnreadMessages();
+        this.loadNotifications();
+        this.loadConversations();
+        if (!this.pollInterval) {
+          this.startPolling();
+        }
+        this.authService.getCurrentUser().subscribe();
+      } else {
+        this.clearPolling();
+        this.unreadCount = 0;
+        this.messageUnreadCount = 0;
+        this.notifications = [];
+        this.conversations = [];
+        this.currentUser = null;
+      }
     });
-    this.authService.getCurrentUser().subscribe();
+    this.authService.currentUser$.subscribe(user => {
+      this.currentUser = user;
+    });
   }
 
   ngOnDestroy(): void {
-    if (this.pollInterval) {
-      clearInterval(this.pollInterval);
-    }
+    this.clearPolling();
   }
 
   loadUnreadCount() {
@@ -95,6 +103,13 @@ export class NavbarComponent implements OnInit, OnDestroy {
       this.loadNotifications();
       this.loadConversations();
     }, 5000);
+  }
+
+  clearPolling() {
+    if (this.pollInterval) {
+      clearInterval(this.pollInterval);
+      this.pollInterval = null;
+    }
   }
 
   toggleNotificationPopup(event: MouseEvent) {

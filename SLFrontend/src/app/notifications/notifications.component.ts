@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NotificationService } from '../services/notification.service';
+import { AuthService } from '../services/auth.service';
 import { CommonModule, NgFor, NgIf } from '@angular/common';
 
 @Component({
@@ -14,11 +15,21 @@ export class NotificationsComponent implements OnInit, OnDestroy {
   showDropdown = false;  // ✅ Gérer l'affichage du menu
   private pollInterval: any;
 
-  constructor(private notificationService: NotificationService) {}
+  constructor(
+    private notificationService: NotificationService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
-    this.loadNotifications();
-    this.startPolling();
+    this.authService.isClientLoggedIn$.subscribe(isLoggedIn => {
+      if (isLoggedIn) {
+        this.loadNotifications();
+        this.startPolling();
+      } else {
+        this.notifications = [];
+        this.clearPolling();
+      }
+    });
   }
 
   // ✅ Charger les notifications
@@ -40,9 +51,14 @@ export class NotificationsComponent implements OnInit, OnDestroy {
     }, 5000);
   }
 
-  ngOnDestroy(): void {
+  clearPolling() {
     if (this.pollInterval) {
       clearInterval(this.pollInterval);
+      this.pollInterval = null;
     }
+  }
+
+  ngOnDestroy(): void {
+    this.clearPolling();
   }
 }
