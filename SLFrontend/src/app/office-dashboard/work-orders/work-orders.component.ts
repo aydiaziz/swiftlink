@@ -136,8 +136,8 @@ export class WorkOrdersComponent implements OnInit {
 }
 
 
-  extrasTotal(extras: Invoice["extras"]): number {
-    return extras.reduce((sum, e) => sum + e.price, 0);
+  extrasTotal(extras?: Invoice["extras"]): number {
+    return extras ? extras.reduce((sum, e) => sum + e.price, 0) : 0;
   }
 
   invoicedAmount(record: WorkOrderRecord): number {
