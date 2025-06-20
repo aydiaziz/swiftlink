@@ -210,6 +210,12 @@
   font-size: 0.95rem;
 }
 
+.summary div {
+  background: #f9fafb;
+  padding: 0.75rem;
+  border-radius: 8px;
+}
+
 .orders-log {
   width: 100%;
   border-collapse: collapse;
@@ -222,14 +228,19 @@
 .orders-log thead {
   background-color: #002f5f;
   color: white;
+  text-transform: uppercase;
 }
 
 .orders-log th,
 .orders-log td {
-  padding: 0.75rem 0.5rem;
+  padding: 0.75rem;
   font-size: 0.85rem;
   text-align: left;
   border-bottom: 1px solid #e0e0e0;
+}
+
+.orders-log tbody tr:nth-child(odd) {
+  background-color: #f9fafb;
 }
 
 .orders-log tr:hover {

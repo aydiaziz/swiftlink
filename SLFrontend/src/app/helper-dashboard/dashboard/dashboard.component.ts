@@ -127,14 +127,17 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.orderService.getAllOrders().subscribe({
       next: (data) => {
         this.orders = data;
-        this.invoiceService.getHelperInvoices().subscribe({
-          next: (invoices) => {
-            this.invoiceStatusMap = {};
-            invoices.forEach((inv: any) => {
-              this.invoiceStatusMap[inv.orderID] = inv.status;
-            });
-            this.calculateSummary();
-          },
+          this.invoiceService.getHelperInvoices().subscribe({
+            next: (invoices) => {
+              this.invoiceStatusMap = {};
+              invoices.forEach((inv: any) => {
+                const orderId = inv.orderID || inv.order;
+                if (orderId !== undefined && orderId !== null) {
+                  this.invoiceStatusMap[orderId] = inv.status;
+                }
+              });
+              this.calculateSummary();
+            },
           error: () => {
             this.calculateSummary();
           }
