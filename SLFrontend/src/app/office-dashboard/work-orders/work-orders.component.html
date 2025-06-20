@@ -117,7 +117,7 @@
       <td>{{ (o.workforce?.hourlyRatebyService || 0) | currency:'USD':'symbol':'1.2-2' }}</td>
       <td>{{ extrasTotal(o.invoice?.extras) | currency:'USD':'symbol':'1.2-2' }}</td>
       <td>{{ invoicedAmount(o) | currency:'USD':'symbol':'1.2-2' }}</td>
-      <td>{{ (invoicedAmount(o) * 0.10) | currency:'USD':'symbol':'1.2-2' }}</td>
+      <td>{{ isfAmount(o) | currency:'USD':'symbol':'1.2-2' }}</td>
       <td>{{ o.invoice?.status || 'N/A' }}</td>
     </tr>
   </tbody>
