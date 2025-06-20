@@ -57,6 +57,7 @@
         <th>Base Payouts</th>
         <th>ISF <small>(Applied on base rate only)</small></th>
         <th>Work Expenses</th>
+        <th>Invoice Status</th>
       </tr>
     </thead>
     <tbody>
@@ -67,6 +68,7 @@
         <td>{{ baseRate * parseDuration(o.orderDuration) | currency:'CAD':'symbol':'1.2-2' }}</td>
         <td>{{ baseRate * parseDuration(o.orderDuration) * 0.10 | currency:'CAD':'symbol':'1.2-2' }}</td>
         <td>{{ 0 | currency:'CAD':'symbol':'1.2-2' }}</td>
+        <td>{{ invoiceStatusMap[o.orderID] || 'N/A' }}</td>
       </tr>
     </tbody>
   </table>

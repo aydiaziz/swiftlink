@@ -214,29 +214,38 @@
   width: 100%;
   border-collapse: collapse;
   margin-top: 1rem;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.orders-log thead {
+  background-color: #002f5f;
+  color: white;
 }
 
 .orders-log th,
 .orders-log td {
-  border: 1px solid #ddd;
-  padding: 0.75rem;
+  padding: 0.75rem 0.5rem;
+  font-size: 0.85rem;
   text-align: left;
-  font-size: 0.95rem;
-}
-
-.orders-log th {
-  background-color: #f0f4f8;
-  color: #333;
-  font-weight: 600;
-}
-
-.orders-log tr:nth-child(even) {
-  background-color: #fafafa;
+  border-bottom: 1px solid #e0e0e0;
 }
 
 .orders-log tr:hover {
   background-color: #f1f7ff;
-  transition: background-color 0.3s ease;
+}
+
+.orders-log th {
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .orders-log th,
+  .orders-log td {
+    font-size: 0.72rem;
+    padding: 0.5rem;
+  }
 }
 
 
