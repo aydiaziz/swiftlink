@@ -13,6 +13,7 @@ export interface Invoice {
   baseAmount: number;
   extras: InvoiceExtra[];
   totalAmount: number;
+  status?: string;
   createdAt: string;
   sentToClient: boolean;
 }
