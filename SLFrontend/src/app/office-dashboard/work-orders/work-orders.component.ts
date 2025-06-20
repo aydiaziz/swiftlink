@@ -13,9 +13,9 @@ interface WorkOrderRecord {
     finalWorkDescription?: string;
     contractorNotes?: string;
   };
-  workforce: Workforce;
-  client: Client;
-  invoice: Invoice;
+  workforce: Workforce | null;
+  client: Client | null;
+  invoice: Invoice | null;
 }
 
 @Component({
@@ -69,7 +69,7 @@ export class WorkOrdersComponent implements OnInit {
   applyFilters(): void {
     const todayStr = new Date().toDateString();
     this.filteredOrders = this.workOrders.filter(o => {
-      const contractorName = o.workforce.lastName;
+      const contractorName = o.workforce?.lastName || '';
       const orderDate = new Date(o.order.executionDate || o.order.creationDate);
       const matchContractor = this.selectedContractor ? contractorName === this.selectedContractor.lastName : true;
       const matchDate = this.dateFilter === 'all'
@@ -142,7 +142,7 @@ export class WorkOrdersComponent implements OnInit {
 
   invoicedAmount(record: WorkOrderRecord): number {
     const hours = Number(record.order.orderDuration) || 0;
-    const rate = record.workforce.hourlyRatebyService || 0;
+    const rate = record.workforce?.hourlyRatebyService || 0;
     return hours * rate;
   }
 }
