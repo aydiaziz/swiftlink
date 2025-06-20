@@ -17,12 +17,24 @@
   </div>
 
   <div class="summary">
+    <div class="summary-card">
     <div><strong>Base Rate:</strong> {{ baseRate | currency:'CAD':'symbol':'1.2-2' }}</div>
+    </div>
+    <div class="summary-card">
     <div><strong>Total Work Orders:</strong> {{ summary.totalWorkOrders }}</div>
+    </div>
+    <div class="summary-card">
     <div><strong>Confirmed Hours:</strong> {{ summary.confirmedHours | number:'1.2-2' }}</div>
+    </div>
+    <div class="summary-card">
     <div><strong>Base Payouts:</strong> {{ summary.basePayouts | currency:'CAD':'symbol':'1.2-2' }}</div>
+    </div>
+    <div class="summary-card">
     <div><strong>My Client-Funded ISF Savings:</strong> {{ summary.isf | currency:'CAD':'symbol':'1.2-2' }}</div>
+    </div>
+    <div class="summary-card">
     <div><strong>Work Expenses:</strong> {{ summary.workExpenses | currency:'CAD':'symbol':'1.2-2' }}</div>
+  </div>
   </div>
 
   <table class="orders-log">

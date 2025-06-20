@@ -238,7 +238,13 @@
   text-align: left;
   border-bottom: 1px solid #e0e0e0;
 }
-
+.summary-card {
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 1rem 1.2rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  border-left: 4px solid #002f5f;
+}
 .orders-log tbody tr:nth-child(odd) {
   background-color: #f9fafb;
 }
