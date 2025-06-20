@@ -17,8 +17,19 @@ export class AuthService {
   public currentUser$ = this.currentUserSubject.asObservable();
   constructor(private http: HttpClient) {}
 
+  private isTokenValid(token: string): boolean {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      if (!payload.exp) return false;
+      return Date.now() < payload.exp * 1000;
+    } catch (e) {
+      return false;
+    }
+  }
+
   private hasClientToken(): boolean {
-    return !!localStorage.getItem('access_token');
+    const token = localStorage.getItem('access_token');
+    return token ? this.isTokenValid(token) : false;
   }
 
   signupClient(clientData: Client): Observable<any> {
