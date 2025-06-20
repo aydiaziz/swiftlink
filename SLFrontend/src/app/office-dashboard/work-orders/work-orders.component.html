@@ -106,15 +106,15 @@
     <tr *ngFor="let o of filteredOrders">
       <td>{{ o.order.executionDate | date:'shortDate' }}</td>
       <td>{{ o.order.orderID }}</td>
-      <td>{{ o.workforce.firstName }} {{ o.workforce.lastName }}</td>
-      <td>{{ o.client.firstName }} {{ o.client.lastName }}</td>
-      <td>{{ o.client.address }}</td>
+      <td>{{ o.workforce?.firstName || 'N/A' }} {{ o.workforce?.lastName || '' }}</td>
+      <td>{{ o.client?.firstName || 'N/A' }} {{ o.client?.lastName || '' }}</td>
+      <td>{{ o.client?.address || 'N/A' }}</td>
       <td>{{ o.order.jobTitle }}</td>
       <td>{{ o.order.finalWorkDescription }}</td>
       <td>{{ o.order.contractorNotes }}</td>
       <td>{{ o.order.clientNotes }}</td>
       <td>{{ o.order.orderDuration }}</td>
-      <td>{{ o.workforce.hourlyRatebyService | currency:'USD':'symbol':'1.2-2' }}</td>
+      <td>{{ (o.workforce?.hourlyRatebyService || 0) | currency:'USD':'symbol':'1.2-2' }}</td>
       <td>{{ extrasTotal(o.invoice?.extras) | currency:'USD':'symbol':'1.2-2' }}</td>
       <td>{{ invoicedAmount(o) | currency:'USD':'symbol':'1.2-2' }}</td>
       <td>{{ (invoicedAmount(o) * 0.10) | currency:'USD':'symbol':'1.2-2' }}</td>
