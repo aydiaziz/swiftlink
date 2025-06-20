@@ -99,8 +99,15 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.authService.getCurrentUser().subscribe({
       next: (user) => {
         this.baseRate = user.workforce?.hourlyRatebyService || 0;
-        if (user.role === 'Workforce' && user.workCategory?.length > 0) {
-          this.helperServiceTypes = user.workCategory.map((category: any) => category.name);
+
+        // The backend assigns the "3rd Party" role to helpers. Accept it here
+        // so we properly load orders for helpers.
+        const isHelper = user.role === 'Workforce' || user.role === '3rd Party';
+
+        if (isHelper && user.workforce?.workCategory?.length > 0) {
+          // workCategory comes from the workforce object and may be a list of
+          // IDs; keep it as-is for now.
+          this.helperServiceTypes = user.workforce.workCategory.map((category: any) => category.name || category);
           this.loadOrders();
         } else {
           this.errorMessage = 'Aucun type de service trouvé pour ce helper';
