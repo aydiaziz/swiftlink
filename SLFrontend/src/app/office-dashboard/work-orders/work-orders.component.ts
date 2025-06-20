@@ -111,7 +111,7 @@ export class WorkOrdersComponent implements OnInit {
       const pending = this.filteredOrders.filter(o => o.order.jobStatus === JobStatus.PENDING);
       const canceled = this.filteredOrders.filter(o => o.order.jobStatus === JobStatus.CANCELED);
 
-      this.activitySummary.total = completed.length;
+      this.activitySummary.total = this.filteredOrders.length;
       this.activitySummary.scheduled = pending.length;
       this.activitySummary.canceled = canceled.length;
       this.activitySummary.confirmedHours = completed.reduce(
