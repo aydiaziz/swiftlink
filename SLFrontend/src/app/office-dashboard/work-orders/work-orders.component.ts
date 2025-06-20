@@ -141,8 +141,10 @@ export class WorkOrdersComponent implements OnInit {
   }
 
   invoicedAmount(record: WorkOrderRecord): number {
-    const hours = Number(record.order.orderDuration) || 0;
-    const rate = record.workforce?.hourlyRatebyService || 0;
-    return hours * rate;
+    return Number(record.invoice?.totalAmount || 0);
+  }
+
+  isfAmount(record: WorkOrderRecord): number {
+    return Number(record.invoice?.baseAmount || 0) * 0.10;
   }
 }
