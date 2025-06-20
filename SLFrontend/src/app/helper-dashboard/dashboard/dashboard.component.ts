@@ -10,6 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { OrderService } from '../../services/order.service';
 import { AuthService } from '../../services/auth.service';
 import { DashboardService } from '../../services/dashboard.service';
+import { InvoiceService } from '../../services/invoice.service';
 
 import { DashboardStats, Job, DashboardResponse } from '../../models/dashboard.model';
 
@@ -40,6 +41,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   errorMessage = '';
   helperServiceTypes: string[] = [];
   orders: any[] = [];
+  invoiceStatusMap: { [orderId: number]: string } = {};
   monthlyIncomeMap: { [key: string]: number } = {};
   chartInstance: Chart | null = null;
   baseRate = 0;
@@ -59,6 +61,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     private orderService: OrderService,
     private authService: AuthService,
     private dashboardService: DashboardService,
+    private invoiceService: InvoiceService,
     private router: Router
   ) {
     Chart.register(...registerables);
@@ -124,7 +127,18 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.orderService.getAllOrders().subscribe({
       next: (data) => {
         this.orders = data;
-        this.calculateSummary();
+        this.invoiceService.getHelperInvoices().subscribe({
+          next: (invoices) => {
+            this.invoiceStatusMap = {};
+            invoices.forEach((inv: any) => {
+              this.invoiceStatusMap[inv.orderID] = inv.status;
+            });
+            this.calculateSummary();
+          },
+          error: () => {
+            this.calculateSummary();
+          }
+        });
       },
       error: (err) => {
         console.error('Error loading orders:', err);
