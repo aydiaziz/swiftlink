@@ -72,10 +72,9 @@ export class SigninComponent implements OnInit {
   onSignIn() {
     const code = this.promotionCode.trim().toLowerCase();
     const valid = this.memberships.some(m =>
-      m.promotionCode && m.promotionCode.toLowerCase() === code
+      m.promotionCode && m.promotionCode.trim().toLowerCase() === code
     );
     const queryParams = valid ? { promo: 'true' } : {};
     this.router.navigate(['/signin-client'], { queryParams });
   }
-
 }
