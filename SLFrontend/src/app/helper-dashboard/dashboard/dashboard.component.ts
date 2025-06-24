@@ -275,7 +275,18 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.summary.workExpenses = 0; // requires invoice data
   }
 
-  parseDuration(duration: string): number {
+  /**
+   * Convert a duration string (e.g. "01:30:00") to hours.
+   *
+   * Some orders may not have a duration defined. In those cases the
+   * parameter can be `null` or `undefined`, so guard against that to
+   * avoid runtime errors when `split` is called on a falsy value.
+   */
+  parseDuration(duration?: string | null): number {
+    if (!duration) {
+      return 0;
+    }
+
     const parts = duration.split(':');
     if (parts.length >= 2) {
       const h = parseInt(parts[0], 10) || 0;
@@ -283,6 +294,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       const s = parseInt(parts[2] || '0', 10) || 0;
       return h + m / 60 + s / 3600;
     }
+
     return 0;
   }
 }
