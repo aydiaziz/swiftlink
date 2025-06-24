@@ -13,7 +13,12 @@
       reliable, and affordable solution for clients.
     </p>
 
-    <input class="promo-input" type="text" [(ngModel)]="promotionCode" placeholder="Enter Promotion CODE here" />
+    <div class="promo-field">
+      <label class="promo-label">Free month</label>
+      <input class="promo-input" type="text" [(ngModel)]="promotionCode" placeholder="Enter Promotion CODE here" />
+      <button type="button" class="btn-apply" (click)="applyPromo()">Apply</button>
+    </div>
+    <div *ngIf="promoError" class="error-message">{{ promoError }}</div>
 
     <h3>Choose a Pricing Plan</h3>
 

@@ -20,6 +20,7 @@ export class SignupComponent implements OnInit {
   genders = Object.values(Gender);
   clientTypes = Object.values(ClientType);
   membershipType: MembershipType | null = null;
+  promoMessage = '';
   clientForm: Client = {
     email: '',
     username: '',
@@ -70,6 +71,10 @@ export class SignupComponent implements OnInit {
     this.route.queryParamMap.subscribe(params => {
       const m = params.get('membership');
       this.membershipType = (m as MembershipType) || null;
+      const promo = params.get('promo');
+      if (promo === 'true') {
+        this.promoMessage = 'Sign-up with promotion code 1 free month';
+      }
     });
   }
 
