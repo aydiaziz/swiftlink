@@ -3,7 +3,7 @@
     <h1>Welcome To Swift Helpers</h1>
 
     <div class="auth-buttons">
-      <button class="btn-secondary" [routerLink]="['/signin-client']">Sign In</button>
+      <button class="btn-secondary" (click)="onSignIn()">Sign In</button>
       <button class="btn-primary" (click)="redirectSignup()">Sign Up</button>
     </div>
 

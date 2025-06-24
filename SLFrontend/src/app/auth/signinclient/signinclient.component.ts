@@ -1,7 +1,7 @@
 import { CommonModule, NgFor } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -11,14 +11,16 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './signinclient.component.html',
   styleUrl: './signinclient.component.css'
 })
-export class SigninclientComponent {
+export class SigninclientComponent implements OnInit {
     form: FormGroup;
     errorMessage = '';
+    promoMessage = '';
   constructor(
       private fb: FormBuilder,
       private authService: AuthService,
       private router: Router,
-      
+      private route: ActivatedRoute,
+
     ) {
       // Création du formulaire avec validation
       this.form = this.fb.group({
@@ -26,6 +28,13 @@ export class SigninclientComponent {
         password: ['', Validators.required],
       });
     }
+
+  ngOnInit(): void {
+    const promo = this.route.snapshot.queryParamMap.get('promo');
+    if (promo === 'true') {
+      this.promoMessage = 'Sign in with promotion code 1 free month';
+    }
+  }
 login() {
   if (this.form.invalid) {
     return;

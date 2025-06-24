@@ -1,3 +1,4 @@
+ <div *ngIf="promoMessage" class="promo-banner">{{ promoMessage }}</div>
  <form (ngSubmit)="login()" [formGroup]="form">
     <input type="email" formControlName="email" placeholder="Email" />
     <input type="password" formControlName="password" placeholder="Password" />
