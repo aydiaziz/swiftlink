@@ -38,7 +38,7 @@ export class WorkOrdersComponent implements OnInit {
   selectedContractor: Workforce | null = null;
 
   rateSummary = { median: 0, average: 0, max: 0, min: 0 };
-  activitySummary = { total: 0, scheduled: 0, canceled: 0, confirmedHours: 0 };
+  activitySummary = { total: 0, scheduled: 0, canceled: 0, confirmedHours: 0, hourlyBaseRate: 0 };
   salesSummary = { totalSales: 0, collectedIsf: 0, pendingPayments: 0, pendingIsf: 0 };
 
   constructor(private orderService: OrderService,private adminService: AdminService) {}
@@ -117,6 +117,9 @@ export class WorkOrdersComponent implements OnInit {
       this.activitySummary.confirmedHours = completed.reduce(
         (sum, o) => sum + (Number(o.order.orderDuration) || 0), 0
       );
+      this.activitySummary.hourlyBaseRate = this.selectedContractor
+        ? Number(this.selectedContractor.hourlyRatebyService || 0)
+        : 0;
 
       // Sales summary
       const totalSales = this.filteredOrders.reduce(

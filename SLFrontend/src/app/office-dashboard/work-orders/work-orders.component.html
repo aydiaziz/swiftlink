@@ -56,6 +56,10 @@
     <h4>Confirmed Hours</h4>
     <p class="value">{{activitySummary.confirmedHours}}</p>
   </div>
+  <div class="summary-card" *ngIf="selectedContractor">
+    <h4>Hourly Base Rate</h4>
+    <p class="value">{{activitySummary.hourlyBaseRate | currency:'USD':'symbol':'1.2-2'}}</p>
+  </div>
 </div>
 
 <div class="summary-grid">
