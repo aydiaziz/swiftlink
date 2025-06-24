@@ -19,6 +19,7 @@ export class SigninComponent implements OnInit {
   memberships: Membership[] = [];
   selectedMembership = '';
   promotionCode = '';
+  promoError = '';
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
@@ -67,6 +68,23 @@ export class SigninComponent implements OnInit {
     this.router.navigate(['/signup'], {
       queryParams: { membership: this.selectedMembership }
     });
+  }
+
+  applyPromo() {
+    const code = this.promotionCode.trim().toLowerCase();
+    const valid = this.memberships.some(m =>
+      m.promotionCode && m.promotionCode.trim().toLowerCase() === code
+    );
+    if (valid) {
+      this.router.navigate(['/signup'], {
+        queryParams: {
+          promo: 'true',
+          membership: this.selectedMembership
+        }
+      });
+    } else {
+      this.promoError = 'Invalid promotion code';
+    }
   }
 
   onSignIn() {
