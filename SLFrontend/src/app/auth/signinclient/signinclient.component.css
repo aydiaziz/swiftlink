@@ -81,3 +81,12 @@ input:focus {
 .switch-auth a:hover {
   text-decoration: underline;
 }
+
+.promo-banner {
+  background-color: #e0f7fa;
+  color: #006064;
+  padding: 10px;
+  text-align: center;
+  margin-bottom: 1rem;
+  border-radius: 6px;
+}
