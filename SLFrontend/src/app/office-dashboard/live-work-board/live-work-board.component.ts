@@ -22,12 +22,12 @@ export class LiveWorkBoardComponent implements OnInit {
   }
 
   loadOrders(): void {
-    this.orderService.getAllOrders().subscribe({
+    this.orderService.getWorkOrdersDashboard().subscribe({
       next: (data) => {
         this.orders = data;
-        this.activeUnassigned = this.orders.filter(o => o.jobStatus !== 'Completed' && !o.assignedTo);
-        this.activeAssigned = this.orders.filter(o => o.jobStatus !== 'Completed' && o.assignedTo);
-        this.pastOrders = this.orders.filter(o => o.jobStatus === 'Completed');
+        this.activeUnassigned = this.orders.filter(o => o.order.jobStatus !== 'Completed' && (!o.order.assignedTo || o.order.assignedTo.length === 0));
+        this.activeAssigned = this.orders.filter(o => o.order.jobStatus !== 'Completed' && o.order.assignedTo && o.order.assignedTo.length > 0);
+        this.pastOrders = this.orders.filter(o => o.order.jobStatus === 'Completed');
       },
       error: (err) => console.error('Error loading orders:', err)
     });
