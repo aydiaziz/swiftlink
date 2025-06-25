@@ -39,7 +39,7 @@ export class WorkOrdersComponent implements OnInit {
 
   rateSummary = { median: 0, average: 0, max: 0, min: 0 };
   activitySummary = { total: 0, scheduled: 0, canceled: 0, confirmedHours: 0, hourlyBaseRate: 0 };
-  salesSummary = { totalSales: 0, collectedIsf: 0, pendingPayments: 0, pendingIsf: 0 };
+  salesSummary = { totalSales: 0, collectedIsf: 0, pendingPayments: 0, pendingIsf: 0, collectedMembership: 0 };
 
   constructor(private orderService: OrderService,private adminService: AdminService) {}
 
@@ -115,22 +115,53 @@ export class WorkOrdersComponent implements OnInit {
       this.activitySummary.scheduled = pending.length;
       this.activitySummary.canceled = canceled.length;
       this.activitySummary.confirmedHours = completed.reduce(
-        (sum, o) => sum + (Number(o.order.orderDuration) || 0), 0
+        (sum, o) => sum + this.durationToHours(o.invoice?.duration || o.order.orderDuration), 0
       );
       this.activitySummary.hourlyBaseRate = this.selectedContractor
         ? Number(this.selectedContractor.hourlyRatebyService || 0)
         : 0;
 
-      // Sales summary
-      const totalSales = this.filteredOrders.reduce(
-        (sum, o) => sum + (o.invoice?.totalAmount || 0), 0
-      );
-      const pendingPayments = pending.length * this.rateSummary.average;
+      // Sales summary based on invoice statuses
+      const paidStatuses = ['paid by cash', 'paid by E-transfer'];
+      const pendingStatuses = ['pending', 'Future Payment', 'In Dispute'];
+
+      const paidInvoices = this.filteredOrders
+        .map(o => o.invoice)
+        .filter(inv => inv && paidStatuses.includes(inv.status || '')) as Invoice[];
+
+      const pendingInvoices = this.filteredOrders
+        .map(o => o.invoice)
+        .filter(inv => inv && pendingStatuses.includes(inv.status || '')) as Invoice[];
+
+      const totalSales = paidInvoices.reduce((sum, inv) => {
+        const base = Number(inv.baseAmount) || 0;
+        const hours = this.durationToHours(inv.duration);
+        return sum + base * hours;
+      }, 0);
+
+      const pendingPayments = pendingInvoices.reduce((sum, inv) => {
+        const base = Number(inv.baseAmount) || 0;
+        const hours = this.durationToHours(inv.duration);
+        return sum + base * hours;
+      }, 0);
+
+      const membershipLabels = [
+        'pay-per-use',
+        'Pay-per-use Fee',
+        'Preferred Member- Unlimited bookings',
+        'Ultimate Member- Unlimited bookings'
+      ];
+      const collectedMembership = paidInvoices.reduce((sum, inv) => {
+        return sum + (inv.extras ? inv.extras
+          .filter(e => membershipLabels.includes(e.label))
+          .reduce((s, e) => s + e.price, 0) : 0);
+      }, 0);
 
       this.salesSummary.totalSales = totalSales;
       this.salesSummary.collectedIsf = totalSales * 0.10;
       this.salesSummary.pendingPayments = pendingPayments;
       this.salesSummary.pendingIsf = pendingPayments * 0.10;
+      this.salesSummary.collectedMembership = collectedMembership;
     },
     error: (err) => {
       console.error('Failed to fetch helpers for rate summary:', err);
@@ -149,5 +180,23 @@ export class WorkOrdersComponent implements OnInit {
 
   isfAmount(record: WorkOrderRecord): number {
     return Number(record.invoice?.baseAmount || 0) * 0.10;
+  }
+
+  private durationToHours(duration?: string | null): number {
+    if (!duration) {
+      return 0;
+    }
+    let days = 0;
+    let timePart = duration;
+    const dayMatch = duration.match(/^(\d+)\s+/);
+    if (dayMatch) {
+      days = parseInt(dayMatch[1], 10);
+      timePart = duration.substring(dayMatch[0].length);
+    }
+    const parts = timePart.split(":");
+    const h = parseInt(parts[0], 10) || 0;
+    const m = parseInt(parts[1], 10) || 0;
+    const s = parseInt(parts[2], 10) || 0;
+    return days * 24 + h + m / 60 + s / 3600;
   }
 }
