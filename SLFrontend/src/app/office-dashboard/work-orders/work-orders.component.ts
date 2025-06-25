@@ -69,9 +69,14 @@ export class WorkOrdersComponent implements OnInit {
   applyFilters(): void {
     const todayStr = new Date().toDateString();
     this.filteredOrders = this.workOrders.filter(o => {
-      const contractorName = o.workforce?.lastName || '';
+      const helperId = (o.invoice as any)?.helper || (o.invoice as any)?.helperID || (o.invoice as any)?.helper_id;
+      const assignedTo = o.order.assignedTo;
+      const matchContractor = this.selectedContractor ? (
+        helperId === this.selectedContractor.UserId ||
+        (Array.isArray(assignedTo) ? assignedTo.includes(this.selectedContractor.UserId) : assignedTo === this.selectedContractor.UserId)
+      ) : true;
+
       const orderDate = new Date(o.order.executionDate || o.order.creationDate);
-      const matchContractor = this.selectedContractor ? contractorName === this.selectedContractor.lastName : true;
       const matchDate = this.dateFilter === 'all'
         ? true
         : this.dateFilter === 'today'
@@ -106,16 +111,27 @@ export class WorkOrdersComponent implements OnInit {
             : (hourlyRates[len / 2 - 1] + hourlyRates[len / 2]) / 2)
         : 0;
 
-      // Job Status summaries
-      const completed = this.filteredOrders.filter(o => o.order.jobStatus === JobStatus.COMPLETED);
-      const pending = this.filteredOrders.filter(o => o.order.jobStatus === JobStatus.PENDING);
-      const canceled = this.filteredOrders.filter(o => o.order.jobStatus === JobStatus.CANCELED);
+      // Job Status and activity summaries
+      const selectedId = this.selectedContractor ? (this.selectedContractor as any).UserId : null;
+      const ordersForHelper = this.workOrders.filter(o => {
+        const assigned = o.order.assignedTo;
+        if (!selectedId) return true;
+        return Array.isArray(assigned) ? assigned.includes(selectedId) : assigned === selectedId;
+      });
+      const invoicesForHelper = this.workOrders
+        .map(o => o.invoice)
+        .filter(inv => inv && (!selectedId ||
+          (inv.helper === selectedId || (inv as any).helperID === selectedId || (inv as any).helper_id === selectedId))) as Invoice[];
 
-      this.activitySummary.total = this.filteredOrders.length;
-      this.activitySummary.scheduled = pending.length;
+      const completed = ordersForHelper.filter(o => o.order.jobStatus === JobStatus.COMPLETED);
+      const booked = ordersForHelper.filter(o => o.order.jobStatus === JobStatus.BOOKED);
+      const canceled = ordersForHelper.filter(o => o.order.jobStatus === JobStatus.CANCELED);
+
+      this.activitySummary.total = completed.length;
+      this.activitySummary.scheduled = booked.length;
       this.activitySummary.canceled = canceled.length;
-      this.activitySummary.confirmedHours = completed.reduce(
-        (sum, o) => sum + this.durationToHours(o.invoice?.duration || o.order.orderDuration), 0
+      this.activitySummary.confirmedHours = invoicesForHelper.reduce(
+        (sum, inv) => sum + this.durationToHours(inv.duration), 0
       );
       this.activitySummary.hourlyBaseRate = this.selectedContractor
         ? Number(this.selectedContractor.hourlyRatebyService || 0)
@@ -125,25 +141,11 @@ export class WorkOrdersComponent implements OnInit {
       const paidStatuses = ['paid by cash', 'paid by E-transfer'];
       const pendingStatuses = ['pending', 'Future Payment', 'In Dispute'];
 
-      const paidInvoices = this.filteredOrders
-        .map(o => o.invoice)
-        .filter(inv => inv && paidStatuses.includes(inv.status || '')) as Invoice[];
+      const paidInvoices = invoicesForHelper.filter(inv => paidStatuses.includes(inv.status || ''));
+      const pendingInvoices = invoicesForHelper.filter(inv => pendingStatuses.includes(inv.status || ''));
 
-      const pendingInvoices = this.filteredOrders
-        .map(o => o.invoice)
-        .filter(inv => inv && pendingStatuses.includes(inv.status || '')) as Invoice[];
-
-      const totalSales = paidInvoices.reduce((sum, inv) => {
-        const base = Number(inv.baseAmount) || 0;
-        const hours = this.durationToHours(inv.duration);
-        return sum + base * hours;
-      }, 0);
-
-      const pendingPayments = pendingInvoices.reduce((sum, inv) => {
-        const base = Number(inv.baseAmount) || 0;
-        const hours = this.durationToHours(inv.duration);
-        return sum + base * hours;
-      }, 0);
+      const totalSales = paidInvoices.reduce((sum, inv) => sum + Number(inv.totalAmount || 0), 0);
+      const pendingPayments = pendingInvoices.reduce((sum, inv) => sum + Number(inv.totalAmount || 0), 0);
 
       const membershipLabels = [
         'pay-per-use',
@@ -158,9 +160,9 @@ export class WorkOrdersComponent implements OnInit {
       }, 0);
 
       this.salesSummary.totalSales = totalSales;
-      this.salesSummary.collectedIsf = totalSales * 0.10;
+      this.salesSummary.collectedIsf = paidInvoices.reduce((sum, inv) => sum + Number(inv.baseAmount || 0) * 0.10, 0);
       this.salesSummary.pendingPayments = pendingPayments;
-      this.salesSummary.pendingIsf = pendingPayments * 0.10;
+      this.salesSummary.pendingIsf = pendingInvoices.reduce((sum, inv) => sum + Number(inv.baseAmount || 0) * 0.10, 0);
       this.salesSummary.collectedMembership = collectedMembership;
     },
     error: (err) => {
