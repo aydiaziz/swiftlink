@@ -1,19 +1,44 @@
 <div class="orders-container">
-    <h2>Orders</h2>
-    <ul>
-      <li *ngFor="let order of orders">
-        <div class="order-details">
-          <h3>{{ order.jobTitle }}</h3>
-          <p><strong>Address:</strong> {{ order.jobAddress }}</p>
-          <p><strong>Priority:</strong> 
-            <span [ngClass]="getPriorityClass(order.priorityLevel)">{{ order.priorityLevel }}</span>
-          </p>
-          <p><strong>Execution Date:</strong> {{ order.executionDate | date:'mediumDate' }}</p>
-          <p><strong>Expiration Time:</strong> {{ order.expirationTime | date:'shortTime' }}</p>
-          <p><strong>Resources:</strong> {{ order.jobResources }}</p>
-        </div>
-        
-      </li>
-    </ul>
-  </div>
+  <h2>Active / Not Assigned</h2>
+  <ul>
+    <li *ngFor="let order of activeUnassigned" (click)="toggleOrder(order.orderID)">
+      <h3>{{ order.jobTitle }}</h3>
+      <div class="order-details" *ngIf="expandedOrderId === order.orderID">
+        <p><strong>Address:</strong> {{ order.jobAddress }}</p>
+        <p><strong>Priority:</strong> <span [ngClass]="getPriorityClass(order.priorityLevel)">{{ order.priorityLevel }}</span></p>
+        <p><strong>Execution Date:</strong> {{ order.executionDate | date:'mediumDate' }}</p>
+        <p><strong>Expiration Time:</strong> {{ order.expirationTime | date:'shortTime' }}</p>
+        <p><strong>Resources:</strong> {{ order.jobResources }}</p>
+      </div>
+    </li>
+  </ul>
+
+  <h2>Active / Assigned</h2>
+  <ul>
+    <li *ngFor="let order of activeAssigned" (click)="toggleOrder(order.orderID)">
+      <h3>{{ order.jobTitle }}</h3>
+      <div class="order-details" *ngIf="expandedOrderId === order.orderID">
+        <p><strong>Address:</strong> {{ order.jobAddress }}</p>
+        <p><strong>Priority:</strong> <span [ngClass]="getPriorityClass(order.priorityLevel)">{{ order.priorityLevel }}</span></p>
+        <p><strong>Execution Date:</strong> {{ order.executionDate | date:'mediumDate' }}</p>
+        <p><strong>Expiration Time:</strong> {{ order.expirationTime | date:'shortTime' }}</p>
+        <p><strong>Resources:</strong> {{ order.jobResources }}</p>
+      </div>
+    </li>
+  </ul>
+
+  <h2>Past Work Orders</h2>
+  <ul>
+    <li *ngFor="let order of pastOrders" (click)="toggleOrder(order.orderID)">
+      <h3>{{ order.jobTitle }}</h3>
+      <div class="order-details" *ngIf="expandedOrderId === order.orderID">
+        <p><strong>Address:</strong> {{ order.jobAddress }}</p>
+        <p><strong>Priority:</strong> <span [ngClass]="getPriorityClass(order.priorityLevel)">{{ order.priorityLevel }}</span></p>
+        <p><strong>Execution Date:</strong> {{ order.executionDate | date:'mediumDate' }}</p>
+        <p><strong>Expiration Time:</strong> {{ order.expirationTime | date:'shortTime' }}</p>
+        <p><strong>Resources:</strong> {{ order.jobResources }}</p>
+      </div>
+    </li>
+  </ul>
+</div>
   
