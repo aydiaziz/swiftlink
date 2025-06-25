@@ -32,10 +32,18 @@ export class WorkSchedulesComponent implements OnInit {
   isTiming = false;
   todayJobs: any[]=[];
   timerDisplay = '00:00:00';
- intervalId: any;
- manualDuration: number = 0; 
+  intervalId: any;
+  manualDuration: number = 0;
 
   constructor(private orderService: OrderService, private router: Router) {}
+
+  viewOrderDetails(job: Order) {
+    this.selectedOrder = job;
+  }
+
+  clearSelectedOrder() {
+    this.selectedOrder = null;
+  }
 
   ngOnInit(): void {
     this.orderService.getAllOrders().subscribe((orders: any[]) => {

@@ -120,10 +120,38 @@
     background-color: #005f46;
   }
   
-  .set-duration-btn:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-  }
+.set-duration-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Selected order details */
+.selected-order {
+  background-color: #e6f7ff;
+  border: 1px solid #b3d8ff;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.selected-order h4 {
+  margin-top: 0;
+  color: #002f5f;
+}
+
+.selected-order button {
+  margin-top: 10px;
+  background-color: #002f5f;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+.selected-order button:hover {
+  background-color: #004080;
+}
   
   
   
