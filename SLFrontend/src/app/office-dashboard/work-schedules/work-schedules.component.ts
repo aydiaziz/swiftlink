@@ -20,6 +20,7 @@ export class WorkSchedulesComponent implements OnInit {
     plugins: [dayGridPlugin, interactionPlugin],
     initialView: 'dayGridMonth',
     events: [],
+    eventClick: this.onEventClick.bind(this),
     headerToolbar: {
       left: 'prev,next today',
       center: 'title',
@@ -37,6 +38,13 @@ export class WorkSchedulesComponent implements OnInit {
 
   constructor(private orderService: OrderService, private router: Router) {}
 
+  onEventClick(info: any) {
+    const order: Order | undefined = info.event.extendedProps.order;
+    if (order) {
+      this.viewOrderDetails(order);
+    }
+  }
+
   viewOrderDetails(job: Order) {
     this.selectedOrder = job;
   }
@@ -47,14 +55,16 @@ export class WorkSchedulesComponent implements OnInit {
 
   ngOnInit(): void {
     this.orderService.getAllOrders().subscribe((orders: any[]) => {
-  this.calendarOptions.events = orders.map((order: any) => ({
-    title: order.jobTitle,
-    date: order.executionDate,
-    extendedProps: {
-      address: order.jobAddress
-    }
-  }));
-});
+      this.calendarOptions.events = orders.map((order: any) => ({
+        id: order.orderID,
+        title: order.jobTitle,
+        date: order.executionDate,
+        extendedProps: {
+          address: order.jobAddress,
+          order: order
+        }
+      }));
+    });
     this.orderService.getJobsToday().subscribe({
       next: orders => {
         this.todayJobs = orders.filter((order: any) => !order.hasInvoice);
