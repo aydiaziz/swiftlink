@@ -55,7 +55,9 @@ export class SigninComponent implements OnInit {
       if (role === 'Client') {
         this.router.navigate(['/']);
       } else if (role === 'Super Admin') {
-        this.router.navigate(['/office-dashboard']);
+        // Super admin should login directly via /office-dashboard
+        this.authService.logout();
+        this.errorMessage = 'Please access the office dashboard to sign in.';
       }
     },
     error: (err) => {
