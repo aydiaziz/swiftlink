@@ -8,19 +8,25 @@
     <h3>Today's Jobs</h3>
 
     <div *ngIf="selectedOrder" class="selected-order">
-      <h4>{{ selectedOrder.jobTitle }}</h4>
-      <p><strong>Address:</strong> {{ selectedOrder.jobAddress }}</p>
-      <p><strong>Execution Date:</strong> {{ selectedOrder.executionDate | date:'medium' }}</p>
-      <p><strong>Priority:</strong> {{ selectedOrder.priorityLevel }}</p>
-      <p><strong>Service:</strong> {{ selectedOrder.serviceType }}</p>
-      <p *ngIf="selectedOrder.manpower"><strong>Manpower:</strong> {{ selectedOrder.manpower }}</p>
-      <p *ngIf="selectedOrder.jobResources"><strong>Resources:</strong> {{ selectedOrder.jobResources }}</p>
+      <h4>{{ selectedOrder.order.jobTitle }}</h4>
+      <p><strong>Address:</strong> {{ selectedOrder.order.jobAddress }}</p>
+      <p><strong>Status:</strong> {{ selectedOrder.order.jobStatus }}</p>
+      <p><strong>Priority:</strong> {{ selectedOrder.order.priorityLevel }}</p>
+      <p><strong>Service:</strong> {{ selectedOrder.order.serviceType }}</p>
+      <p><strong>Creation Date:</strong> {{ selectedOrder.order.creationDate | date:'medium' }}</p>
+      <p><strong>Execution Date:</strong> {{ selectedOrder.order.executionDate | date:'medium' }}</p>
+      <p *ngIf="selectedOrder.workforce"><strong>Helper:</strong> {{ selectedOrder.workforce.firstName }} {{ selectedOrder.workforce.lastName }}</p>
+      <p *ngIf="selectedOrder.order.jobStatus === 'Completed'"><strong>Duration:</strong> {{ selectedOrder.order.orderDuration }}</p>
+      <p *ngIf="selectedOrder.order.manpower"><strong>Manpower:</strong> {{ selectedOrder.order.manpower }}</p>
+      <p *ngIf="selectedOrder.order.jobResources"><strong>Resources:</strong> {{ selectedOrder.order.jobResources }}</p>
+      <p><strong>Client:</strong> {{ selectedOrder.client.firstName }} {{ selectedOrder.client.lastName }}</p>
+      <p><strong>Client Phone:</strong> {{ selectedOrder.client.phone }}</p>
       <button (click)="clearSelectedOrder()">Close</button>
     </div>
 
     <div class="job-card" *ngFor="let job of todayJobs" (click)="viewOrderDetails(job)">
-      <p><strong>{{ job.jobTitle }}</strong></p>
-      <p>⏰ {{ job.executionDate | date:'shortTime' }}</p>
+      <p><strong>{{ job.order.jobTitle }}</strong></p>
+      <p>⏰ {{ job.order.executionDate | date:'shortTime' }}</p>
     </div>
 
   </div>

@@ -8,6 +8,13 @@ import { OrderService } from '../../services/order.service';
 import { Order } from '../../models/order.model';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+
+interface WorkOrderRecord {
+  order: Order;
+  workforce: { firstName: string; lastName: string } | null;
+  client: { firstName: string; lastName: string; phone: string } | null;
+  invoice: any;
+}
 @Component({
   selector: 'app-work-schedules',
   standalone: true,
@@ -27,11 +34,11 @@ export class WorkSchedulesComponent implements OnInit {
       right: 'dayGridMonth'
     }
   };
-  selectedOrder: Order | null = null;
+  selectedOrder: WorkOrderRecord | null = null;
   startTime: Date | null = null;
   endTime: Date | null = null;
   isTiming = false;
-  todayJobs: any[]=[];
+  todayJobs: WorkOrderRecord[]=[];
   timerDisplay = '00:00:00';
   intervalId: any;
   manualDuration: number = 0;
@@ -39,14 +46,14 @@ export class WorkSchedulesComponent implements OnInit {
   constructor(private orderService: OrderService, private router: Router) {}
 
   onEventClick(info: any) {
-    const order: Order | undefined = info.event.extendedProps.order;
-    if (order) {
-      this.viewOrderDetails(order);
+    const record: WorkOrderRecord | undefined = info.event.extendedProps.record;
+    if (record) {
+      this.viewOrderDetails(record);
     }
   }
 
-  viewOrderDetails(job: Order) {
-    this.selectedOrder = job;
+  viewOrderDetails(record: WorkOrderRecord) {
+    this.selectedOrder = record;
   }
 
   clearSelectedOrder() {
@@ -54,27 +61,26 @@ export class WorkSchedulesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.orderService.getAllOrders().subscribe((orders: any[]) => {
-      this.calendarOptions.events = orders.map((order: any) => ({
-        id: order.orderID,
-        title: order.jobTitle,
-        date: order.executionDate,
+    this.orderService.getWorkOrdersDashboard().subscribe(records => {
+      const today = new Date().toDateString();
+      this.calendarOptions.events = records.map((rec: any) => ({
+        id: rec.order.orderID,
+        title: rec.order.jobTitle,
+        date: rec.order.executionDate,
         extendedProps: {
-          address: order.jobAddress,
-          order: order
+          address: rec.order.jobAddress,
+          record: rec
         }
       }));
-    });
-    this.orderService.getJobsToday().subscribe({
-      next: orders => {
-        this.todayJobs = orders.filter((order: any) => !order.hasInvoice);
-      },
-      error: err => {
-        console.error('❌ Failed to load today’s jobs:', err);
-      }
+      this.todayJobs = records.filter((rec: any) => {
+        const exec = rec.order.executionDate ? new Date(rec.order.executionDate).toDateString() : '';
+        return exec === today && !rec.order.hasInvoice;
+      });
+    }, err => {
+      console.error('❌ Failed to load orders:', err);
     });
   }
-  startJob(job: Order) {
+  startJob(job: WorkOrderRecord) {
     this.selectedOrder = job;
     this.startTime = new Date();
     this.isTiming = true;
@@ -127,14 +133,14 @@ export class WorkSchedulesComponent implements OnInit {
   
       // Envoi vers l'API
       this.orderService.updateOrderDuration(
-        this.selectedOrder.orderID,
+        this.selectedOrder.order.orderID,
         this.startTime?.toISOString() || '',
         this.endTime.toISOString(),
         durationInMinutes  // Envoie la durée finale
       ).subscribe({
         next: res => {
           
-          const orderId = this.selectedOrder?.orderID;
+          const orderId = this.selectedOrder?.order.orderID;
           this.selectedOrder = null;
           this.timerDisplay = '00:00:00';
           this.manualDuration = 0;
@@ -153,19 +159,19 @@ export class WorkSchedulesComponent implements OnInit {
   pad(num: number): string {
     return num < 10 ? '0' + num : num.toString();
   }
-  setManualDuration(job: Order) {
+  setManualDuration(job: WorkOrderRecord) {
     if (this.manualDuration > 0) {
       const now = new Date(); // On peut utiliser la date actuelle pour start & end fictifs
   
       this.orderService.updateOrderDuration(
-        job.orderID,
+        job.order.orderID,
         now.toISOString(),
         now.toISOString(),
         this.manualDuration
       ).subscribe({
         next: res => {
           
-          const orderId = job.orderID;
+          const orderId = job.order.orderID;
           this.manualDuration = 0;
           alert('Duration has been set successfully!');
           this.router.navigate(['/helper-dashboard/invoice', orderId]);
