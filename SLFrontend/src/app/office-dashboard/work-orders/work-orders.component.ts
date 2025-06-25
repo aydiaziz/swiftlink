@@ -182,9 +182,12 @@ export class WorkOrdersComponent implements OnInit {
     return Number(record.invoice?.baseAmount || 0) * 0.10;
   }
 
-  private durationToHours(duration?: string | null): number {
-    if (!duration) {
+  private durationToHours(duration?: string | number | null): number {
+    if (duration == null) {
       return 0;
+    }
+    if (typeof duration === 'number') {
+      return duration;
     }
     let days = 0;
     let timePart = duration;
