@@ -44,6 +44,8 @@ export interface Client extends User {
 export interface Workforce extends User {
   phone: string;
   gender: Gender;  // ✅ Utilisation de l'énumération
+  professionnelemail?: string;
+  UserId?: number | { email: string };
   driverLicence?: string;
   driverLicenceExpiry?: string | null ;
   credentials?: string;
