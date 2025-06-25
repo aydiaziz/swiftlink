@@ -1,19 +1,27 @@
 <div class="agenda-container">
-    <div class="calendar-wrapper">
-      <h2>🗓️ My Job Calendar</h2>
-      <full-calendar [options]="calendarOptions"></full-calendar>
-    </div>
-  
-    <div class="jobs-today">
-      <h3>Today's Jobs</h3>
-    
-      <div class="job-card" *ngFor="let job of todayJobs">
-        <p><strong>{{ job.jobTitle }}</strong></p>
-        <p>⏰ {{ job.executionDate | date:'shortTime' }}</p>
-    
-      
-       
-    </div>
-    
+  <div class="calendar-wrapper">
+    <h2>🗓️ My Job Calendar</h2>
+    <full-calendar [options]="calendarOptions"></full-calendar>
   </div>
-  
+
+  <div class="jobs-today">
+    <h3>Today's Jobs</h3>
+
+    <div *ngIf="selectedOrder" class="selected-order">
+      <h4>{{ selectedOrder.jobTitle }}</h4>
+      <p><strong>Address:</strong> {{ selectedOrder.jobAddress }}</p>
+      <p><strong>Execution Date:</strong> {{ selectedOrder.executionDate | date:'medium' }}</p>
+      <p><strong>Priority:</strong> {{ selectedOrder.priorityLevel }}</p>
+      <p><strong>Service:</strong> {{ selectedOrder.serviceType }}</p>
+      <p *ngIf="selectedOrder.manpower"><strong>Manpower:</strong> {{ selectedOrder.manpower }}</p>
+      <p *ngIf="selectedOrder.jobResources"><strong>Resources:</strong> {{ selectedOrder.jobResources }}</p>
+      <button (click)="clearSelectedOrder()">Close</button>
+    </div>
+
+    <div class="job-card" *ngFor="let job of todayJobs" (click)="viewOrderDetails(job)">
+      <p><strong>{{ job.jobTitle }}</strong></p>
+      <p>⏰ {{ job.executionDate | date:'shortTime' }}</p>
+    </div>
+
+  </div>
+</div>
