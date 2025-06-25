@@ -108,7 +108,7 @@
   </thead>
   <tbody>
     <tr *ngFor="let o of filteredOrders">
-      <td>{{ o.order.executionDate | date:'shortDate' }}</td>
+      <td>{{ o.order.executionDate ? (o.order.executionDate | date:'shortDate') : (o.order.creationDate | date:'shortDate') }}</td>
       <td>{{ o.order.orderID }}</td>
       <td>{{ o.workforce?.firstName || 'N/A' }} {{ o.workforce?.lastName || '' }}</td>
       <td>{{ o.client?.firstName || 'N/A' }} {{ o.client?.lastName || '' }}</td>
