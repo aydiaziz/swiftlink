@@ -1,7 +1,7 @@
 <div class="orders-container">
   <h2>Active / Not Assigned</h2>
   <ul>
-    <li *ngFor="let order of activeUnassigned" (click)="toggleOrder(order.order.orderID)">
+    <li *ngFor="let order of activeUnassigned; trackBy: trackById" (click)="toggleOrder(order.order.orderID)">
       <h3>{{ order.order.jobTitle }}</h3>
       <div class="order-details" *ngIf="expandedOrderId === order.order.orderID">
         <p><strong>Address:</strong> {{ order.order.jobAddress }}</p>
@@ -19,7 +19,7 @@
 
   <h2>Active / Assigned</h2>
   <ul>
-    <li *ngFor="let order of activeAssigned" (click)="toggleOrder(order.order.orderID)">
+    <li *ngFor="let order of activeAssigned; trackBy: trackById" (click)="toggleOrder(order.order.orderID)">
       <h3>{{ order.order.jobTitle }}</h3>
       <div class="order-details" *ngIf="expandedOrderId === order.order.orderID">
         <p><strong>Address:</strong> {{ order.order.jobAddress }}</p>
@@ -38,7 +38,7 @@
 
   <h2>Past Work Orders</h2>
   <ul>
-    <li *ngFor="let order of pastOrders" (click)="toggleOrder(order.order.orderID)">
+    <li *ngFor="let order of pastOrders; trackBy: trackById" (click)="toggleOrder(order.order.orderID)">
       <h3>{{ order.order.jobTitle }}</h3>
       <div class="order-details" *ngIf="expandedOrderId === order.order.orderID">
         <p><strong>Address:</strong> {{ order.order.jobAddress }}</p>
