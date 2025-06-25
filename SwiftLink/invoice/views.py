@@ -163,6 +163,10 @@ def submit_invoice(request, order_id):
         invoice.sentToClient = True
         invoice.save()
 
+        # Mark the related order as completed
+        order.jobStatus = Order.JobStatus.COMPLETED
+        order.save()
+
         # ➔ Générer le PDF
         html_content = render_to_string('invoice_template.html', {'invoice': invoice})
         pdf_file = BytesIO()

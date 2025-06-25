@@ -103,6 +103,7 @@ def confirm_order_assignment(request):
             return Response({'error': 'No order associated with this conversation'}, status=400)
 
         conversation.order.assignedTo = conversation.helper.user_id
+        conversation.order.jobStatus = Order.JobStatus.BOOKED
         conversation.order.save()
 
         return Response({'success': True})
