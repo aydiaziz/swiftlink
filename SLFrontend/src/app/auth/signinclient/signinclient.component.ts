@@ -47,9 +47,7 @@ login() {
       const role = response.role;
       if (role === 'Client') {
         this.router.navigate(['/']);
-      } else if (role === 'Super Admin') {
-        this.router.navigate(['/office-dashboard']);
-      }
+      } 
     },
     error: (err) => {
       this.errorMessage = err?.error?.error || 'An error occurred, please try again.';
