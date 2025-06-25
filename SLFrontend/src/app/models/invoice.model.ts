@@ -7,6 +7,7 @@ export interface Invoice {
   invoiceID: number;
   orderID: number;
   helperID: number;
+  helper?: number;
   serviceType: string;
   duration: number; // hours worked
   unitPrice: number;
