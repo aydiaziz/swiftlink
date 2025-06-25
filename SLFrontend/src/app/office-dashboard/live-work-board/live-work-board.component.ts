@@ -10,6 +10,10 @@ import { CommonModule, NgFor } from '@angular/common';
 })
 export class LiveWorkBoardComponent implements OnInit {
   orders: any[] = [];
+  activeUnassigned: any[] = [];
+  activeAssigned: any[] = [];
+  pastOrders: any[] = [];
+  expandedOrderId: number | null = null;
   errorMessage: string = '';
   constructor(private orderService: OrderService) {}
 
@@ -19,7 +23,12 @@ export class LiveWorkBoardComponent implements OnInit {
 
   loadOrders(): void {
     this.orderService.getAllOrders().subscribe({
-      next: (data) => this.orders = data,
+      next: (data) => {
+        this.orders = data;
+        this.activeUnassigned = this.orders.filter(o => o.jobStatus !== 'Completed' && !o.assignedTo);
+        this.activeAssigned = this.orders.filter(o => o.jobStatus !== 'Completed' && o.assignedTo);
+        this.pastOrders = this.orders.filter(o => o.jobStatus === 'Completed');
+      },
       error: (err) => console.error('Error loading orders:', err)
     });
   }
@@ -35,6 +44,10 @@ export class LiveWorkBoardComponent implements OnInit {
         this.errorMessage = 'Failed to like order. Please try again!';
       }
     });
+  }
+
+  toggleOrder(orderID: number): void {
+    this.expandedOrderId = this.expandedOrderId === orderID ? null : orderID;
   }
   getPriorityClass(priority: string): string {
     switch (priority.toLowerCase()) {
