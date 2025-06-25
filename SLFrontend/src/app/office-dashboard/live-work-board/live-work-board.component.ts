@@ -26,7 +26,7 @@ export class LiveWorkBoardComponent implements OnInit {
       next: (data) => {
         this.orders = data;
         this.activeUnassigned = this.orders.filter(o => o.order.jobStatus !== 'Completed' && (!o.order.assignedTo || o.order.assignedTo.length === 0));
-        this.activeAssigned = this.orders.filter(o => o.order.jobStatus !== 'Completed' && o.order.assignedTo && o.order.assignedTo.length > 0);
+        this.activeAssigned = this.orders.filter(o => o.order.jobStatus === 'Booked' );
         this.pastOrders = this.orders.filter(o => o.order.jobStatus === 'Completed');
       },
       error: (err) => console.error('Error loading orders:', err)
