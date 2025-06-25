@@ -163,8 +163,25 @@ signin(credentials: { email: string; password: string }): Observable<any> {
     return this.http.patch(`${this.apiUrl}/client/profile/`, data);
   }
   loginSuperAdmin(data: { email: string; password: string }): Observable<any> {
-  return this.http.post(`${this.apiUrl}/login-superadmin/`, data);
-}
+    return this.http.post(`${this.apiUrl}/login-superadmin/`, data).pipe(
+      tap((response: any) => {
+        if (response.access && response.refresh) {
+          localStorage.setItem('access_token', response.access);
+          localStorage.setItem('refresh_token', response.refresh);
+          localStorage.setItem('role', response.role);
+          localStorage.setItem('user_id', response.user_id);
+          this.isClientLoggedInSubject.next(true);
+        }
+      }),
+      tap(() => {
+        this.getCurrentUser().subscribe();
+      }),
+      catchError(error => {
+        console.error('SuperAdmin Login Error:', error);
+        return throwError(() => new Error('Invalid credentials'));
+      })
+    );
+  }
 updateUserProfile(data:FormData){
   return this.http.patch(`${this.apiUrl}/updateuser/`, data)
 }

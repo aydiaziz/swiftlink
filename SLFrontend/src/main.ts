@@ -74,7 +74,6 @@ const routes: Routes = [
     },
     { path: 'office-dashboard',
       component: OfficeDashboardComponent,
-      canActivate: [authGuard],
       children: [
         { path: '', component: WelcomeComponent },
         { path: 'live-work-board', component: LiveWorkBoardComponent },
