@@ -19,8 +19,8 @@
       <p *ngIf="selectedOrder.order.jobStatus === 'Completed'"><strong>Duration:</strong> {{ selectedOrder.order.orderDuration }}</p>
       <p *ngIf="selectedOrder.order.manpower"><strong>Manpower:</strong> {{ selectedOrder.order.manpower }}</p>
       <p *ngIf="selectedOrder.order.jobResources"><strong>Resources:</strong> {{ selectedOrder.order.jobResources }}</p>
-      <p><strong>Client:</strong> {{ selectedOrder.client.firstName }} {{ selectedOrder.client.lastName }}</p>
-      <p><strong>Client Phone:</strong> {{ selectedOrder.client.phone }}</p>
+      <p><strong>Client:</strong> {{ selectedOrder.client?.firstName }} {{ selectedOrder.client?.lastName }}</p>
+      <p><strong>Client Phone:</strong> {{ selectedOrder.client?.phone }}</p>
       <button (click)="clearSelectedOrder()">Close</button>
     </div>
 
