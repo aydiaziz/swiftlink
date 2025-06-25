@@ -73,6 +73,15 @@ export class OrderService {
   }
 
   getWorkOrdersDashboard() {
-    return this.http.get<any>(`${environment.apiUrl}/dashboard/work-orders/`);
+    const token = localStorage.getItem('access_token');
+    if (!token) {
+      console.error('No access token found!');
+      return new Observable();
+    }
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get<any>(`${environment.apiUrl}/dashboard/work-orders/`, { headers });
   }
 }

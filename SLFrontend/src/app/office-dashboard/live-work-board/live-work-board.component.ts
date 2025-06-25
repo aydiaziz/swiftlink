@@ -57,5 +57,9 @@ export class LiveWorkBoardComponent implements OnInit {
       default: return '';
     }
   }
-  
+
+  trackById(index: number, item: any): number {
+    return item.order?.orderID;
+  }
+
 }

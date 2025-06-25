@@ -269,6 +269,7 @@ def work_orders_dashboard(request):
             'firstName': client.UserId.first_name,
             'lastName': client.UserId.last_name,
             'address': client.address,
+            'phone': client.phone,
         }
         data.append({
             'order': order_data,
