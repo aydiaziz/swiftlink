@@ -4,7 +4,7 @@ import { NavbarComponent } from "./home/navbar/navbar.component";
 import { FooterComponent } from "./home/footer/footer.component";
 import { CommunicationService } from './services/communication.service';
 import { ChatComponent } from './chat/chat.component';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe, NgFor, NgIf } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { OnInit } from '@angular/core';
 import { environment } from '../environments/environment';
@@ -12,7 +12,7 @@ import { environment } from '../environments/environment';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NavbarComponent, FooterComponent,ChatComponent,NgIf],
+  imports: [RouterOutlet, NavbarComponent, FooterComponent,ChatComponent,NgFor],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
