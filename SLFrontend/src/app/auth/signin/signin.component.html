@@ -27,7 +27,9 @@
         <input type="radio" name="membership" [value]="m.membershipType" [(ngModel)]="selectedMembership" />
         <div class="plan-title">
           <span class="plan-name">{{ m.membershipType }}</span>
-          <span class="plan-price">${{ m.cost }}</span>
+          <span class="plan-price">
+            ${{ m.cost }}<span *ngIf="m.membershipType.toLowerCase() === 'preferred' || m.membershipType.toLowerCase() === 'ultimate'">/month</span>
+          </span>
         </div>
         <div class="plan-desc">
           <ng-container [ngSwitch]="m.membershipType.toLowerCase()">
