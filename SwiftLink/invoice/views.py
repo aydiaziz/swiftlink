@@ -37,17 +37,27 @@ def init_invoice(request, order_id):
             m_type = membership.membership.membershipType
             label = ''
             price = Decimal('0')
+            today = timezone.now().date()
+            days_since_start = (today - membership.startDate).days if membership.startDate else 0
+
             if m_type == 'pay-per-use':
                 label = 'Pay-per-use Fee'
                 price = membership.membership.cost
             elif m_type in ['preferred', 'ultimate']:
                 label = f"{m_type.capitalize()} Member- Unlimited bookings"
                 if membership.status == 'pending':
-                    price = membership.membership.cost
-                    membership.status = 'active'
-                    membership.startDate = timezone.now().date()
-                    membership.save()
-            if label:
+                    if not membership.membership.promotionCode or days_since_start >= 30:
+                        price = membership.membership.cost
+                        membership.status = 'active'
+                        membership.startDate = today
+                        membership.save()
+                else:
+                    if days_since_start >= 30:
+                        price = membership.membership.cost
+                        membership.startDate = today
+                        membership.save()
+
+            if label and price > 0:
                 extras.append({'label': label, 'price': float(price)})
                 total += price
 

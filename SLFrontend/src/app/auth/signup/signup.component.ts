@@ -21,6 +21,7 @@ export class SignupComponent implements OnInit {
   clientTypes = Object.values(ClientType);
   membershipType: MembershipType | null = null;
   promoMessage = '';
+  hasPromo = false;
   errorMessage = '';
   clientForm: Client = {
     email: '',
@@ -75,6 +76,7 @@ export class SignupComponent implements OnInit {
       const promo = params.get('promo');
       if (promo === 'true') {
         this.promoMessage = 'Sign-up with promotion code 1 free month';
+        this.hasPromo = true;
       }
     });
   }
@@ -89,7 +91,9 @@ export class SignupComponent implements OnInit {
             email: this.clientForm.email,
             password: this.clientForm.password
           }).subscribe(() => {
-            if (this.membershipType === MembershipType.PAY_PER_USE) {
+            if (this.hasPromo) {
+              alert('Your account is fully active. You have one free month');
+            } else if (this.membershipType === MembershipType.PAY_PER_USE) {
               alert('Your account is now fully active. Your free month will begin when you place your first work order');
             } else {
               alert('Your account is now fully active. your membership fee will be added to your first job, which will also mark the start of your monthly membership period');
