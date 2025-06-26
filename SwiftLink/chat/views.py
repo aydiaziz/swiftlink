@@ -40,7 +40,10 @@ def get_default_helper():
 
 
 class IsAuthenticatedWithMessage(IsAuthenticated):
-    message = "You have to log in to help you"
+    """Custom permission with a clearer unauthenticated message."""
+    # When an unauthenticated user tries to interact with the chatbot,
+    # the API should respond with this message.
+    message = "Please log in to inquire about services."
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticatedWithMessage])
