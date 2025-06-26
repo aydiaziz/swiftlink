@@ -43,13 +43,7 @@ export class ChatbotComponent {
             time: this.getCurrentTime()
           });
         }
-        if (res.order_confirmed) {
-          this.messages.push({
-            sender: 'assistant',
-            text: 'Your order has been created.',
-            time: this.getCurrentTime()
-          });
-        }
+       
       },
       error: err => {
         const detail = err?.error?.detail || 'Please log in to inquire about services.';
