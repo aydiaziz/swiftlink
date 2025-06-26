@@ -54,8 +54,8 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/signup/client/`, formattedData).pipe(
       tap(() => this.isClientLoggedInSubject.next(true)),
       catchError(error => {
-        console.error("Signup Client Error:", error);
-        return throwError(() => new Error("Signup failed"));
+        console.error('Signup Client Error:', error);
+        return throwError(() => error);
       })
     );
   }
@@ -98,8 +98,8 @@ export class AuthService {
 
   return this.http.post(`${this.apiUrl}/signup/workforce/`, formattedData).pipe(
     catchError(error => {
-      console.error("Signup Workforce Error:", error);
-      return throwError(() => new Error("Signup failed"));
+      console.error('Signup Workforce Error:', error);
+      return throwError(() => error);
     })
   );
 }
