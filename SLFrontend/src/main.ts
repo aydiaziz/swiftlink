@@ -55,7 +55,7 @@ const routes: Routes = [
   { path: 'signup', component: SignupComponent },
   { path: 'signuphelper', component: SignuphelperComponent },
   { path: 'notifications', component: NotificationsComponent },
-  { path: 'signin', component: SigninComponent },
+  { path: 'client-signin', component: SigninComponent },
   {path:'signin-client',component:SigninclientComponent},
    { path: 'helper-dashboard',
       component: HelperDashboardComponent,
