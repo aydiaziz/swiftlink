@@ -30,22 +30,32 @@ export class ChatbotComponent {
 
     this.userMessage = '';
 
-    this.gptService.sendMessage(message, this.conversationId).subscribe(res => {
-      if (res.conversation_id) {
-        this.conversationId = res.conversation_id;
-      }
-      const reply = res.reply ?? '';
-      if (reply) {
+    this.gptService.sendMessage(message, this.conversationId).subscribe({
+      next: res => {
+        if (res.conversation_id) {
+          this.conversationId = res.conversation_id;
+        }
+        const reply = res.reply ?? '';
+        if (reply) {
+          this.messages.push({
+            sender: 'assistant',
+            text: reply,
+            time: this.getCurrentTime()
+          });
+        }
+        if (res.order_confirmed) {
+          this.messages.push({
+            sender: 'assistant',
+            text: 'Your order has been created.',
+            time: this.getCurrentTime()
+          });
+        }
+      },
+      error: err => {
+        const detail = err?.error?.detail || 'Please log in to inquire about services.';
         this.messages.push({
           sender: 'assistant',
-          text: reply,
-          time: this.getCurrentTime()
-        });
-      }
-      if (res.order_confirmed) {
-        this.messages.push({
-          sender: 'assistant',
-          text: 'Your order has been created.',
+          text: detail,
           time: this.getCurrentTime()
         });
       }
