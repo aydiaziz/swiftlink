@@ -171,7 +171,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
     });
   }
 
-  openChat(conversationId: number, helperId: number, orderId: number) {
+  openChat(event: MouseEvent, conversationId: number, helperId: number, orderId: number) {
+    event.stopPropagation();
     this.showMessagesPopup = false;
     this.communicationService.openChatPopup({ conversationId, helperId, orderId });
     this.loadUnreadMessages();
