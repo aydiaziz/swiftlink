@@ -4,8 +4,8 @@
   <p>Service: {{ invoice.serviceType }}</p>
   <p>Description: {{ invoice.description }}</p>
   <p>Duration: {{ durationHours }} hour(s)</p>
-  <p>Hourly Rate: {{ invoice.unitPrice }} $ CAD</p>
-  <p>Total Labour: {{ invoice.baseAmount }} $ CAD</p>
+  <p>Hourly Rate: {{ hourlyRateWithFee | number:'1.2-2' }} $ CAD</p>
+  <p>Total Labour: {{ labourTotalWithFee | number:'1.2-2' }} $ CAD</p>
 
   <div *ngIf="invoice.extras && invoice.extras.length">
     <h3>Extras</h3>
@@ -14,7 +14,7 @@
     </ul>
   </div>
 
-  <p>Total: {{ invoice.totalAmount }} $ CAD</p>
+  <p>Total: {{ grandTotal | number:'1.2-2' }} $ CAD</p>
 
   <div class="payment-box">
     please send an Interac e-Transfer to
