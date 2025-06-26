@@ -168,6 +168,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.chatService.startConversation(helperId, orderId).subscribe(res => {
       const conversationId = res.conversation_id;
       this.communicationService.openChatPopup({ conversationId, helperId, orderId });
+      this.router.navigate(['/helper-profile', helperId]);
     });
   }
 
