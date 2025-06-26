@@ -40,6 +40,9 @@ export class ChatComponent implements OnInit, OnDestroy {
       this.chatService.getConversation(this.conversationId).subscribe(data => {
         this.messages = data.messages;
         this.orderStatus = data.order_status;
+        if (this.orderStatus === 'Booked') {
+          this.appendConfirmationMessage();
+        }
         // start polling for new messages
         this.startPolling();
       });
@@ -59,6 +62,9 @@ export class ChatComponent implements OnInit, OnDestroy {
       this.chatService.getConversation(this.conversationId).subscribe(data => {
         this.messages = data.messages;
         this.orderStatus = data.order_status;
+        if (this.orderStatus === 'Booked') {
+          this.appendConfirmationMessage();
+        }
       });
     }, 5000);
   }
@@ -72,10 +78,8 @@ export class ChatComponent implements OnInit, OnDestroy {
     if (!this.conversationId) return;
     this.orderConfirmed = true;
 
-  this.messages.push({
-    content: "Your order has been confirmed",
-    system: true // tu peux utiliser ce flag pour les messages spéciaux
-  });
+  this.orderStatus = 'Booked';
+  this.appendConfirmationMessage();
     this.orderService.confirmOrderAssignment(this.conversationId).subscribe({
       next: (res) => {
         if (res.success) {
@@ -102,6 +106,13 @@ export class ChatComponent implements OnInit, OnDestroy {
       });
       this.messageText = '';
     });
+  }
+
+  private appendConfirmationMessage() {
+    const exists = this.messages.some(m => m.system && m.content === 'Your order has been confirmed');
+    if (!exists) {
+      this.messages.push({ content: 'Your order has been confirmed', system: true });
+    }
   }
   goToHelperProfile(helperId: number) {
   this.router.navigate(['/helper-profile', helperId]);
