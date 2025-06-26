@@ -51,11 +51,11 @@ h1 {
 }
 
 .promo-input {
-  width: 100%;
+  flex: 1;
   padding: 10px;
   border-radius: 6px;
   border: 1px solid #ccc;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0;
 }
 
 h3 {
@@ -110,6 +110,7 @@ h3 {
   align-items: center;
   gap: 0.5rem;
   margin-bottom: 1.5rem;
+  width: 100%;
 }
 
 .promo-label {
