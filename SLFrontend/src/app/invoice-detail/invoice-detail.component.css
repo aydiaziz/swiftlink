@@ -8,3 +8,28 @@
   border: 1px solid #ccc;
   background-color: #f9f9f9;
 }
+
+.rating-section {
+  margin-top: 30px;
+}
+
+.stars span {
+  font-size: 24px;
+  cursor: pointer;
+  color: #ccc;
+}
+
+.stars span.filled {
+  color: #ffb400;
+}
+
+textarea {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 8px;
+}
+
+button {
+  margin-top: 10px;
+}
