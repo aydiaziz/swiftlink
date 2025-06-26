@@ -33,7 +33,7 @@ class LikeOrderView(APIView):
             order.save()
 
             # ✅ Create a notification with full context
-            message = f"{helper.first_name} is interested to help you! Click to start the conversation"
+            message = f"{helper.UserId.first_name} is interested to help you! Click to start the conversation"
             Notification.objects.create(
                 user=order.clientID.UserId,         # The client
                 message=message,
