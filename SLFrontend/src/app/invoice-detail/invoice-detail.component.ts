@@ -15,6 +15,10 @@ import { RatingService } from '../services/rating.service';
 export class InvoiceDetailComponent implements OnInit {
   invoice: any;
   durationHours = 0;
+  hourlyRateWithFee = 0;
+  labourTotalWithFee = 0;
+  extrasTotal = 0;
+  grandTotal = 0;
   rating = 0;
   comment = '';
 
@@ -30,6 +34,7 @@ export class InvoiceDetailComponent implements OnInit {
       this.invoiceService.getInvoice(+id).subscribe(data => {
         this.invoice = data;
         this.durationHours = this.calculateHours(this.invoice.duration);
+        this.calculateTotals();
       });
     }
   }
@@ -47,6 +52,23 @@ export class InvoiceDetailComponent implements OnInit {
 
   copyToClipboard(text: any) {
     navigator.clipboard.writeText(String(text));
+  }
+
+  calculateTotals() {
+    if (!this.invoice) {
+      return;
+    }
+    const unit = parseFloat(this.invoice.unitPrice);
+    const base = parseFloat(this.invoice.baseAmount);
+    this.hourlyRateWithFee = +(unit * 1.2).toFixed(2);
+    this.labourTotalWithFee = +(base * 1.2).toFixed(2);
+    if (Array.isArray(this.invoice.extras)) {
+      this.extrasTotal = this.invoice.extras.reduce(
+        (sum: number, e: any) => sum + parseFloat(e.price),
+        0
+      );
+    }
+    this.grandTotal = +(this.labourTotalWithFee + this.extrasTotal).toFixed(2);
   }
 
   setRating(star: number) {
