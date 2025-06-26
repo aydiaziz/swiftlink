@@ -54,7 +54,8 @@ INSTALLED_APPS = [
     'JobRessources',
     'notification',
     'chat',
-    'invoice'
+    'invoice',
+    'rating'
 ]
 
 AUTH_USER_MODEL = 'Ref_User.Ref_User'
