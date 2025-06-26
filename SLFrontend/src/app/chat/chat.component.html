@@ -1,4 +1,4 @@
-<div class="chat-popup">
+<div class="chat-popup" [style.right.px]="20 + index * 340">
   <div class="chat-header">
     <span>Chat</span>
     <button (click)="close.emit()">×</button>
@@ -41,7 +41,7 @@
   </div>
   
   <!-- Bouton Confirm pour le client uniquement -->
-  <div *ngIf="isClient" class="confirm-section">
+  <div *ngIf="isClient && orderStatus !== 'Booked'" class="confirm-section">
     <button class="confirm-btn" (click)="confirmOrder()">Confirm</button>
   </div>
   

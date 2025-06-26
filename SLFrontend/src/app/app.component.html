@@ -1,10 +1,12 @@
 <app-navbar></app-navbar>
 <router-outlet></router-outlet>
 <app-footer></app-footer>
-<app-chat
-  *ngIf="showPopup && popupData"
-  [conversationId]="popupData.conversationId"
-  [helperId]="popupData.helperId"
-  [orderId]="popupData.orderId"
-  (close)="closeChat()"
-></app-chat>
+<ng-container *ngFor="let popup of chatPopups; let i = index">
+  <app-chat
+    [conversationId]="popup.conversationId"
+    [helperId]="popup.helperId"
+    [orderId]="popup.orderId"
+    [index]="i"
+    (close)="closeChat(i)"
+  ></app-chat>
+</ng-container>

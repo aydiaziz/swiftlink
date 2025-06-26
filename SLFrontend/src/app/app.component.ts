@@ -17,24 +17,23 @@ import { environment } from '../environments/environment';
   styleUrl: './app.component.css'
 })
 export class AppComponent implements OnInit {
-  showPopup = false;
   private apiUrl = environment.apiUrl;
-  popupConversationId!: number;
   title = 'SLFrontend';
-  popupData: { conversationId: number, helperId: number, orderId: number } | null = null;
+  chatPopups: { conversationId: number; helperId: number; orderId: number }[] = [];
   ngOnInit(): void {
     this.http.get(`${this.apiUrl}/csrf/`, { withCredentials: true }).subscribe();
   }
 constructor(private commService: CommunicationService,private http: HttpClient) {
   this.commService.chatPopup$.subscribe(data => {
-    this.popupData = data;
-    this.showPopup = true;
+    const exists = this.chatPopups.find(p => p.conversationId === data.conversationId);
+    if (!exists) {
+      this.chatPopups.push(data);
+    }
   });
 }
 
-closeChat() {
-  this.showPopup = false;
-  this.popupData = null;
+closeChat(index: number) {
+  this.chatPopups.splice(index, 1);
 }
 }
 

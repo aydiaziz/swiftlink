@@ -20,6 +20,7 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   @Input() conversationId!: number;  // passed from <app-chat>
   @Input() helperId!: number;
+  @Input() index: number = 0;
   @Output() close = new EventEmitter<void>();
   currentUserId!: number;
   isClient:boolean=false;
@@ -28,6 +29,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   defaultProfileImage: string = '/default-user.jpg';
   currentUser: any;
   private pollInterval: any;
+  orderStatus: string | null = null;
   
 
   constructor(private router: Router,private chatService: ChatService,private authService: AuthService,private orderService: OrderService)
@@ -37,6 +39,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     if (this.conversationId) {
       this.chatService.getConversation(this.conversationId).subscribe(data => {
         this.messages = data.messages;
+        this.orderStatus = data.order_status;
         // start polling for new messages
         this.startPolling();
       });
@@ -55,6 +58,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.pollInterval = setInterval(() => {
       this.chatService.getConversation(this.conversationId).subscribe(data => {
         this.messages = data.messages;
+        this.orderStatus = data.order_status;
       });
     }, 5000);
   }
