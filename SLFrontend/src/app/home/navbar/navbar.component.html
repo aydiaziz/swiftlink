@@ -26,7 +26,7 @@
         <div *ngIf="showMessagesPopup" class="messages-popup">
           <div *ngIf="conversations.length === 0">No messages</div>
           <ul *ngIf="conversations.length > 0">
-            <li *ngFor="let conv of conversations" (click)="openChat(conv.id, conv.helper, conv.order)">
+            <li *ngFor="let conv of conversations" (click)="openChat($event, conv.id, conv.helper.user_id, conv.order)">
               You have a discussion with {{ getOtherUserName(conv) }}
               <span *ngIf="conv.unread_count > 0" class="unread-label">Unread message</span>
             </li>
