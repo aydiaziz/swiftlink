@@ -40,10 +40,18 @@ def get_default_helper():
 
 
 class IsAuthenticatedWithMessage(IsAuthenticated):
-    """Custom permission with a clearer unauthenticated message."""
-    # When an unauthenticated user tries to interact with the chatbot,
-    # the API should respond with this message.
+    """Custom permission that returns a clearer unauthenticated message."""
+
     message = "Please log in to inquire about services."
+
+    def has_permission(self, request, view):
+        """Override to raise NotAuthenticated with our custom message."""
+        if request.user and request.user.is_authenticated:
+            return True
+
+        from rest_framework.exceptions import NotAuthenticated
+
+        raise NotAuthenticated(self.message)
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticatedWithMessage])
