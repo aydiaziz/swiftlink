@@ -21,6 +21,7 @@ export class SignupComponent implements OnInit {
   clientTypes = Object.values(ClientType);
   membershipType: MembershipType | null = null;
   promoMessage = '';
+  errorMessage = '';
   clientForm: Client = {
     email: '',
     username: '',
@@ -81,29 +82,49 @@ export class SignupComponent implements OnInit {
   onSignup() {
     if (this.userType === 'client') {
       this.clientForm.membershipType = this.membershipType || undefined;
-      this.authService.signupClient(this.clientForm).subscribe(() => {
-        this.authService.signin({
-          email: this.clientForm.email,
-          password: this.clientForm.password
-        }).subscribe(() => {
-          if (this.membershipType === MembershipType.PAY_PER_USE) {
-            alert('Your account is now fully active. Your free month will begin when you place your first work order');
+      this.errorMessage = '';
+      this.authService.signupClient(this.clientForm).subscribe({
+        next: () => {
+          this.authService.signin({
+            email: this.clientForm.email,
+            password: this.clientForm.password
+          }).subscribe(() => {
+            if (this.membershipType === MembershipType.PAY_PER_USE) {
+              alert('Your account is now fully active. Your free month will begin when you place your first work order');
+            } else {
+              alert('Your account is now fully active. your membership fee will be added to your first job, which will also mark the start of your monthly membership period');
+            }
+            this.router.navigate(['/']);
+          });
+        },
+        error: err => {
+          const msg = JSON.stringify(err?.error || err).toLowerCase();
+          if (msg.includes('already exists')) {
+            this.errorMessage = 'you already have an account with us. Please sign in to continue';
           } else {
-            alert('Your account is now fully active. your membership fee will be added to your first job, which will also mark the start of your monthly membership period');
+            this.errorMessage = 'An error occurred during signup.';
           }
-          this.router.navigate(['/']);
-        });
+        }
       });
     } else {
-      this.authService.signupWorkforce(this.workforceForm).subscribe(response => {
-        
-
-        // ✅ Redirection vers dashboard si Helper, sinon Home
-        if (this.workforceForm.workForceType === WorkForceType.PROFESSIONAL_HELPER || 
-            this.workforceForm.workForceType === WorkForceType.GENERAL_HELPER) {
-          this.router.navigate(['/helper-dashboard']);
-        } else {
-          this.router.navigate(['/']);
+      this.errorMessage = '';
+      this.authService.signupWorkforce(this.workforceForm).subscribe({
+        next: () => {
+          // ✅ Redirection vers dashboard si Helper, sinon Home
+          if (this.workforceForm.workForceType === WorkForceType.PROFESSIONAL_HELPER ||
+              this.workforceForm.workForceType === WorkForceType.GENERAL_HELPER) {
+            this.router.navigate(['/helper-dashboard']);
+          } else {
+            this.router.navigate(['/']);
+          }
+        },
+        error: err => {
+          const msg = JSON.stringify(err?.error || err).toLowerCase();
+          if (msg.includes('already exists')) {
+            this.errorMessage = 'you already have an account with us. Please sign in to continue';
+          } else {
+            this.errorMessage = 'An error occurred during signup.';
+          }
         }
       });
     }
