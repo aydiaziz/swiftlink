@@ -23,7 +23,9 @@ import { ChatComponent } from './app/chat/chat.component';
 import { InvoiceComponent } from './app/helper-dashboard/invoice/invoice.component';
 import { InvoicesComponent } from './app/helper-dashboard/invoices/invoices.component';
 import { InvoiceDetailsComponent } from './app/helper-dashboard/invoice-details/invoice-details.component';
-import { UserProfileComponent } from './app/user-profile/user-profile.component';
+import { ClientProfileComponent } from './app/client-profile/client-profile.component';
+import { HelperProfileEditComponent } from './app/helper-profile-edit/helper-profile-edit.component';
+import { AdminProfileComponent } from './app/admin-profile/admin-profile.component';
 import { HelperProfileComponent } from './app/helper-profile/helper-profile.component';
 import { AdminDashboardComponent } from './app/admin-dashboard/admin-dashboard.component';
 import { AdminHelperViewComponent } from './app/admin-helper-view/admin-helper-view.component';
@@ -89,8 +91,10 @@ const routes: Routes = [
   { path: 'helper-signin', component: SigninhelperComponent },
   { path: 'application', component: SignuphelperComponent },
   { path: 'chat/:id', component: ChatComponent },
-  { path: 'userprofile', component: UserProfileComponent },
-  {path:'helper-profile/:id',component:HelperProfileComponent},
+  { path: 'client-profile', component: ClientProfileComponent },
+  { path: 'helper-profile', component: HelperProfileEditComponent },
+  { path: 'admin-profile', component: AdminProfileComponent },
+  { path: 'helper-profile/:id', component: HelperProfileComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
    {
       path: 'admindashboard',

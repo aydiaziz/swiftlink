@@ -29,6 +29,12 @@ export class NavbarComponent implements OnInit, OnDestroy {
   showMessagesPopup = false;
   conversations: any[] = [];
   currentUser: any;
+  get profileLink(): string {
+    const role = this.currentUser?.role || this.authService.getUserRole();
+    if (role === '3rd Party') return '/helper-profile';
+    if (role === 'Super Admin') return '/admin-profile';
+    return '/client-profile';
+  }
   private pollInterval: any;
 
   @ViewChild('notificationWrapper') notificationWrapper!: ElementRef;
