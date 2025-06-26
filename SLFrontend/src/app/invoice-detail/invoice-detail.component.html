@@ -1,10 +1,11 @@
 <div *ngIf="invoice" class="invoice-detail">
-  <h2>Invoice #{{ invoice.invoiceID }}</h2>
+  <h2>Invoice #<a href="#" (click)="copyToClipboard(invoice.invoiceID)">{{ invoice.invoiceID }}</a></h2>
   <p>Status: {{ invoice.status }}</p>
   <p>Service: {{ invoice.serviceType }}</p>
-  <p>Duration: {{ invoice.duration }}</p>
-  <p>Unit Price: {{ invoice.unitPrice }} $ CAD</p>
-  <p>Base Amount: {{ invoice.baseAmount }} $ CAD</p>
+  <p>Description: {{ invoice.description }}</p>
+  <p>Duration: {{ durationHours }} hour(s)</p>
+  <p>Hourly Rate: {{ invoice.unitPrice }} $ CAD</p>
+  <p>Total Labour: {{ invoice.baseAmount }} $ CAD</p>
 
   <div *ngIf="invoice.extras && invoice.extras.length">
     <h3>Extras</h3>
@@ -16,7 +17,19 @@
   <p>Total: {{ invoice.totalAmount }} $ CAD</p>
 
   <div class="payment-box">
-    please send an Interac e-Transfer to {{ invoice.helper_professional_email }}<br />
+    please send an Interac e-Transfer to
+    <a href="mailto:{{ invoice.helper_professional_email }}" (click)="copyToClipboard(invoice.helper_professional_email)">
+      {{ invoice.helper_professional_email }}
+    </a><br />
     Include the invoice number in the e-Transfer message.
+  </div>
+
+  <div class="rating-section">
+    <h3>Rate this Helper</h3>
+    <div class="stars">
+      <span *ngFor="let star of [1,2,3,4,5]" (click)="setRating(star)" [class.filled]="star <= rating">&#9733;</span>
+    </div>
+    <textarea [(ngModel)]="comment" placeholder="Leave a comment"></textarea>
+    <button (click)="submitRating()">Submit Rating</button>
   </div>
 </div>
