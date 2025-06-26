@@ -280,3 +280,41 @@ def work_orders_dashboard(request):
         })
     return Response(data)
 
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def client_booked_orders(request):
+    """Return booked orders for the authenticated client."""
+    try:
+        client = Client.objects.get(UserId=request.user)
+    except Client.DoesNotExist:
+        return Response({'error': 'Client not found'}, status=404)
+
+    orders = Order.objects.filter(clientID=client, jobStatus=Order.JobStatus.BOOKED)
+    response = []
+
+    for order in orders:
+        helper_name = None
+        invoice = Invoice.objects.filter(order=order).first()
+        if invoice and invoice.helper:
+            helper = invoice.helper
+            helper_name = f"{helper.UserId.first_name} {helper.UserId.last_name}".strip()
+        elif order.assignedTo:
+            helper_id = order.assignedTo if not isinstance(order.assignedTo, list) else (order.assignedTo[0] if order.assignedTo else None)
+            if helper_id:
+                try:
+                    helper_obj = WorkForce.objects.get(UserId__user_id=helper_id)
+                    helper_name = f"{helper_obj.UserId.first_name} {helper_obj.UserId.last_name}".strip()
+                except WorkForce.DoesNotExist:
+                    helper_name = None
+
+        response.append({
+            'orderID': order.orderID,
+            'status': order.jobStatus,
+            'address': order.jobAddress,
+            'executionDate': order.executionDate,
+            'helperName': helper_name
+        })
+
+    return Response(response)
+

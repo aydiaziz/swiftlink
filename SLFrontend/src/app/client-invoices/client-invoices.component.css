@@ -14,3 +14,16 @@
 .invoice-list li:hover {
   background-color: #f0f0f0;
 }
+
+.scheduled-orders {
+  max-width: 600px;
+  margin: 20px auto;
+}
+.scheduled-orders ul {
+  list-style: none;
+  padding: 0;
+}
+.scheduled-orders li {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}

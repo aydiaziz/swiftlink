@@ -13,4 +13,5 @@ urlpatterns = [
     path('orders/today/', views.orders_today),
     path('dashboard/helper/', views.helper_dashboard),
     path('dashboard/work-orders/', views.work_orders_dashboard),
+    path('orders/client-booked/', views.client_booked_orders),
 ]
