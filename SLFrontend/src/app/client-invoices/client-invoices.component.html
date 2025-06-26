@@ -1,3 +1,14 @@
+<div class="scheduled-orders">
+  <h2>Scheduled Work Orders</h2>
+  <ul>
+    <li *ngFor="let order of bookedOrders">
+      {{ order.status }} - {{ order.address }} -
+      {{ order.executionDate | date:'mediumDate' }} -
+      {{ order.helperName || 'N/A' }}
+    </li>
+  </ul>
+</div>
+<hr />
 <div class="invoice-list">
   <h2>Your Invoices</h2>
   <ul>

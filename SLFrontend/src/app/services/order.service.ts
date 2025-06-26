@@ -72,6 +72,20 @@ export class OrderService {
     return this.http.get<any[]>(`${this.apiUrl}today/`);
   }
 
+  getClientBookedOrders(): Observable<any[]> {
+    const token = localStorage.getItem('access_token');
+    if (!token) {
+      console.error('No access token found!');
+      return new Observable<any[]>();
+    }
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+
+    return this.http.get<any[]>(`${this.apiUrl}client-booked/`, { headers });
+  }
+
   getWorkOrdersDashboard() {
     const token = localStorage.getItem('access_token');
     if (!token) {
