@@ -33,7 +33,7 @@ class LikeOrderView(APIView):
             order.save()
 
             # ✅ Create a notification with full context
-            message = f"{helper.UserId.first_name} is interested to help you! Click to start the conversation"
+            message = f"{helper.first_name} is interested to help you! Click to start the conversation"
             Notification.objects.create(
                 user=order.clientID.UserId,         # The client
                 message=message,
@@ -45,7 +45,7 @@ class LikeOrderView(APIView):
 
     def send_notification(self, client, helper, order):
         """Simuler l'envoi d'une notification"""
-        print(f"📩 Notification envoyée à {client.UserId.email}: {helper.UserId.username} a liké votre ordre '{order.jobTitle}'")
+        print(f"📩 Notification envoyée à {client.UserId.email}: {helper.username} a liké votre ordre '{order.jobTitle}'")
 class OrdersByServiceTypeView(generics.ListAPIView):
     serializer_class = OrderSerializer
     permission_classes = [IsAuthenticated]
