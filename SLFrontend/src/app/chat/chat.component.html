@@ -47,7 +47,10 @@
   
 
   <div class="input-bar">
-    <input [(ngModel)]="messageText" placeholder="Type a message..." />
+    <input
+      [(ngModel)]="messageText"
+      placeholder="Type a message..."
+      (keyup.enter)="send()" />
     <button (click)="send()">Send</button>
   </div>
 </div>
