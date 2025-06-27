@@ -34,7 +34,8 @@ export class AgendaComponent implements OnInit {
   todayJobs: any[]=[];
   timerDisplay = '00:00:00';
  intervalId: any;
- manualDuration: number = 0; 
+  manualDuration: number = 0;
+  detailOrder: any | null = null;
 
   constructor(private orderService: OrderService, private router: Router) {}
 
@@ -56,6 +57,10 @@ export class AgendaComponent implements OnInit {
         console.error('❌ Failed to load today’s jobs:', err);
       }
     });
+  }
+
+  showDetails(job: any) {
+    this.detailOrder = job;
   }
   startJob(job: Order) {
     this.selectedOrder = job;

@@ -26,8 +26,9 @@ export enum JobStatus {
     assignedTo?: any; 
     orderDuration?: string; 
     expirationTime?: string;
-    expressedInterest: number[]; 
+    expressedInterest: number[];
     manpower?: number;
     jobResources?: string;
+    clientName?: string;
+    clientPhone?: string;
   }
-  
