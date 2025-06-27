@@ -1,5 +1,5 @@
 import { Component, NgModule, OnInit } from '@angular/core';
-import { CalendarOptions} from '@fullcalendar/core';
+import { CalendarOptions, EventClickArg } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { CommonModule } from '@angular/common';
@@ -25,7 +25,8 @@ export class AgendaComponent implements OnInit {
       left: 'prev,next today',
       center: 'title',
       right: 'dayGridMonth'
-    }
+    },
+    eventClick: this.onCalendarEventClick.bind(this)
   };
   selectedOrder: Order | null = null;
   startTime: Date | null = null;
@@ -45,7 +46,8 @@ export class AgendaComponent implements OnInit {
         title: order.jobTitle,
         date: order.executionDate,
         extendedProps: {
-          address: order.jobAddress
+          address: order.jobAddress,
+          order: order
         }
       }));
     });
@@ -61,6 +63,20 @@ export class AgendaComponent implements OnInit {
 
   showDetails(job: any) {
     this.detailOrder = job;
+  }
+
+  onCalendarEventClick(arg: EventClickArg) {
+    const order = arg.event.extendedProps['order'];
+    if (order) {
+      this.detailOrder = order;
+    } else {
+      // Fallback: build minimal order from event data
+      this.detailOrder = {
+        jobTitle: arg.event.title,
+        executionDate: arg.event.start,
+        jobAddress: arg.event.extendedProps['address']
+      };
+    }
   }
   startJob(job: Order) {
     this.selectedOrder = job;
