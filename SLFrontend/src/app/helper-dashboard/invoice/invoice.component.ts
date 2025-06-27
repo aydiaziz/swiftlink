@@ -14,14 +14,11 @@ import { FormsModule } from '@angular/forms';
 export class InvoiceComponent implements OnInit {
   invoice: any = null;
   newExtra = { label: '', price: 0 };
+  membershipExtra: any = null;
   totalAmount: number = 0;
   isSending: boolean = false;
-  statuses = [
-    'paid by E-transfer',
-    'paid by cash',
-    'Future Payment',
-    'In Dispute'
-  ];
+  unitPriceWithFee = 0;
+  baseAmountWithFee = 0;
 
   constructor(
     private route: ActivatedRoute,
@@ -34,7 +31,18 @@ export class InvoiceComponent implements OnInit {
     if (orderId) {
       this.invoiceService.initInvoice(orderId).subscribe(res => {
         this.invoice = res;
-        this.totalAmount = res.totalAmount;
+        if (Array.isArray(this.invoice.extras)) {
+          const idx = this.invoice.extras.findIndex((e: any) =>
+            e.label.includes('Member') || e.label === 'Pay-per-use Fee'
+          );
+          if (idx >= 0) {
+            this.membershipExtra = this.invoice.extras[idx];
+            this.invoice.extras.splice(idx, 1);
+          }
+        }
+        this.unitPriceWithFee = +(parseFloat(this.invoice.unitPrice) * 1.2).toFixed(2);
+        this.baseAmountWithFee = +(parseFloat(this.invoice.baseAmount) * 1.2).toFixed(2);
+        this.recalculateTotal();
       });
     }
   }
@@ -42,20 +50,26 @@ export class InvoiceComponent implements OnInit {
   addExtra() {
     if (this.newExtra.label && this.newExtra.price > 0) {
       this.invoice.extras.push({ ...this.newExtra });
-      this.totalAmount += this.newExtra.price;
       this.newExtra = { label: '', price: 0 };
+      this.recalculateTotal();
     }
   }
 
   removeExtra(index: number) {
     const removed = this.invoice.extras.splice(index, 1)[0];
-    this.totalAmount -= removed.price;
+    if (removed) {
+      this.recalculateTotal();
+    }
   }
 
   submitInvoice() {
     const orderId = this.route.snapshot.paramMap.get('orderId');
     const data = {
       ...this.invoice,
+      extras: [
+        ...this.invoice.extras,
+        ...(this.membershipExtra ? [this.membershipExtra] : [])
+      ],
       totalAmount: this.totalAmount,
     };
   
@@ -63,18 +77,9 @@ export class InvoiceComponent implements OnInit {
       this.isSending = true;  // ✅ Démarre l'animation
   
       this.invoiceService.submitInvoice(orderId, data).subscribe({
-        next: (blob) => {
-          // ✅ Téléchargement du PDF
-          const link = document.createElement('a');
-          link.href = window.URL.createObjectURL(blob);
-          link.download = `Invoice_${orderId}.pdf`;
-          link.click();
-  
-          // ✅ Message optionnel
-          alert('Invoice sent and downloaded!');
-  
-          // ✅ Redirection automatique
-          this.router.navigate(['/helper-dashboard/dashboard']);
+        next: () => {
+          alert('Invoice sent!');
+          this.router.navigate(['/helper-dashboard']);
         },
         error: (err) => {
           console.error('Failed to send invoice:', err);
@@ -83,7 +88,16 @@ export class InvoiceComponent implements OnInit {
         complete: () => {
           this.isSending = false;  // ✅ Stop l'animation même si erreur
         }
-      });
+        });
+      }
     }
+
+  private recalculateTotal() {
+    const extrasSum = this.invoice.extras.reduce(
+      (sum: number, e: any) => sum + parseFloat(e.price),
+      0
+    );
+    const membership = this.membershipExtra ? parseFloat(this.membershipExtra.price) : 0;
+    this.totalAmount = +(this.baseAmountWithFee + extrasSum + membership).toFixed(2);
   }
 }
