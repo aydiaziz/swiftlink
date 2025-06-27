@@ -95,16 +95,17 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
   send() {
     if (!this.messageText.trim()) return;
-    
-    
-    this.chatService.sendMessage(this.conversationId, this.messageText,this.currentUserId).subscribe(() => {
+
+    const content = this.messageText;
+    this.messageText = '';
+
+    this.chatService.sendMessage(this.conversationId, content, this.currentUserId).subscribe(() => {
       this.messages.push({
-        content: this.messageText,
+        content,
         sender: this.currentUserId,
         senderImage: this.currentUser?.profileImage || this.defaultProfileImage,
         timestamp: new Date()
       });
-      this.messageText = '';
     });
   }
 

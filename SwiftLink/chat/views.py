@@ -94,7 +94,7 @@ def get_conversation(request, conversation_id):
 @api_view(['POST'])
 @permission_classes([IsAuthenticatedWithMessage])
 def send_message(request):
-    serializer = MessageSerializer(data=request.data)
+    serializer = MessageSerializer(data=request.data, context={'request': request})
     if serializer.is_valid():
         serializer.save(sender=request.user)
         return Response(serializer.data)
