@@ -6,7 +6,14 @@
 
   <div class="jobs-today">
     <h3>Today's Jobs</h3>
-
+<div class="order-details" *ngIf="detailOrder">
+    <h3>Order Details</h3>
+    <p><strong>Title:</strong> {{ detailOrder.jobTitle }}</p>
+    <p><strong>Address:</strong> {{ detailOrder.jobAddress }}</p>
+    <p><strong>Date:</strong> {{ detailOrder.executionDate | date:'short' }}</p>
+    <p><strong>Client:</strong> {{ detailOrder.clientName }}</p>
+    <p><strong>Phone:</strong> {{ detailOrder.clientPhone }}</p>
+  </div>
     <div class="job-card" *ngFor="let job of todayJobs" (click)="showDetails(job)">
       <p><strong>{{ job.jobTitle }}</strong></p>
       <p>⏰ {{ job.executionDate | date:'shortTime' }}</p>
@@ -36,12 +43,5 @@
     </div>
   </div>
 
-  <div class="order-details" *ngIf="detailOrder">
-    <h3>Order Details</h3>
-    <p><strong>Title:</strong> {{ detailOrder.jobTitle }}</p>
-    <p><strong>Address:</strong> {{ detailOrder.jobAddress }}</p>
-    <p><strong>Date:</strong> {{ detailOrder.executionDate | date:'short' }}</p>
-    <p><strong>Client:</strong> {{ detailOrder.clientName }}</p>
-    <p><strong>Phone:</strong> {{ detailOrder.clientPhone }}</p>
-  </div>
+  
 </div>
