@@ -118,7 +118,8 @@ def invoice_detail(request, invoice_id):
     except Invoice.DoesNotExist:
         return Response({'error': 'Invoice not found'}, status=404)
 
-    if invoice.order.clientID.UserId != request.user:
+    if (invoice.order.clientID.UserId != request.user and
+            (not invoice.helper or invoice.helper.UserId != request.user)):
         return Response({'error': 'Unauthorized'}, status=403)
 
     serializer = InvoiceSerializer(invoice)

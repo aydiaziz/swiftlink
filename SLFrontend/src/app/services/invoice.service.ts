@@ -18,7 +18,7 @@ export class InvoiceService {
 
   // Soumettre la facture
   submitInvoice(orderId: string, data: any) {
-    return this.http.post(`${this.apiUrl}${orderId}/submit/`, data, { responseType: 'blob' });
+    return this.http.post(`${this.apiUrl}${orderId}/submit/`, data);
   }
 
   getClientInvoices(): Observable<any[]> {
