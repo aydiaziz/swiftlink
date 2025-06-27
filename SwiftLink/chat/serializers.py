@@ -5,6 +5,7 @@ from Ref_User.serializers import UserSerializer
 
 class MessageSerializer(serializers.ModelSerializer):
     senderImage = serializers.SerializerMethodField()
+
     class Meta:
         model = Message
         fields = '__all__'

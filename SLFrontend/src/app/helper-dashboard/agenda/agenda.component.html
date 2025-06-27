@@ -1,44 +1,47 @@
 <div class="agenda-container">
-    <div class="calendar-wrapper">
-      <h2>🗓️ My Job Calendar</h2>
-      <full-calendar [options]="calendarOptions"></full-calendar>
-    </div>
-  
-    <div class="jobs-today">
-      <h3>Today's Jobs</h3>
-    
-      <div class="job-card" *ngFor="let job of todayJobs">
-        <p><strong>{{ job.jobTitle }}</strong></p>
-        <p>⏰ {{ job.executionDate | date:'shortTime' }}</p>
-    
-        
-    
-        <!-- Chronomètre -->
-        <div class="timer" *ngIf="isTiming && selectedOrder?.orderID === job.orderID">
-          ⌛ {{ timerDisplay }}
-        </div>
-    
-        <!-- Boutons -->
-        <button *ngIf="!isTiming" (click)="startJob(job)">Start</button>
-        <button *ngIf="isTiming && selectedOrder?.orderID === job.orderID" (click)="stopJob()">Stop</button>
-        <div class="manual-duration">
-          <label for="manualDuration">Set Duration:</label>
-          <select [(ngModel)]="manualDuration" class="duration-select">
-            <option [value]="30">30 min</option>
-            <option [value]="60">1 hour</option>
-            <option [value]="90">1h 30min</option>
-            <option [value]="120">2 hours</option>
-            <option [value]="150">2h 30min</option>
-            <option [value]="180">3 hours</option>
-          </select>
-          <button class="set-duration-btn" (click)="setManualDuration(job)" [disabled]="manualDuration === 0">
-            Set Duration
-          </button>
-        </div>
-      </div>
-    <!-- Choix manuel de la durée -->
-    
-    </div>
-    
+  <div class="calendar-wrapper">
+    <h2>🗓️ My Job Calendar</h2>
+    <full-calendar [options]="calendarOptions"></full-calendar>
   </div>
-  
+
+  <div class="jobs-today">
+    <h3>Today's Jobs</h3>
+
+    <div class="job-card" *ngFor="let job of todayJobs" (click)="showDetails(job)">
+      <p><strong>{{ job.jobTitle }}</strong></p>
+      <p>⏰ {{ job.executionDate | date:'shortTime' }}</p>
+
+      <!-- Chronomètre -->
+      <div class="timer" *ngIf="isTiming && selectedOrder?.orderID === job.orderID">
+        ⌛ {{ timerDisplay }}
+      </div>
+
+      <!-- Boutons -->
+      <button *ngIf="!isTiming" (click)="startJob(job); $event.stopPropagation()">Start</button>
+      <button *ngIf="isTiming && selectedOrder?.orderID === job.orderID" (click)="stopJob(); $event.stopPropagation()">Stop</button>
+      <div class="manual-duration">
+        <label for="manualDuration">Set Duration:</label>
+        <select [(ngModel)]="manualDuration" class="duration-select">
+          <option [value]="30">30 min</option>
+          <option [value]="60">1 hour</option>
+          <option [value]="90">1h 30min</option>
+          <option [value]="120">2 hours</option>
+          <option [value]="150">2h 30min</option>
+          <option [value]="180">3 hours</option>
+        </select>
+        <button class="set-duration-btn" (click)="setManualDuration(job); $event.stopPropagation()" [disabled]="manualDuration === 0">
+          Set Duration
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="order-details" *ngIf="detailOrder">
+    <h3>Order Details</h3>
+    <p><strong>Title:</strong> {{ detailOrder.jobTitle }}</p>
+    <p><strong>Address:</strong> {{ detailOrder.jobAddress }}</p>
+    <p><strong>Date:</strong> {{ detailOrder.executionDate | date:'short' }}</p>
+    <p><strong>Client:</strong> {{ detailOrder.clientName }}</p>
+    <p><strong>Phone:</strong> {{ detailOrder.clientPhone }}</p>
+  </div>
+</div>

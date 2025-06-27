@@ -15,7 +15,7 @@ from Client.models import Client
 from rest_framework import generics
 from django.contrib.auth import get_user_model
 from rest_framework.decorators import api_view, permission_classes
-from chat.models import Conversation
+from chat.models import Conversation, Message
 from django.utils import timezone
 from collections import defaultdict
 
@@ -106,6 +106,20 @@ def confirm_order_assignment(request):
         conversation.order.jobStatus = Order.JobStatus.BOOKED
         conversation.order.save()
 
+        Notification.objects.create(
+            user=conversation.helper,
+            message="A client confirmed an order",
+            order=conversation.order,
+            related_helper=conversation.helper
+        )
+
+        Message.objects.create(
+            conversation=conversation,
+            sender=conversation.client,
+            content="Your order has been confirmed",
+            system=True
+        )
+
         return Response({'success': True})
 
     except Conversation.DoesNotExist:
@@ -191,7 +205,7 @@ def orders_today(request):
     orders = Order.objects.filter(
         assignedTo__contains=user_id,
         executionDate__date=today
-    )
+    ).select_related('clientID__UserId')
     serializer = OrderSerializer(orders, many=True)
     return Response(serializer.data)
 @api_view(['GET'])
