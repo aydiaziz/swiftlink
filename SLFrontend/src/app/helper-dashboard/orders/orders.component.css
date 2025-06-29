@@ -136,6 +136,11 @@
     background: linear-gradient(135deg, #20c997 0%, #099268 100%);
 }
 
+.orders-container button:disabled {
+    cursor: default;
+    opacity: 0.8;
+}
+
 /* Badge pour les dates importantes */
 .date-badge {
     display: inline-flex;
