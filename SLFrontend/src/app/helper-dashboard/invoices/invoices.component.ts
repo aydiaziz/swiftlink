@@ -24,12 +24,24 @@ export class InvoicesComponent implements OnInit {
 
   ngOnInit() {
     this.invoiceService.getHelperInvoices().subscribe(data => {
-      this.invoices = data;
+      this.invoices = data.map(inv => ({ ...inv, previousStatus: inv.status }));
     });
   }
 
   updateStatus(inv: any) {
-    this.invoiceService.updateInvoiceStatus(inv.invoiceID, inv.status).subscribe();
+    const newStatus = inv.status;
+    if (confirm(`Confirm changing status to "${newStatus}"?`)) {
+      this.invoiceService.updateInvoiceStatus(inv.invoiceID, newStatus).subscribe({
+        next: () => {
+          inv.previousStatus = newStatus;
+        },
+        error: () => {
+          inv.status = inv.previousStatus;
+        }
+      });
+    } else {
+      inv.status = inv.previousStatus;
+    }
   }
 
   viewInvoice(inv: any) {

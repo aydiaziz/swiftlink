@@ -2,7 +2,7 @@
   <h2>Invoice #{{ invoice.invoiceID }}</h2>
   <p>ISF contribution (10%): {{ isf | number:'1.2-2' }} $ CAD</p>
   <p>Platform fee (10%): {{ platformFee | number:'1.2-2' }} $ CAD</p>
-  <p *ngIf="payPerUse">Pay-per-use fee: {{ payPerUse }} $ CAD</p>
+  <p *ngIf="membershipFee">Membership fee: {{ membershipFee }} $ CAD</p>
   <p>Total due: {{ totalDue | number:'1.2-2' }} $ CAD</p>
   <div class="payment-box">
     send e-Transfer to : platform.fee&#64;swift-link.ca<br />
