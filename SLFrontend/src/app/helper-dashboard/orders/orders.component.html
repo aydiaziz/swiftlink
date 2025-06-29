@@ -12,8 +12,11 @@
           <p><strong>Expiration Time:</strong> {{ order.expirationTime | date:'shortTime' }}</p>
           <p><strong>Resources:</strong> {{ order.jobResources }}</p>
         </div>
-        <button (click)="likeOrder(order.orderID)">interested</button>
+        <button (click)="expressInterest(order)"
+                [class.liked]="order.isInterested"
+                [disabled]="order.isInterested">
+          {{ order.isInterested ? 'interest expressed' : 'interested' }}
+        </button>
       </li>
     </ul>
   </div>
-  

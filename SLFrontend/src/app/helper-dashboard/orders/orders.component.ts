@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { OrderService } from '../../services/order.service';
 import { CommonModule, NgFor } from '@angular/common';
+import { Order } from '../../models/order.model';
 
 @Component({
   selector: 'app-orders',
@@ -20,16 +21,25 @@ export class OrdersComponent implements OnInit {
 
   loadOrders(): void {
     this.orderService.getAllOrders().subscribe({
-      next: (data) => this.orders = data,
+      next: (data: Order[]) => {
+        const userId = localStorage.getItem('user_id');
+        this.orders = data
+          .filter(o => o.jobStatus !== 'Booked' && o.jobStatus !== 'Completed')
+          .sort((a, b) => new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime())
+          .map(o => ({
+            ...o,
+            isInterested: userId ? o.expressedInterest?.includes(Number(userId)) : false
+          }));
+      },
       error: (err) => console.error('Error loading orders:', err)
     });
   }
   // ✅ Liker un ordre
-  likeOrder(orderID: number): void {
-    this.orderService.likeOrder(orderID).subscribe({
+  expressInterest(order: any): void {
+    if (order.isInterested) return;
+    this.orderService.likeOrder(order.orderID).subscribe({
       next: () => {
-        
-        this.loadOrders();  // 🔄 Rafraîchir les ordres après le like
+        order.isInterested = true; // update UI directly
       },
       error: (err) => {
         console.error('Error liking order:', err);
