@@ -152,7 +152,15 @@ onVehicleSelect(event: Event, type: 'vehicle' | 'tool'): void {
     }
   });
 
-  this.authService.signupWorkforce(payload).subscribe({
+  const formData = new FormData();
+  for (const key in payload) {
+    const value = payload[key];
+    if (value !== undefined && value !== null) {
+      formData.append(key, value);
+    }
+  }
+
+  this.authService.signupWorkforce(formData).subscribe({
     next: () => {
       this.isLoading = false;
       this.router.navigate(['/confirmation']);
