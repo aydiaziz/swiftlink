@@ -62,7 +62,18 @@ export class OfficeDashboardComponent implements OnInit {
         this.isLoggedIn = true;
       },
       error: (err) => {
-        this.errorMessage = err?.error?.error || 'An error occurred, please try again.';
+        const nonField = err.error?.non_field_errors;
+        if (
+          (Array.isArray(nonField) &&
+            (nonField.includes('Invalid credentials.') ||
+             nonField.includes('Invalid credentials') ||
+             nonField.includes('User not found.')))
+          || err.error?.error === 'Invalid credentials'
+        ) {
+          this.errorMessage = 'Email or password are wrong, try again.';
+        } else {
+          this.errorMessage = err?.error?.error || 'An error occurred, please try again.';
+        }
       }
     });
   }
