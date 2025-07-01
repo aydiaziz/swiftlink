@@ -12,7 +12,7 @@ import { CommonModule } from '@angular/common';
 })
 export class ChatbotComponent {
   userMessage = '';
-  messages: { sender: 'user' | 'assistant', text: string, time: string }[] = [];
+  messages: { sender: 'user' | 'assistant', text: string, timestamp: string }[] = [];
   clientId: string = '12345';  
 
   constructor(private rasaService: RasaService) {}
@@ -25,7 +25,7 @@ export class ChatbotComponent {
     this.messages.push({
       sender: 'user',
       text: message,
-      time: this.getCurrentTime()
+      timestamp: this.getCurrentTimestamp()
     });
 
     this.userMessage = '';
@@ -36,14 +36,23 @@ export class ChatbotComponent {
         this.messages.push({
           sender: 'assistant',
           text: res.text,
-          time: this.getCurrentTime()
+          timestamp: this.getCurrentTimestamp()
         });
       }
     });
   }
 
-  private getCurrentTime(): string {
+  private getCurrentTimestamp(): string {
     const now = new Date();
-    return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    return now.toLocaleString('en-US', {
+      timeZone: 'America/Denver',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+      timeZoneName: 'short'
+    });
   }
 }
