@@ -6,6 +6,8 @@ from rest_framework.response import Response
 from django.conf import settings
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime, parse_date
+from datetime import datetime
+from zoneinfo import ZoneInfo
 import openai
 import json
 import logging
@@ -182,7 +184,8 @@ def gpt_message(request):
         "You are the Swift Helpers assistant. Your goal is to help clients create clear job requests "
         "for the Swift Link work board. Ask clarifying questions if instructions are vague and keep each "
         "interaction focused on a single missing field. Start by requesting the jobAddress, then ask for "
-        "serviceType and executionDate in separate messages. Only once these are provided, request the "
+        "serviceType, executionDate and the exact time of execution (in Mountain Time) in separate messages. "
+        "Only once these are provided, request the "
         "priorityLevel. Do not ask for jobTitle, expirationDate or jobResources. Automatically set "
         "expirationDate to three days after executionDate. When all details are gathered, summarise the job "
         "and ask for confirmation. "
@@ -191,7 +194,7 @@ def gpt_message(request):
         "Example format: {\"reply\": \"your message\", \"order\": null, \"confirm\": false} "
         "Do not include any text outside the JSON object. Do not use markdown formatting. "
         "Supported services are: " + service_details + ". Today's date is " + str(today) + ". "
-        "Infer missing details when possible: deduce executionDate from relative expressions, "
+        "Infer missing details when possible: deduce executionDate and time from relative expressions, "
         "and infer manpower from the service type (moving usually needs 2 helpers, cleaning 1). "
         "Deduce typical jobResources from the service type."
     )
@@ -279,15 +282,25 @@ def gpt_message(request):
             execution_dt = pending.get('executionDate')
             expiration_dt = pending.get('expirationDate')
 
-            # Calculer la date d'expiration si non fournie
+            mt_tz = ZoneInfo('America/Denver')
+
+            # Parse execution datetime and convert to Mountain Time zone
+            if execution_dt:
+                try:
+                    exec_dt = parse_datetime(execution_dt) or parse_date(execution_dt)
+                    if exec_dt:
+                        if not isinstance(exec_dt, datetime):
+                            exec_dt = datetime.combine(exec_dt, datetime.min.time())
+                        exec_dt = timezone.make_aware(exec_dt, mt_tz)
+                        execution_dt = exec_dt
+                except Exception as e:
+                    logger.warning(f"Failed to parse execution date: {e}")
+                    execution_dt = None
+
+            # Calculate expiration if not provided
             if execution_dt and not expiration_dt:
                 try:
-                    from django.utils.dateparse import parse_datetime, parse_date
-                    exec_date = parse_datetime(execution_dt) or parse_date(execution_dt)
-                    if exec_date:
-                        if hasattr(exec_date, 'date'):  # datetime object
-                            exec_date = exec_date.date()
-                        expiration_dt = (exec_date + timezone.timedelta(days=3)).isoformat()
+                    expiration_dt = execution_dt + timezone.timedelta(days=3)
                 except Exception as e:
                     logger.warning(f"Failed to calculate expiration date: {e}")
                     expiration_dt = None
