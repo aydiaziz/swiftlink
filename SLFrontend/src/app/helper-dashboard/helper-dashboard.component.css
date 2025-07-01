@@ -141,3 +141,18 @@
     color: #002f5f;
   }
 }
+
+@media (max-width: 768px) {
+  .dashboard-container {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    height: auto;
+  }
+
+  .main-content {
+    padding: 1rem;
+  }
+}

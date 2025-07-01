@@ -131,3 +131,26 @@
     );
     pointer-events: none;
   }
+
+@media (max-width: 768px) {
+  .cyber-sidebar {
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    overflow-x: auto;
+  }
+
+  .nav-grid {
+    display: flex;
+    padding: 0.5rem;
+  }
+
+  .nav-item {
+    margin-right: 0.5rem;
+    margin-bottom: 0;
+  }
+
+  .status-box {
+    display: none;
+  }
+}
