@@ -60,7 +60,16 @@ export class AuthService {
     );
   }
 
-  signupWorkforce(workforceData: Workforce): Observable<any> {
+  signupWorkforce(workforceData: Workforce | FormData): Observable<any> {
+  if (workforceData instanceof FormData) {
+    return this.http.post(`${this.apiUrl}/signup/workforce/`, workforceData).pipe(
+      catchError(error => {
+        console.error('Signup Workforce Error:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
   const formattedData: any = {
     entityID: 1,
     UserId: {
