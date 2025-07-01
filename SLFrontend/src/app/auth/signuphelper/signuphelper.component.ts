@@ -42,7 +42,6 @@ vehicleOptions = {
     credentialsExpiry: '',
     training: '',
     yearsOfExperience: '',
-    resume: null,
     workForceType: WorkForceType.EMPLOYEE,
     dateOfBirth: '',
     socialSecurityNumber: '',
@@ -120,12 +119,6 @@ onVehicleSelect(event: Event, type: 'vehicle' | 'tool'): void {
 }
 
 
-  onFileChange(event: any, field: string): void {
-    const file = event.target.files[0];
-    if (file) {
-      this.workforceForm[field] = file;
-    }
-  }
 
  register(): void {
   if (!this.acceptedPolicy || !this.workforceForm.firstName || !this.workforceForm.training) {
