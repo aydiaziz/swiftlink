@@ -9,7 +9,7 @@
   
       <div class="job-card" *ngFor="let job of todayJobs">
         <p><strong>{{ job.jobTitle }}</strong></p>
-        <p>⏰ {{ job.executionDate | date:'shortTime' }}</p>
+        <p>⏰ {{ job.executionDate | date:'short':'America/Denver' }}</p>
   
         <!-- Chronomètre -->
         <div class="timer" *ngIf="isTiming && selectedOrder?.orderID === job.orderID">
