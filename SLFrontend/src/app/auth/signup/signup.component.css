@@ -79,3 +79,19 @@ button:hover {
   text-align: center;
   margin-top: 1rem;
 }
+
+@media (max-width: 600px) {
+  .form {
+    padding: 20px;
+    max-width: 100%;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .radio-group {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
