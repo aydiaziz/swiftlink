@@ -29,6 +29,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   showMessagesPopup = false;
   conversations: any[] = [];
   currentUser: any;
+  menuOpen = false;
   get profileLink(): string {
     const role = this.currentUser?.role || this.authService.getUserRole();
     if (role === '3rd Party') return '/helper-profile';
@@ -116,6 +117,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
       clearInterval(this.pollInterval);
       this.pollInterval = null;
     }
+  }
+
+  toggleMenu() {
+    this.menuOpen = !this.menuOpen;
   }
 
   toggleNotificationPopup(event: MouseEvent) {

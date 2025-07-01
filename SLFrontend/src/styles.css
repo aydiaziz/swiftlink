@@ -10,10 +10,16 @@
     color: #333;
   }
   
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 0 20px;
+}
+head{font-family: 'Open Sans', sans-serif;
+}
+
+@media (max-width: 768px) {
   .container {
-    max-width: 1200px;
-    margin: auto;
-    padding: 0 20px;
+    padding: 0 10px;
   }
-  head{font-family: 'Open Sans', sans-serif;
-  }
+}
