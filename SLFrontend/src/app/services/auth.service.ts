@@ -105,6 +105,34 @@ export class AuthService {
     formattedData.driverLicenceExpiry = rawDate.toISOString().slice(0, 10);
   }
 
+  if (workforceData.resume) {
+    const form = new FormData();
+    Object.entries(formattedData.UserId).forEach(([k, v]) => {
+      form.append(`UserId.${k}`, v as any);
+    });
+    delete formattedData.UserId;
+    for (const key in formattedData) {
+      const value = (formattedData as any)[key];
+      if (value === undefined || value === null) {
+        continue;
+      }
+      if (key === 'workCategory' && Array.isArray(value)) {
+        value.forEach((val: any) => form.append('workCategory', val));
+      } else if (typeof value === 'object') {
+        form.append(key, JSON.stringify(value));
+      } else {
+        form.append(key, value);
+      }
+    }
+    form.append('resume', workforceData.resume);
+    return this.http.post(`${this.apiUrl}/signup/workforce/`, form).pipe(
+      catchError(error => {
+        console.error('Signup Workforce Error:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
   return this.http.post(`${this.apiUrl}/signup/workforce/`, formattedData).pipe(
     catchError(error => {
       console.error('Signup Workforce Error:', error);
