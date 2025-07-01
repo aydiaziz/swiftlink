@@ -97,7 +97,7 @@ export class AuthService {
       }),
       catchError(error => {
         console.error("Signin Error:", error);
-        return throwError(() => new Error("Invalid credentials"));
+        return throwError(() => error);
       })
     );
   }
