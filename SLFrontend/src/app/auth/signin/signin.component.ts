@@ -44,7 +44,12 @@ export class SigninComponent {
         }
       },
       error: (err) => {
-        this.errorMessage = err?.error?.error || 'An error occurred, please try again.';
+        const serverMessage = err?.error?.non_field_errors?.[0];
+        if (serverMessage) {
+          this.errorMessage = 'Email or password are wrong, try again.';
+        } else {
+          this.errorMessage = 'An error occurred, please try again.';
+        }
       }
     });
   }
