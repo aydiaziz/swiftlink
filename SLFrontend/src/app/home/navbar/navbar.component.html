@@ -2,8 +2,9 @@
   <div class="logo" (click)="redirectByRole()" style="cursor: pointer;">
     <img src="/logo.png" alt="Swift Helpers Logo" class="logo-img">
   </div>
+  <button class="navbar-toggle" (click)="toggleMenu()">&#9776;</button>
 
-  <ul class="nav-links">
+  <ul class="nav-links" [class.active]="menuOpen">
     <li><a (click)="redirectByRole()">Home</a></li>
        <li *ngIf="currentUser?.role !== '3rd Party' && currentUser?.role !== 'Super Admin'">
     <a routerLink="/services">Services</a>
