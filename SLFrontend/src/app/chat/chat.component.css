@@ -170,3 +170,12 @@
 .clickable:hover {
   transform: scale(1.05);
 }
+
+@media (max-width: 600px) {
+  .chat-popup {
+    width: 90%;
+    height: 70vh;
+    right: 5%;
+    bottom: 0;
+  }
+}
