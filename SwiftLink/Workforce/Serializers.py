@@ -54,6 +54,7 @@ class WorkforceProfileCompletionSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(source='UserId.first_name', required=False)
     last_name = serializers.CharField(source='UserId.last_name', required=False)
     password = serializers.CharField(source='UserId.password', write_only=True, required=False)
+    resume = serializers.FileField(required=False)
     
     class Meta:
         model = WorkForce
@@ -63,6 +64,7 @@ class WorkforceProfileCompletionSerializer(serializers.ModelSerializer):
             'first_name',
             'last_name',
             'password',
+            'resume',
             'driverLicence', 'driverLicenceExpiry', 'driverLicenceFile',
             'wcbNumber', 'wcbFile',
             'address', 'city', 'province', 'postalCode', 'country',

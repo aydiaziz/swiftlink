@@ -15,9 +15,10 @@ import { LogarithmicScale } from 'chart.js';
 export class HelperFormComponent implements OnInit {
   errorMessage: string = '';
    showContract = false;
-form: any = {
-  country: 'Canada'  // valeur par défaut
-};
+ form: any = {
+  country: 'Canada',  // valeur par défaut
+  resume: null
+ };
   files: { [key: string]: File } = {};
 emailError: string = '';
 passwordError: string = '';
@@ -110,7 +111,7 @@ calculateRates() {
     }
   });
 }
-onFileSelect(event: Event, field: 'profileImage' | 'driverLicenceFile' | 'wcbFile'): void {
+onFileSelect(event: Event, field: 'profileImage' | 'driverLicenceFile' | 'wcbFile' | 'resume'): void {
   const input = event.target as HTMLInputElement;
   if (input.files && input.files.length > 0) {
     const file = input.files[0];
